@@ -45,7 +45,7 @@ class DashboardController extends Controller
             ->get();
 
         // 4. Pilotos activos
-        $totalPilots = Pilot::where('status', 'active')->count();
+        $totalPilots = Pilot::where('status', 1)->count();
 
         // 5. Clima (desde cache o fallback)
         $weather = Cache::get('weather_data') ?? $this->getFallbackWeather();
