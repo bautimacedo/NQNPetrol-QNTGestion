@@ -1,0 +1,65 @@
+@extends('layouts.app')
+
+@section('content')
+<div class="space-y-6">
+    <div>
+        <h2 class="text-3xl font-bold text-gray-100">Pilotos</h2>
+        <p class="mt-2 text-gray-400">Listado completo de pilotos registrados</p>
+    </div>
+
+    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+        <div class="overflow-x-auto">
+            <table class="w-full">
+                <thead class="bg-gray-900">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Telegram ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Estado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Licencia</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    @forelse($pilots as $pilot)
+                            @php
+                                $latestLicense = $pilot->licenses->sortByDesc('expiration_date')->first();
+                            @endphp
+                            <tr class="hover:bg-gray-700/50">
+                                <td class="px-6 py-4">
+                                <div class="text-sm font-medium text-gray-100">{{ $pilot->full_name }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                <div class="text-sm text-gray-400">{{ $pilot->user_telegram_id }}</div>
+                                </td>
+                                <td class="px-6 py-4">
+                                <span class="px-2 py-1 text-xs font-medium rounded {{ (int) $pilot->status === 1 ? 'bg-green-500/20 text-green-400' : 'bg-red-500/20 text-red-400' }}">
+                                    {{ (int) $pilot->status === 1 ? 'Activo' : 'Inactivo' }}
+                                </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                @if($latestLicense)
+                                    <div class="text-sm text-gray-100">{{ $latestLicense->category }}</div>
+                                    <div class="text-xs text-gray-400">Vence: {{ $latestLicense->expiration_date->format('d/m/Y') }}</div>
+                                    @if($latestLicense->expiresSoon(30))
+                                        <span class="text-xs text-red-400 font-medium">⚠ Próxima a vencer</span>
+                                    @endif
+                                @else
+                                    <span class="text-xs text-gray-500">Sin licencia</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 text-right">
+                                <a href="{{ route('pilots.show', $pilot) }}" class="text-orange-400 hover:text-orange-300">Ver Perfil</a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-400">No hay pilotos registrados.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@endsection
+
