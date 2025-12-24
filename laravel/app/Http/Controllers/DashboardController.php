@@ -24,12 +24,13 @@ class DashboardController extends Controller
             ->count();
         
         // Obtener estados desde StatusLog uniendo con Logs para obtener event_type como status
+        // Usamos comillas dobles "" para los nombres de tablas con mayúsculas
         $statusCounts = StatusLog::join('Logs', 'Status.event', '=', 'Logs.event_id')
-            ->selectRaw('COALESCE(Logs.event_type, \'unknown\') as status')
-            ->selectRaw('COUNT(DISTINCT Status.drone) as drone_count')
-            ->groupByRaw('COALESCE(Logs.event_type, \'unknown\')')
-            ->get()
-            ->pluck('drone_count', 'status');
+        ->selectRaw('COALESCE("Logs".event_type, \'unknown\') as status') // Agregamos "" a "Logs"
+        ->selectRaw('COUNT(DISTINCT "Status".drone) as drone_count')      // Agregamos "" a "Status"
+        ->groupByRaw('COALESCE("Logs".event_type, \'unknown\')')         // Agregamos "" a "Logs"
+        ->get()
+        ->pluck('drone_count', 'status');
 
         // 2. Alertas de licencias por vencer (desde license y pilots)
         $expiringLicenses = License::where('expiration_date', '>', now())
