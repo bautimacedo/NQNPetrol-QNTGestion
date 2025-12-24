@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Pilot extends Model
 {
+    protected $table = 'pilots';
+    
     public $timestamps = false;
 
     protected $fillable = [

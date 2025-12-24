@@ -23,10 +23,11 @@ class DashboardController extends Controller
             ->unique()
             ->count();
         
-        // Obtener estados desde StatusLog
-        $statusCounts = StatusLog::select('status')
-            ->selectRaw('COUNT(DISTINCT drone) as drone_count')
-            ->groupBy('status')
+        // Obtener estados desde StatusLog uniendo con Logs para obtener event_type como status
+        $statusCounts = StatusLog::join('Logs', 'Status.event', '=', 'Logs.event_id')
+            ->selectRaw('COALESCE(Logs.event_type, \'unknown\') as status')
+            ->selectRaw('COUNT(DISTINCT Status.drone) as drone_count')
+            ->groupByRaw('COALESCE(Logs.event_type, \'unknown\')')
             ->get()
             ->pluck('drone_count', 'status');
 
