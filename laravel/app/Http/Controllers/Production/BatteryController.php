@@ -36,13 +36,20 @@ class BatteryController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'serial' => 'required|string|unique:batteries,serial',
+            'serial' => 'required|string|unique:batteries,serial_number',
             'flight_count' => 'nullable|integer|min:0',
             'last_used' => 'nullable|date',
             'drone_name' => 'nullable|string|exists:Drone,name',
         ]);
 
-        Battery::create($validated);
+        // Mapear 'serial' del formulario a 'serial_number' del modelo
+        Battery::create([
+            'serial_number' => $validated['serial'],
+            'flight_count' => $validated['flight_count'] ?? 0,
+            'last_used' => $validated['last_used'] ?? null,
+            'drone_name' => $validated['drone_name'] ?? null,
+            'status' => 'active', // Valor por defecto
+        ]);
 
         return redirect()->route('production.batteries.index')
             ->with('success', 'Batería registrada exitosamente.');

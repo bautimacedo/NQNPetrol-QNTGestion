@@ -4,6 +4,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PilotController;
 use App\Http\Controllers\Production\AuthorizedUserController;
 use App\Http\Controllers\Production\BatteryController;
+use App\Http\Controllers\Production\LicenseController;
 use App\Http\Controllers\Production\ProductionDroneController;
 use App\Http\Controllers\Production\ProductionMissionController;
 use App\Http\Controllers\Production\TelemetryLogController;
@@ -22,5 +23,6 @@ Route::prefix('production')->name('production.')->group(function () {
     Route::resource('users', AuthorizedUserController::class);
     Route::resource('batteries', BatteryController::class);
     Route::resource('wells', WellController::class);
+    Route::resource('licenses', LicenseController::class)->only(['index']);
     Route::get('logs', [TelemetryLogController::class, 'index'])->name('logs.index');
 });

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'DroneOps Manager') }} - Dashboard</title>
+    <title>{{ config('app.name', 'Quintana Energy Operations') }} - Dashboard</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
@@ -22,7 +22,7 @@
                 <div class="flex justify-between h-16">
                     <div class="flex items-center space-x-8">
                         <a href="{{ route('dashboard') }}" class="text-xl font-bold text-orange-500 hover:text-orange-400 transition-colors">
-                            DroneOps Manager
+                            Quintana Energy Operations
                         </a>
                         <!-- Menú Desktop -->
                         <div class="hidden md:flex items-center space-x-4">
@@ -57,6 +57,9 @@
                             </a>
                             <a href="{{ route('production.users.index') }}" class="px-3 py-2 text-sm font-medium text-gray-300 hover:text-orange-400 hover:bg-gray-700 rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'text-orange-400 bg-gray-700' : '' }}">
                                 Usuarios
+                            </a>
+                            <a href="{{ route('production.licenses.index') }}" class="px-3 py-2 text-sm font-medium text-gray-300 hover:text-orange-400 hover:bg-gray-700 rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'text-orange-400 bg-gray-700' : '' }}">
+                                Licencias
                             </a>
                         </div>
                         <!-- Botón Hamburguesa Móvil -->
@@ -118,6 +121,9 @@
                         </a>
                         <a href="{{ route('production.users.index') }}" class="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-orange-400 hover:bg-gray-700 rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'text-orange-400 bg-gray-700' : '' }}">
                             Usuarios
+                        </a>
+                        <a href="{{ route('production.licenses.index') }}" class="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-orange-400 hover:bg-gray-700 rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'text-orange-400 bg-gray-700' : '' }}">
+                            Licencias
                         </a>
                     </nav>
                 </div>

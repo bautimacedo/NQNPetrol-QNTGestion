@@ -42,12 +42,12 @@ class PilotController extends Controller
         try {
             DB::beginTransaction();
 
-            // Crear el piloto
+            // Crear el piloto (asegurar que status sea integer)
             $pilot = Pilot::create([
                 'full_name' => $validated['full_name'],
                 'dni' => $validated['dni'],
                 'user_telegram_id' => $validated['user_telegram_id'],
-                'status' => $validated['status'],
+                'status' => (int) $validated['status'], // Asegurar conversión explícita a integer
                 'timestamp' => now(),
             ]);
 
