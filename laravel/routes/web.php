@@ -7,6 +7,7 @@ use App\Http\Controllers\Production\BatteryController;
 use App\Http\Controllers\Production\ProductionDroneController;
 use App\Http\Controllers\Production\ProductionMissionController;
 use App\Http\Controllers\Production\TelemetryLogController;
+use App\Http\Controllers\Production\WellController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
@@ -20,5 +21,6 @@ Route::prefix('production')->name('production.')->group(function () {
     Route::resource('missions', ProductionMissionController::class);
     Route::resource('users', AuthorizedUserController::class);
     Route::resource('batteries', BatteryController::class);
+    Route::resource('wells', WellController::class);
     Route::get('logs', [TelemetryLogController::class, 'index'])->name('logs.index');
 });
