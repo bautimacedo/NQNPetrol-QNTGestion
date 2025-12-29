@@ -71,6 +71,23 @@
         </div>
     </div>
 
+    <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
+        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-green-500/50 transition-colors">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-400">Pozos Activos</p>
+                    <p class="mt-2 text-3xl font-bold text-green-400">{{ $activeWells ?? 0 }}</p>
+                </div>
+                <div class="p-3 bg-green-500/10 rounded-lg">
+                    <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if($batteriesHighFlightCount->count() > 0)
     <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
         <div class="flex items-center justify-between mb-4">
@@ -194,11 +211,14 @@
                     <div class="flex items-center">
                         <p class="text-base font-medium text-gray-100 capitalize">{{ $weather['description'] ?? 'Sin datos' }}</p>
                     </div>
+                    @if(isset($weather['city_name']) && $weather['city_name'] !== 'N/A')
+                        <p class="text-xs text-gray-500 mt-1">{{ $weather['city_name'] }}</p>
+                    @endif
                 </div>
                 
-                @if(isset($weather['source']) && $weather['source'] === 'mock')
+                @if(isset($weather['last_update']) && $weather['last_update'] === 'N/A')
                     <div class="pt-2 px-2 py-1 bg-yellow-500/10 border border-yellow-500/20 rounded">
-                        <p class="text-[10px] text-yellow-500 font-bold uppercase text-center">Modo Simulación Activo</p>
+                        <p class="text-[10px] text-yellow-500 font-bold uppercase text-center">Datos no disponibles</p>
                     </div>
                 @endif
             </div>

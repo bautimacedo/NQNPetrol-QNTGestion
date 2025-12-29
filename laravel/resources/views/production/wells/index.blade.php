@@ -91,6 +91,18 @@
         maxZoom: 19
     }).addTo(map);
 
+    // Función para formatear fecha
+    function formatDate(dateString) {
+        if (!dateString) return 'N/A';
+        var date = new Date(dateString);
+        var day = String(date.getDate()).padStart(2, '0');
+        var month = String(date.getMonth() + 1).padStart(2, '0');
+        var year = date.getFullYear();
+        var hours = String(date.getHours()).padStart(2, '0');
+        var minutes = String(date.getMinutes()).padStart(2, '0');
+        return day + '/' + month + '/' + year + ' ' + hours + ':' + minutes;
+    }
+
     // Datos de los pozos desde PHP
     var wells = @json($wells);
 
@@ -112,10 +124,12 @@
             var marker = L.marker([well.latitude, well.longitude], { icon: icon }).addTo(map);
 
             // Tooltip con información del pozo
+            var lastUpdate = well.last_update ? formatDate(well.last_update) : 'N/A';
             var tooltipContent = '<div class="text-sm">' +
                 '<strong>' + (well.name || 'Sin nombre') + '</strong><br>' +
                 '<span>Sede: ' + (well.site || 'N/A') + '</span><br>' +
-                '<span>BPM: ' + (well.bpm || 'N/A') + '</span>' +
+                '<span>BPM: ' + (well.bpm || 'N/A') + '</span><br>' +
+                '<span class="text-xs text-gray-400">Última act: ' + lastUpdate + '</span>' +
                 '</div>';
 
             marker.bindTooltip(tooltipContent, {

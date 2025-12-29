@@ -7,6 +7,8 @@ use App\Models\License;
 use App\Models\Pilot;
 use App\Models\ProductionDrone;
 use App\Models\StatusLog;
+use App\Models\Well;
+use App\Models\WeatherLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
@@ -47,8 +49,12 @@ class DashboardController extends Controller
         // 4. Pilotos activos
         $totalPilots = Pilot::where('status', 1)->count();
 
-        // 5. Clima (desde cache o fallback)
-        $weather = Cache::get('weather_data') ?? $this->getFallbackWeather();
+        // 5. Pozos activos
+        $activeWells = Well::where('status', 'activo')->count();
+
+        // 6. Clima (desde weather_logs o fallback)
+        $latestWeather = WeatherLog::orderByDesc('recorded_at')->first();
+        $weather = $this->getWeatherData($latestWeather);
 
         return view('dashboard.index', compact(
             'totalDrones',
@@ -57,20 +63,52 @@ class DashboardController extends Controller
             'expiringLicenses',
             'batteriesHighFlightCount',
             'totalPilots',
+            'activeWells',
             'weather'
         ));
     }
 
     /**
-     * Datos de respaldo por si la API falla o la cache está vacía
+     * Obtener datos del clima desde weather_logs o fallback
+     */
+    protected function getWeatherData($latestWeather): array
+    {
+        if ($latestWeather) {
+            // Convertir velocidad del viento de m/s a km/h
+            $windSpeedKmh = ($latestWeather->wind_speed_ms ?? 0) * 3.6;
+            $windGustsKmh = ($latestWeather->wind_gust_ms ?? 0) * 3.6;
+            
+            return [
+                'temperature' => $latestWeather->temp_celsius ?? 0,
+                'wind_speed' => $windSpeedKmh,
+                'wind_gusts' => $windGustsKmh,
+                'description' => $latestWeather->condition_desc ?? $latestWeather->condition_main ?? 'Sin datos',
+                'condition_main' => $latestWeather->condition_main ?? 'N/A',
+                'visibility' => $latestWeather->visibility_meters ?? 0,
+                'is_flyable' => $latestWeather->is_flyable ?? false,
+                'last_update' => $latestWeather->recorded_at ? $latestWeather->recorded_at->format('d/m/Y H:i') : 'N/A',
+                'city_name' => $latestWeather->city_name ?? 'N/A',
+            ];
+        }
+        
+        return $this->getFallbackWeather();
+    }
+
+    /**
+     * Datos de respaldo por si no hay registros en weather_logs
      */
     protected function getFallbackWeather(): array
     {
         return [
-            'temp' => 22,
-            'wind' => 15,
-            'condition' => 'Datos no actualizados',
-            'last_update' => 'N/A'
+            'temperature' => 22,
+            'wind_speed' => 15,
+            'wind_gusts' => 20,
+            'description' => 'Datos no actualizados',
+            'condition_main' => 'N/A',
+            'visibility' => 0,
+            'is_flyable' => true,
+            'last_update' => 'N/A',
+            'city_name' => 'N/A',
         ];
     }
 }
