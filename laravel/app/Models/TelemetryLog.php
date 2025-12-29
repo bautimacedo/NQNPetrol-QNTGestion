@@ -36,6 +36,7 @@ class TelemetryLog extends Model
 
     protected $casts = [
         'telegram' => 'boolean',
+        'timestamp' => 'datetime',
     ];
 
     /**

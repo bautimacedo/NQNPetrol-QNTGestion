@@ -2,9 +2,14 @@
 
 @section('content')
 <div class="space-y-6">
-    <div>
-        <h2 class="text-3xl font-bold text-gray-100">Pilotos</h2>
-        <p class="mt-2 text-gray-400">Listado completo de pilotos registrados</p>
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-100">Pilotos</h2>
+            <p class="mt-2 text-gray-400">Listado completo de pilotos registrados</p>
+        </div>
+        <button onclick="openModal()" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium">
+            Registrar Piloto
+        </button>
     </div>
 
     <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -61,5 +66,131 @@
         </div>
     </div>
 </div>
+
+<!-- Modal para Registrar Piloto -->
+<div id="pilotModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center">
+    <div class="bg-gray-800 rounded-lg border border-gray-700 w-full max-w-2xl mx-4 max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-gray-100">Registrar Nuevo Piloto</h3>
+                <button onclick="closeModal()" class="text-gray-400 hover:text-gray-200">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form action="{{ route('pilots.store') }}" method="POST" id="pilotForm">
+                @csrf
+                
+                <!-- Campos del Piloto -->
+                <div class="space-y-4 mb-6">
+                    <h4 class="text-lg font-semibold text-gray-200 border-b border-gray-700 pb-2">Datos del Piloto</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="full_name" class="block text-sm font-medium text-gray-400 mb-1">Nombre Completo *</label>
+                            <input type="text" name="full_name" id="full_name" required
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        
+                        <div>
+                            <label for="dni" class="block text-sm font-medium text-gray-400 mb-1">DNI *</label>
+                            <input type="text" name="dni" id="dni" required
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        
+                        <div>
+                            <label for="user_telegram_id" class="block text-sm font-medium text-gray-400 mb-1">Telegram ID *</label>
+                            <input type="text" name="user_telegram_id" id="user_telegram_id" required
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-400 mb-1">Estado *</label>
+                            <select name="status" id="status" required
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Campos de la Licencia -->
+                <div class="space-y-4 mb-6">
+                    <h4 class="text-lg font-semibold text-gray-200 border-b border-gray-700 pb-2">Datos de la Licencia</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label for="license_number" class="block text-sm font-medium text-gray-400 mb-1">Número de Licencia *</label>
+                            <input type="text" name="license_number" id="license_number" required
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        
+                        <div>
+                            <label for="category" class="block text-sm font-medium text-gray-400 mb-1">Categoría *</label>
+                            <input type="text" name="category" id="category" required
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                        
+                        <div class="md:col-span-2">
+                            <label for="expiration_date" class="block text-sm font-medium text-gray-400 mb-1">Fecha de Vencimiento *</label>
+                            <input type="date" name="expiration_date" id="expiration_date" required
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mensajes de Error -->
+                @if($errors->any())
+                    <div class="mb-4 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+                        <ul class="list-disc list-inside text-sm text-red-400">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- Botones -->
+                <div class="flex gap-3 justify-end">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">
+                        Cancelar
+                    </button>
+                    <button type="submit" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium">
+                        Registrar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openModal() {
+        document.getElementById('pilotModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+        document.getElementById('pilotModal').classList.add('hidden');
+        // Limpiar el formulario
+        document.getElementById('pilotForm').reset();
+    }
+
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('pilotModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeModal();
+        }
+    });
+
+    // Cerrar modal con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+</script>
 @endsection
 

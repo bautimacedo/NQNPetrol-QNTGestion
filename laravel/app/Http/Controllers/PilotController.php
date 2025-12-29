@@ -6,6 +6,7 @@ use App\Models\Flight;
 use App\Models\License;
 use App\Models\Pilot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PilotController extends Controller
 {
@@ -21,6 +22,55 @@ class PilotController extends Controller
             ->get();
 
         return view('pilots.index', compact('pilots'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'full_name' => 'required|string|max:255',
+            'dni' => 'required|string|max:20',
+            'user_telegram_id' => 'required|string|max:255',
+            'status' => 'required|integer|in:0,1',
+            'license_number' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'expiration_date' => 'required|date',
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            // Crear el piloto
+            $pilot = Pilot::create([
+                'full_name' => $validated['full_name'],
+                'dni' => $validated['dni'],
+                'user_telegram_id' => $validated['user_telegram_id'],
+                'status' => $validated['status'],
+                'timestamp' => now(),
+            ]);
+
+            // Crear la licencia asociada
+            License::create([
+                'pilot_id' => $pilot->id,
+                'license_number' => $validated['license_number'],
+                'category' => $validated['category'],
+                'expiration_date' => $validated['expiration_date'],
+                'created_at' => now(),
+            ]);
+
+            DB::commit();
+
+            return redirect()->route('pilots.index')
+                ->with('success', 'Piloto y licencia registrados exitosamente.');
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()->route('pilots.index')
+                ->withErrors(['error' => 'Error al registrar el piloto: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 
     /**

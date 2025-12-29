@@ -8,7 +8,7 @@
             <p class="mt-2 text-gray-400">Detalle completo de la misión</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('production.missions.edit', $productionMission) }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">Editar</a>
+            <a href="{{ route('production.missions.edit', $productionMission->id) }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">Editar</a>
             <a href="{{ route('production.missions.index') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Volver</a>
         </div>
     </div>

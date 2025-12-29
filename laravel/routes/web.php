@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
 
 // Resource Routes
-Route::resource('pilots', PilotController::class)->only(['index', 'show']);
+Route::resource('pilots', PilotController::class)->only(['index', 'show', 'store']);
 
 // Production Routes (Sincronización con DB de producción)
 Route::prefix('production')->name('production.')->group(function () {
