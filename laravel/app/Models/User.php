@@ -33,6 +33,7 @@ class User extends Authenticatable
         'password',
         'birth_date',
         'dni',
+        'is_approved',
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable
             'password' => 'hashed',
             'birth_date' => 'date',
             'dni' => 'encrypted',
+            'is_approved' => 'boolean',
         ];
     }
 }

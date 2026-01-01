@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'telegram.bot' => \App\Http\Middleware\ValidateTelegramBot::class,
             'blocked.ip' => \App\Http\Middleware\CheckBlockedIp::class,
+            'approved' => \App\Http\Middleware\EnsureUserIsApproved::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

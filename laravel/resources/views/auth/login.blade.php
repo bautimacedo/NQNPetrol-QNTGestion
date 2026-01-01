@@ -23,6 +23,12 @@
         </div>
 
         <div class="rounded-lg p-8" style="background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+            @if (session('error'))
+                <div class="mb-6 p-4 rounded-lg" style="background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                    <p class="text-sm" style="color: #f87171;">{{ session('error') }}</p>
+                </div>
+            @endif
+            
             @if ($errors->any())
                 <div class="mb-6 p-4 rounded-lg" style="background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
                     <ul class="list-disc list-inside text-sm" style="color: #f87171;">

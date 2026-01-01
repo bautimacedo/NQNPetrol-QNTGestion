@@ -69,6 +69,9 @@
                             </a>
                             @auth
                                 @if(auth()->user()->hasRole('admin'))
+                                    <a href="{{ route('admin.users.pending') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('admin.users.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
+                                        Usuarios Pendientes
+                                    </a>
                                     <a href="{{ route('security.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('security.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                                         Seguridad
                                     </a>
@@ -140,6 +143,15 @@
                         </a>
                         @auth
                             @if(auth()->user()->hasRole('admin'))
+                                @php
+                                    $pendingCount = \App\Models\User::where('is_approved', false)->count();
+                                @endphp
+                                <a href="{{ route('admin.users.pending') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('admin.users.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
+                                    Usuarios Pendientes
+                                    @if($pendingCount > 0)
+                                        <span class="ml-2 px-2 py-0.5 text-xs rounded-full" style="background-color: rgba(251, 191, 36, 0.2); color: #fbbf24;">{{ $pendingCount }}</span>
+                                    @endif
+                                </a>
                                 <a href="{{ route('security.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('security.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                                     Seguridad
                                 </a>

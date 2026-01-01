@@ -38,8 +38,8 @@ class RegisterController extends Controller
             'dni' => $validated['dni'],
         ]);
 
-        // Asignar rol 'operator' por defecto
-        $user->assignRole('operator');
+        // NO asignar rol todavía - esperar aprobación del admin
+        // El rol 'operator' se asignará cuando el admin apruebe al usuario
 
         event(new Registered($user));
 
