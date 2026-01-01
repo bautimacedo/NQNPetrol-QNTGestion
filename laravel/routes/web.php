@@ -24,13 +24,13 @@ Route::middleware(['guest', \App\Http\Middleware\CheckBlockedIp::class])->group(
     Route::post('/register', [RegisterController::class, 'register']);
 });
 
-// Ruta de espera de aprobación (sin middleware de aprobación)
+// Ruta de espera de aprobación y logout (sin middleware de aprobación)
 Route::middleware('auth')->group(function () {
     Route::get('/waiting-approval', [WaitingApprovalController::class, 'index'])->name('waiting.approval');
+    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 });
 
 Route::middleware(['auth', 'approved'])->group(function () {
-    Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     
     // Panel de administración (solo admin)
