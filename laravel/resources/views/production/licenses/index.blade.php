@@ -7,7 +7,7 @@
             <h2 class="text-3xl font-bold text-gray-100">Licencias de Pilotos</h2>
             <p class="mt-2 text-gray-400">Gestión y seguimiento de licencias de pilotos</p>
         </div>
-        <button onclick="openLicenseModal()" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium">
+        <button onclick="openLicenseModal()" class="px-4 py-2 text-white rounded-lg font-medium qnt-gradient">
             Registrar Licencia
         </button>
     </div>
@@ -142,7 +142,7 @@
                         <button type="button" onclick="closeLicenseModal()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors">
                             Cancelar
                         </button>
-                        <button type="submit" class="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+                        <button type="submit" class="px-6 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
                             Registrar
                         </button>
                     </div>

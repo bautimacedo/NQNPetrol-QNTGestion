@@ -8,8 +8,8 @@
             <p class="mt-2 text-gray-400">Detalle completo de la misión</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('production.missions.edit', $productionMission->id) }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">Editar</a>
-            <a href="{{ route('production.missions.index') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Volver</a>
+            <a href="{{ route('production.missions.edit', $productionMission->id) }}" class="px-4 py-2 text-white rounded-lg qnt-gradient">Editar</a>
+            <a href="{{ route('production.missions.index') }}" class="px-4 py-2 text-white rounded-lg" style="background-color: rgba(255, 255, 255, 0.1);" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.1)'">Volver</a>
         </div>
     </div>
 
@@ -64,7 +64,7 @@
                 <div class="space-y-4">
                     <div>
                         <p class="text-sm text-gray-400">Logs de Telemetría</p>
-                        <p class="text-2xl font-bold text-orange-400">{{ $productionMission->telemetryLogs->count() }}</p>
+                        <p class="text-2xl font-bold" style="color: #1B998B;">{{ $productionMission->telemetryLogs->count() }}</p>
                     </div>
                 </div>
             </div>

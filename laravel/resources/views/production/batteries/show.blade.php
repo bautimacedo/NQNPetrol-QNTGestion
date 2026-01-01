@@ -8,7 +8,7 @@
             <p class="mt-2 text-gray-400">Información completa de la batería</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('production.batteries.edit', $battery) }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">Editar</a>
+            <a href="{{ route('production.batteries.edit', $battery) }}" class="px-4 py-2 text-white rounded-lg qnt-gradient">Editar</a>
             <a href="{{ route('production.batteries.index') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Volver</a>
         </div>
     </div>

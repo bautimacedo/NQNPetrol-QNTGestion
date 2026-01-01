@@ -9,3 +9,25 @@
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
 }
+
+/* Quintana Energy Operations - Brand Colors */
+.qnt-gradient {
+    background: linear-gradient(135deg, #082032 0%, #1B998B 100%);
+}
+
+.qnt-gradient:hover {
+    background: linear-gradient(135deg, #0a2840 0%, #1fa896 100%);
+    filter: brightness(1.1);
+}
+
+.qnt-bg-primary {
+    background-color: #0F172A;
+}
+
+.qnt-text-primary {
+    color: #FFFFFF;
+}
+
+.qnt-border {
+    border-color: rgba(255, 255, 255, 0.1);
+}

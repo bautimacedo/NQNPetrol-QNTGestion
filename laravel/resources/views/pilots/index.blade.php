@@ -7,7 +7,7 @@
             <h2 class="text-3xl font-bold text-gray-100">Pilotos</h2>
             <p class="mt-2 text-gray-400">Listado completo de pilotos registrados</p>
         </div>
-        <button onclick="openModal()" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium">
+        <button onclick="openModal()" class="px-4 py-2 text-white rounded-lg font-medium qnt-gradient">
             Registrar Piloto
         </button>
     </div>
@@ -162,9 +162,9 @@
                     <button type="button" onclick="closeModal()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors">
                         Cancelar
                     </button>
-                    <button type="submit" class="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
-                        Registrar
-                    </button>
+                        <button type="submit" class="px-6 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
+                            Registrar
+                        </button>
                 </div>
             </form>
         </div>

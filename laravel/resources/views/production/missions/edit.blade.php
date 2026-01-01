@@ -47,7 +47,7 @@
 
         <div class="flex justify-end gap-4 pt-6 border-t border-gray-700 mt-6">
             <a href="{{ route('production.missions.index') }}" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Cancelar</a>
-            <button type="submit" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg">Actualizar</button>
+            <button type="submit" class="px-4 py-2 text-white rounded-lg qnt-gradient">Actualizar</button>
         </div>
     </form>
 </div>

@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6" style="background-color: #0F172A;">
     <div class="flex items-center justify-between">
         <div>
-            <h2 class="text-3xl font-bold text-gray-100">Dashboard Operativo</h2>
-            <p class="mt-2 text-gray-400">Vista general de la flota y operaciones en tiempo real</p>
+            <h2 class="text-3xl font-bold" style="color: #FFFFFF;">Dashboard Operativo</h2>
+            <p class="mt-2" style="color: rgba(255, 255, 255, 0.6);">Vista general de la flota y operaciones en tiempo real</p>
         </div>
         <div class="hidden md:block text-right">
             <p class="text-sm text-gray-400">Ubicación: <span class="text-gray-200">Neuquén, AR</span></p>
@@ -14,11 +14,11 @@
     </div>
 
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 hover:border-blue-500/50 transition-colors">
+        <div class="rounded-lg border p-6 transition-colors" style="background-color: rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1);">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm font-medium text-gray-400">Flota Total</p>
-                    <p class="mt-2 text-3xl font-bold text-gray-100">{{ $totalDrones }}</p>
+                    <p class="text-sm font-medium" style="color: rgba(255, 255, 255, 0.6);">Flota Total</p>
+                    <p class="mt-2 text-3xl font-bold" style="color: #FFFFFF;">{{ $totalDrones }}</p>
                 </div>
                 <div class="p-3 bg-blue-500/10 rounded-lg">
                     <svg class="w-8 h-8 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">

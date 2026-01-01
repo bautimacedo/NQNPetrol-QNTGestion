@@ -7,7 +7,7 @@
             <h2 class="text-3xl font-bold text-gray-100">Libro de Misiones</h2>
             <p class="mt-2 text-gray-400">Registro completo de misiones de producción</p>
         </div>
-        <a href="{{ route('production.missions.create') }}" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+        <a href="{{ route('production.missions.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
             + Nueva Misión
         </a>
     </div>

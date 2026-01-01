@@ -7,15 +7,15 @@
             <h2 class="text-3xl font-bold text-gray-100">Gestión de RPAs (Producción)</h2>
             <p class="mt-2 text-gray-400">Flota de RPAs sincronizada con base de datos de producción</p>
         </div>
-        <a href="{{ route('production.drones.create') }}" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+        <a href="{{ route('production.drones.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
             + Nuevo RPA
         </a>
     </div>
 
-    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+    <div class="rounded-lg overflow-hidden" style="background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
         <div class="overflow-x-auto">
             <table class="w-full">
-                <thead class="bg-gray-900">
+                <thead style="background-color: rgba(255, 255, 255, 0.08);">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Nombre</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Dock/Site</th>
@@ -45,8 +45,8 @@
                                 @endif
                             </td>
                             <td class="px-6 py-4 text-right">
-                                <a href="{{ route('production.drones.show', $drone) }}" class="text-orange-400 hover:text-orange-300 mr-3">Ver</a>
-                                <a href="{{ route('production.drones.edit', $drone) }}" class="text-blue-400 hover:text-blue-300 mr-3">Editar</a>
+                                <a href="{{ route('production.drones.show', $drone) }}" class="mr-3 transition-colors" style="color: #1B998B;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#1B998B'">Ver</a>
+                                <a href="{{ route('production.drones.edit', $drone) }}" class="mr-3 transition-colors" style="color: #60a5fa;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#60a5fa'">Editar</a>
                             </td>
                         </tr>
                     @empty
