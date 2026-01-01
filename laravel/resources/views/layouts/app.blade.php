@@ -30,6 +30,11 @@
                         <a href="{{ route('dashboard') }}" class="text-xl font-bold transition-colors" style="color: #FFFFFF;">
                             Quintana Energy Operations
                         </a>
+                        @auth
+                            <span class="text-sm font-semibold" style="color: rgba(255, 255, 255, 0.8);">
+                                Hola {{ auth()->user()->first_name ?? auth()->user()->name }}!
+                            </span>
+                        @endauth
                         <!-- Menú Desktop -->
                         <div class="hidden md:flex items-center space-x-4">
                             <a href="{{ route('dashboard') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('dashboard') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
@@ -87,6 +92,14 @@
                         </button>
                     </div>
                     <div class="flex items-center space-x-4">
+                        @auth
+                            <form action="{{ route('logout') }}" method="POST" class="inline">
+                                @csrf
+                                <button type="submit" class="px-4 py-2 text-sm font-semibold rounded-lg transition-colors" style="color: #FFFFFF; background-color: rgba(239, 68, 68, 0.2);" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
+                        @endauth
                         <span class="text-sm hidden sm:inline" style="color: rgba(255, 255, 255, 0.6);">QNT Energy</span>
                     </div>
                 </div>
@@ -143,6 +156,7 @@
                         </a>
                         @auth
                             @if(auth()->user()->hasRole('admin'))
+                                <div class="border-t my-2" style="border-color: rgba(255, 255, 255, 0.1);"></div>
                                 @php
                                     $pendingCount = \App\Models\User::where('is_approved', false)->count();
                                 @endphp
@@ -156,6 +170,13 @@
                                     Seguridad
                                 </a>
                             @endif
+                            <div class="border-t my-2" style="border-color: rgba(255, 255, 255, 0.1);"></div>
+                            <form action="{{ route('logout') }}" method="POST" class="px-4">
+                                @csrf
+                                <button type="submit" class="w-full px-4 py-3 text-sm font-semibold rounded-lg transition-colors text-left" style="color: #FFFFFF; background-color: rgba(239, 68, 68, 0.2);" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'">
+                                    Cerrar Sesión
+                                </button>
+                            </form>
                         @endauth
                     </nav>
                 </div>

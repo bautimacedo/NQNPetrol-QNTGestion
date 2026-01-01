@@ -29,17 +29,27 @@ class PilotController extends Controller
      */
     public function store(Request $request)
     {
-        $validated = $request->validate([
-            'full_name' => 'required|string|max:255',
-            'dni' => 'required|string|max:20',
-            'user_telegram_id' => 'required|string|max:255',
-            'status' => 'required|integer|in:0,1',
-            'license_number' => 'required|string|max:255',
-            'category' => 'required|string|max:255',
-            'expiration_date' => 'required|date',
-        ]);
-
         try {
+            $validated = $request->validate([
+                'full_name' => 'required|string|max:255',
+                'dni' => 'required|string|max:20',
+                'user_telegram_id' => 'required|string|max:255',
+                'status' => 'required|integer|in:0,1',
+                'license_number' => 'required|string|max:255',
+                'category' => 'required|string|max:255',
+                'expiration_date' => 'required|date',
+            ], [
+                'full_name.required' => 'El nombre completo es obligatorio.',
+                'dni.required' => 'El DNI es obligatorio.',
+                'user_telegram_id.required' => 'El Telegram ID es obligatorio.',
+                'status.required' => 'El estado es obligatorio.',
+                'status.integer' => 'El estado debe ser un número entero.',
+                'license_number.required' => 'El número de licencia es obligatorio.',
+                'category.required' => 'La categoría es obligatoria.',
+                'expiration_date.required' => 'La fecha de vencimiento es obligatoria.',
+                'expiration_date.date' => 'La fecha de vencimiento debe ser una fecha válida.',
+            ]);
+
             DB::beginTransaction();
 
             // Crear el piloto (asegurar que status sea integer)
@@ -47,7 +57,7 @@ class PilotController extends Controller
                 'full_name' => $validated['full_name'],
                 'dni' => $validated['dni'],
                 'user_telegram_id' => $validated['user_telegram_id'],
-                'status' => (int) $validated['status'], // Asegurar conversión explícita a integer
+                'status' => (int) $validated['status'],
                 'timestamp' => now(),
             ]);
 
@@ -64,10 +74,21 @@ class PilotController extends Controller
 
             return redirect()->route('pilots.index')
                 ->with('success', 'Piloto y licencia registrados exitosamente.');
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            // Errores de validación
+            return redirect()->back()
+                ->withErrors($e->validator)
+                ->withInput();
         } catch (\Exception $e) {
             DB::rollBack();
             
-            return redirect()->route('pilots.index')
+            // Log del error para debugging
+            \Log::error('Error al registrar piloto: ' . $e->getMessage(), [
+                'exception' => $e,
+                'request_data' => $request->all(),
+            ]);
+            
+            return redirect()->back()
                 ->withErrors(['error' => 'Error al registrar el piloto: ' . $e->getMessage()])
                 ->withInput();
         }

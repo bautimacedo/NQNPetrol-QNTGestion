@@ -1,11 +1,27 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="space-y-6">
+<div class="space-y-6" style="background-color: #0F172A;">
+    @if(session('success'))
+        <div class="p-4 rounded-lg" style="background-color: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3);">
+            <p style="color: #4ade80;">{{ session('success') }}</p>
+        </div>
+    @endif
+
+    @if($errors->any())
+        <div class="p-4 rounded-lg" style="background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+            <ul class="list-disc list-inside text-sm" style="color: #f87171;">
+                @foreach($errors->all() as $error)
+                    <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="flex items-center justify-between">
         <div>
-            <h2 class="text-3xl font-bold text-gray-100">Pilotos</h2>
-            <p class="mt-2 text-gray-400">Listado completo de pilotos registrados</p>
+            <h2 class="text-3xl font-bold" style="color: #FFFFFF;">Pilotos</h2>
+            <p class="mt-2" style="color: rgba(255, 255, 255, 0.6);">Listado completo de pilotos registrados</p>
         </div>
         <button onclick="openModal()" class="px-4 py-2 text-white rounded-lg font-medium qnt-gradient">
             Registrar Piloto
@@ -91,29 +107,41 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label for="full_name" class="block text-sm font-medium text-gray-400 mb-2">Nombre Completo *</label>
-                                <input type="text" name="full_name" id="full_name" required
+                                <input type="text" name="full_name" id="full_name" value="{{ old('full_name') }}" required
                                     class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                                @error('full_name')
+                                    <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                                @enderror
                             </div>
                             
                             <div>
                                 <label for="dni" class="block text-sm font-medium text-gray-400 mb-2">DNI *</label>
-                                <input type="text" name="dni" id="dni" required
+                                <input type="text" name="dni" id="dni" value="{{ old('dni') }}" required
                                     class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                                @error('dni')
+                                    <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                                @enderror
                             </div>
                             
                             <div>
                                 <label for="user_telegram_id" class="block text-sm font-medium text-gray-400 mb-2">Telegram ID *</label>
-                                <input type="text" name="user_telegram_id" id="user_telegram_id" required
+                                <input type="text" name="user_telegram_id" id="user_telegram_id" value="{{ old('user_telegram_id') }}" required
                                     class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                                @error('user_telegram_id')
+                                    <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                                @enderror
                             </div>
                             
                             <div>
                                 <label for="status" class="block text-sm font-medium text-gray-400 mb-2">Estado *</label>
                                 <select name="status" id="status" required
                                     class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
-                                    <option value="1">Activo</option>
-                                    <option value="0">Inactivo</option>
+                                    <option value="1" {{ old('status') == '1' ? 'selected' : '' }}>Activo</option>
+                                    <option value="0" {{ old('status') == '0' ? 'selected' : '' }}>Inactivo</option>
                                 </select>
+                                @error('status')
+                                    <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -127,20 +155,29 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>
                                 <label for="license_number" class="block text-sm font-medium text-gray-400 mb-2">Número de Licencia *</label>
-                                <input type="text" name="license_number" id="license_number" required
+                                <input type="text" name="license_number" id="license_number" value="{{ old('license_number') }}" required
                                     class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                                @error('license_number')
+                                    <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                                @enderror
                             </div>
                             
                             <div>
                                 <label for="category" class="block text-sm font-medium text-gray-400 mb-2">Categoría *</label>
-                                <input type="text" name="category" id="category" required
+                                <input type="text" name="category" id="category" value="{{ old('category') }}" required
                                     class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                                @error('category')
+                                    <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                                @enderror
                             </div>
                             
                             <div class="md:col-span-2">
                                 <label for="expiration_date" class="block text-sm font-medium text-gray-400 mb-2">Fecha de Vencimiento *</label>
-                                <input type="date" name="expiration_date" id="expiration_date" required
+                                <input type="date" name="expiration_date" id="expiration_date" value="{{ old('expiration_date') }}" required
                                     class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                                @error('expiration_date')
+                                    <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
                     </div>
@@ -148,8 +185,9 @@
 
                 <!-- Mensajes de Error -->
                 @if($errors->any())
-                    <div class="mb-6 p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
-                        <ul class="list-disc list-inside text-sm text-red-400">
+                    <div class="mb-6 p-4 rounded-lg" style="background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3);">
+                        <p class="text-sm font-semibold mb-2" style="color: #f87171;">Errores de validación:</p>
+                        <ul class="list-disc list-inside text-sm" style="color: #f87171;">
                             @foreach($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
