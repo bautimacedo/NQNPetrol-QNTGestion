@@ -39,7 +39,7 @@
                                 </button>
                                 <div class="absolute left-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                                     <a href="{{ route('production.drones.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-orange-400 {{ request()->routeIs('production.drones.*') ? 'bg-gray-700 text-orange-400' : '' }}">
-                                        Drones
+                                        RPAs
                                     </a>
                                     <a href="{{ route('production.batteries.index') }}" class="block px-4 py-2 text-sm text-gray-300 hover:bg-gray-700 hover:text-orange-400 {{ request()->routeIs('production.batteries.*') ? 'bg-gray-700 text-orange-400' : '' }}">
                                         Baterías
@@ -104,7 +104,7 @@
                         <div class="border-t border-gray-700 my-2"></div>
                         <div class="px-4 py-2 text-xs font-semibold text-gray-500 uppercase">Inventario</div>
                         <a href="{{ route('production.drones.index') }}" class="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-orange-400 hover:bg-gray-700 rounded-lg transition-colors {{ request()->routeIs('production.drones.*') ? 'text-orange-400 bg-gray-700' : '' }}">
-                            Drones
+                            RPAs
                         </a>
                         <a href="{{ route('production.batteries.index') }}" class="block px-4 py-3 text-sm font-medium text-gray-300 hover:text-orange-400 hover:bg-gray-700 rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'text-orange-400 bg-gray-700' : '' }}">
                             Baterías

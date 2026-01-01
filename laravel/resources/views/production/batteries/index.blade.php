@@ -18,7 +18,7 @@
                 <thead class="bg-gray-900">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Serial</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Dron Asignado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">RPA Asignado</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Vuelos</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Último Uso</th>
                         <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">Acciones</th>

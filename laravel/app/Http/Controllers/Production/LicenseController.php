@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Production;
 
 use App\Http\Controllers\Controller;
 use App\Models\License;
+use App\Models\Pilot;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class LicenseController extends Controller
 {
@@ -18,6 +20,36 @@ class LicenseController extends Controller
             ->get();
 
         return view('production.licenses.index', compact('licenses'));
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'pilot_id' => 'required|integer|exists:pilots,id',
+            'license_number' => 'required|string|max:255',
+            'category' => 'required|string|max:255',
+            'expiration_date' => 'required|date',
+        ]);
+
+        try {
+            License::create([
+                'pilot_id' => $validated['pilot_id'],
+                'license_number' => $validated['license_number'],
+                'category' => $validated['category'],
+                'expiration_date' => $validated['expiration_date'],
+                'created_at' => now(),
+            ]);
+
+            return redirect()->route('production.licenses.index')
+                ->with('success', 'Licencia registrada exitosamente.');
+        } catch (\Exception $e) {
+            return redirect()->route('production.licenses.index')
+                ->withErrors(['error' => 'Error al registrar la licencia: ' . $e->getMessage()])
+                ->withInput();
+        }
     }
 }
 

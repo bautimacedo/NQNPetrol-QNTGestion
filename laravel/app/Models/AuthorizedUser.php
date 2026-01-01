@@ -40,4 +40,12 @@ class AuthorizedUser extends Model
     {
         return $this->hasMany(SendMissionIntent::class, 'sender', 'user_telegram_id');
     }
+
+    /**
+     * Obtener el nombre de la clave para route model binding
+     */
+    public function getRouteKeyName()
+    {
+        return 'user_telegram_id';
+    }
 }

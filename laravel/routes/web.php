@@ -23,6 +23,6 @@ Route::prefix('production')->name('production.')->group(function () {
     Route::resource('users', AuthorizedUserController::class);
     Route::resource('batteries', BatteryController::class);
     Route::resource('wells', WellController::class);
-    Route::resource('licenses', LicenseController::class)->only(['index']);
+    Route::resource('licenses', LicenseController::class)->only(['index', 'store']);
     Route::get('logs', [TelemetryLogController::class, 'index'])->name('logs.index');
 });

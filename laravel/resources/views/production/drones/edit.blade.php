@@ -3,11 +3,11 @@
 @section('content')
 <div class="space-y-6">
     <div>
-        <h2 class="text-3xl font-bold text-gray-100">Editar Dron (Producción)</h2>
-        <p class="mt-2 text-gray-400">Modificar información del dron</p>
+        <h2 class="text-3xl font-bold text-gray-100">Editar RPA (Producción)</h2>
+        <p class="mt-2 text-gray-400">Modificar información del RPA</p>
     </div>
 
-    <form action="{{ route('production.drones.update', $productionDrone) }}" method="POST" class="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-2xl">
+    <form action="{{ route('production.drones.update', $productionDrone->id) }}" method="POST" class="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-2xl">
         @csrf
         @method('PUT')
 
@@ -32,6 +32,22 @@
             <div>
                 <label class="block text-sm font-medium text-gray-400 mb-2">Organización</label>
                 <input type="text" name="organization" value="{{ old('organization', $productionDrone->organization) }}" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Marca</label>
+                    <input type="text" name="brand" value="{{ old('brand', $productionDrone->brand) }}" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-400 mb-2">Modelo</label>
+                    <input type="text" name="model" value="{{ old('model', $productionDrone->model) }}" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
+                </div>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-400 mb-2">Matrícula</label>
+                <input type="text" name="registration" value="{{ old('registration', $productionDrone->registration) }}" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
             </div>
 
             <div class="grid grid-cols-2 gap-4">

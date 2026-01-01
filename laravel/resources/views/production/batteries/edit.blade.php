@@ -19,9 +19,9 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-400 mb-2">Dron Asignado</label>
+                <label class="block text-sm font-medium text-gray-400 mb-2">RPA Asignado</label>
                 <select name="drone_name" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
-                    <option value="">Seleccione un dron</option>
+                    <option value="">Seleccione un RPA</option>
                     @foreach($drones as $drone)
                         <option value="{{ $drone->name }}" {{ $battery->drone_name == $drone->name ? 'selected' : '' }}>
                             {{ $drone->name }}

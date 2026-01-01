@@ -20,7 +20,7 @@
                 <h3 class="text-lg font-semibold text-gray-100 mb-4">Información de la Misión</h3>
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <p class="text-sm text-gray-400">Dron</p>
+                        <p class="text-sm text-gray-400">RPA</p>
                         <p class="text-gray-100 font-medium">{{ $productionMission->drone ?? '-' }}</p>
                     </div>
                     <div>

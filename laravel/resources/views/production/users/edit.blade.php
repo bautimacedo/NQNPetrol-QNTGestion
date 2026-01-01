@@ -7,7 +7,7 @@
         <p class="mt-2 text-gray-400">Modificar información del usuario</p>
     </div>
 
-    <form action="{{ route('production.users.update', $authorizedUser) }}" method="POST" class="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-2xl">
+    <form action="{{ route('production.users.update', $authorizedUser->user_telegram_id) }}" method="POST" class="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-2xl">
         @csrf
         @method('PUT')
 

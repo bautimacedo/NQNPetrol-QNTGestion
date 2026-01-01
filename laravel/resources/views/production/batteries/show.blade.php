@@ -23,7 +23,7 @@
                         <p class="text-gray-100 font-medium">{{ $battery->serial }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-400">Dron Asignado</p>
+                        <p class="text-sm text-gray-400">RPA Asignado</p>
                         <p class="text-gray-100 font-medium">{{ $battery->drone->name ?? 'Sin asignar' }}</p>
                     </div>
                     <div>

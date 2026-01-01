@@ -19,6 +19,9 @@ class ProductionDrone extends Model
         'organization',
         'Latitud',
         'Longitud',
+        'brand',
+        'model',
+        'registration',
     ];
 
     protected $casts = [
@@ -64,5 +67,13 @@ class ProductionDrone extends Model
     public function isAvailable(): bool
     {
         return true;
+    }
+
+    /**
+     * Obtener el nombre de la clave para route model binding
+     */
+    public function getRouteKeyName()
+    {
+        return 'id';
     }
 }

@@ -2,9 +2,14 @@
 
 @section('content')
 <div class="space-y-6">
-    <div>
-        <h2 class="text-3xl font-bold text-gray-100">Licencias de Pilotos</h2>
-        <p class="mt-2 text-gray-400">Gestión y seguimiento de licencias de pilotos</p>
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="text-3xl font-bold text-gray-100">Licencias de Pilotos</h2>
+            <p class="mt-2 text-gray-400">Gestión y seguimiento de licencias de pilotos</p>
+        </div>
+        <button onclick="openLicenseModal()" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium">
+            Registrar Licencia
+        </button>
     </div>
 
     <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -68,5 +73,108 @@
         </div>
     </div>
 </div>
+
+<!-- Modal para Registrar Licencia -->
+<div id="licenseModal" class="fixed inset-0 bg-black bg-opacity-50 hidden z-50 flex items-center justify-center p-4">
+    <div class="bg-gray-800 rounded-lg border border-gray-700 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+        <div class="p-8">
+            <div class="flex items-center justify-between mb-8">
+                <h3 class="text-2xl font-bold text-gray-100">Registrar Nueva Licencia</h3>
+                <button onclick="closeLicenseModal()" class="text-gray-400 hover:text-gray-200 transition-colors">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <form action="{{ route('production.licenses.store') }}" method="POST" id="licenseForm">
+                @csrf
+                
+                <div class="space-y-6">
+                    <div>
+                        <label for="pilot_id" class="block text-sm font-medium text-gray-400 mb-2">Piloto *</label>
+                        <select name="pilot_id" id="pilot_id" required
+                            class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                            <option value="">Seleccione un piloto</option>
+                            @foreach(\App\Models\Pilot::orderBy('full_name')->get() as $pilot)
+                                <option value="{{ $pilot->id }}" {{ old('pilot_id') == $pilot->id ? 'selected' : '' }}>
+                                    {{ $pilot->full_name }} ({{ $pilot->dni }})
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('pilot_id')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+                    </div>
+                    
+                    <div>
+                        <label for="license_number" class="block text-sm font-medium text-gray-400 mb-2">Número de Licencia *</label>
+                        <input type="text" name="license_number" id="license_number" value="{{ old('license_number') }}" required
+                            class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                        @error('license_number')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+                    </div>
+                    
+                    <div>
+                        <label for="category" class="block text-sm font-medium text-gray-400 mb-2">Categoría *</label>
+                        <input type="text" name="category" id="category" value="{{ old('category') }}" required
+                            class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                        @error('category')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+                    </div>
+                    
+                    <div>
+                        <label for="expiration_date" class="block text-sm font-medium text-gray-400 mb-2">Fecha de Vencimiento *</label>
+                        <input type="date" name="expiration_date" id="expiration_date" value="{{ old('expiration_date') }}" required
+                            class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                        @error('expiration_date')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+                    </div>
+
+                    <!-- Mensajes de Error -->
+                    @if($errors->any())
+                        <div class="p-4 bg-red-500/20 border border-red-500/50 rounded-lg">
+                            <ul class="list-disc list-inside text-sm text-red-400">
+                                @foreach($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <!-- Botones -->
+                    <div class="flex gap-3 justify-end pt-4 border-t border-gray-700">
+                        <button type="button" onclick="closeLicenseModal()" class="px-6 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors">
+                            Cancelar
+                        </button>
+                        <button type="submit" class="px-6 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
+                            Registrar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openLicenseModal() {
+        document.getElementById('licenseModal').classList.remove('hidden');
+    }
+
+    function closeLicenseModal() {
+        document.getElementById('licenseModal').classList.add('hidden');
+        document.getElementById('licenseForm').reset();
+    }
+
+    // Cerrar modal al hacer clic fuera
+    document.getElementById('licenseModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeLicenseModal();
+        }
+    });
+
+    // Cerrar modal con Escape
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLicenseModal();
+        }
+    });
+</script>
 @endsection
 

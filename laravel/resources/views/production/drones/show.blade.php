@@ -5,7 +5,7 @@
     <div class="flex items-center justify-between">
         <div>
             <h2 class="text-3xl font-bold text-gray-100">{{ $productionDrone->name }}</h2>
-            <p class="mt-2 text-gray-400">Información completa del dron</p>
+            <p class="mt-2 text-gray-400">Información completa del RPA</p>
         </div>
         <div class="flex gap-2">
             <a href="{{ route('production.drones.edit', $productionDrone) }}" class="px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg">Editar</a>
@@ -16,8 +16,20 @@
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <div class="lg:col-span-2 space-y-6">
             <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-                <h3 class="text-lg font-semibold text-gray-100 mb-4">Información del Dron</h3>
+                <h3 class="text-lg font-semibold text-gray-100 mb-4">Información del RPA</h3>
                 <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <p class="text-sm text-gray-400">Marca</p>
+                        <p class="text-gray-100 font-medium">{{ $productionDrone->brand ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400">Modelo</p>
+                        <p class="text-gray-100 font-medium">{{ $productionDrone->model ?? '-' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400">Matrícula</p>
+                        <p class="text-gray-100 font-medium">{{ $productionDrone->registration ?? '-' }}</p>
+                    </div>
                     <div>
                         <p class="text-sm text-gray-400">Dock</p>
                         <p class="text-gray-100 font-medium">{{ $productionDrone->dock ?? '-' }}</p>

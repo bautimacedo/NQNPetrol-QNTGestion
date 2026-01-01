@@ -11,7 +11,7 @@
     <div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
         <form method="GET" action="{{ route('production.logs.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Dron</label>
+                <label class="block text-sm font-medium text-gray-400 mb-1">RPA</label>
                 <select name="drone" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
                     <option value="">Todos</option>
                     @foreach($drones as $drone)
@@ -54,7 +54,7 @@
                 <thead class="bg-gray-900">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Timestamp</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Dron</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">RPA</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Severidad</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Mensaje</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Ubicación</th>

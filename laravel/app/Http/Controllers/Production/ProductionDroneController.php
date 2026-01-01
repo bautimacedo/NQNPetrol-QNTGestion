@@ -37,12 +37,15 @@ class ProductionDroneController extends Controller
             'organization' => 'nullable|string',
             'Latitud' => 'nullable|numeric',
             'Longitud' => 'nullable|numeric',
+            'brand' => 'nullable|string',
+            'model' => 'nullable|string',
+            'registration' => 'nullable|string',
         ]);
 
         ProductionDrone::create($validated);
 
         return redirect()->route('production.drones.index')
-            ->with('success', 'Dron registrado exitosamente.');
+            ->with('success', 'RPA registrado exitosamente.');
     }
 
     /**
@@ -74,12 +77,15 @@ class ProductionDroneController extends Controller
             'organization' => 'nullable|string',
             'Latitud' => 'nullable|numeric',
             'Longitud' => 'nullable|numeric',
+            'brand' => 'nullable|string',
+            'model' => 'nullable|string',
+            'registration' => 'nullable|string',
         ]);
 
         $productionDrone->update($validated);
 
         return redirect()->route('production.drones.index')
-            ->with('success', 'Dron actualizado exitosamente.');
+            ->with('success', 'RPA actualizado exitosamente.');
     }
 
     /**
@@ -89,6 +95,6 @@ class ProductionDroneController extends Controller
     {
         $productionDrone->delete();
         return redirect()->route('production.drones.index')
-            ->with('success', 'Dron eliminado exitosamente.');
+            ->with('success', 'RPA eliminado exitosamente.');
     }
 }

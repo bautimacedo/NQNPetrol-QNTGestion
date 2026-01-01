@@ -18,7 +18,7 @@
                 <thead class="bg-gray-900">
                     <tr>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Nombre</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Dron</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">RPA</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Duración</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Payload</th>
                         <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">URL</th>

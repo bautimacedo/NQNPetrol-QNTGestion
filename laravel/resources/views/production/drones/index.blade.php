@@ -4,11 +4,11 @@
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
-            <h2 class="text-3xl font-bold text-gray-100">Gestión de Drones (Producción)</h2>
-            <p class="mt-2 text-gray-400">Flota de drones sincronizada con base de datos de producción</p>
+            <h2 class="text-3xl font-bold text-gray-100">Gestión de RPAs (Producción)</h2>
+            <p class="mt-2 text-gray-400">Flota de RPAs sincronizada con base de datos de producción</p>
         </div>
         <a href="{{ route('production.drones.create') }}" class="px-4 py-2 bg-orange-500 hover:bg-orange-600 text-white rounded-lg font-medium transition-colors">
-            + Nuevo Dron
+            + Nuevo RPA
         </a>
     </div>
 
@@ -51,7 +51,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-400">No hay drones registrados.</td>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-400">No hay RPAs registrados.</td>
                         </tr>
                     @endforelse
                 </tbody>
