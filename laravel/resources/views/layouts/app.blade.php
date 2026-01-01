@@ -67,6 +67,13 @@
                             <a href="{{ route('production.licenses.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.licenses.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                                 Licencias
                             </a>
+                            @auth
+                                @if(auth()->user()->hasRole('admin'))
+                                    <a href="{{ route('security.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('security.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
+                                        Seguridad
+                                    </a>
+                                @endif
+                            @endauth
                         </div>
                         <!-- Botón Hamburguesa Móvil -->
                         <button id="mobile-menu-button" class="md:hidden focus:outline-none" style="color: #FFFFFF;">
@@ -131,6 +138,13 @@
                         <a href="{{ route('production.licenses.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.licenses.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                             Licencias
                         </a>
+                        @auth
+                            @if(auth()->user()->hasRole('admin'))
+                                <a href="{{ route('security.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('security.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
+                                    Seguridad
+                                </a>
+                            @endif
+                        @endauth
                     </nav>
                 </div>
             </div>
