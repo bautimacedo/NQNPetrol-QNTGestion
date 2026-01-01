@@ -84,13 +84,13 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::get('wells/{well}', [WellController::class, 'show'])->name('wells.show');
         
         // Licencias - Solo lectura para operators
-        Route::get('licenses', [LicenseController::class, 'index'])->name('licenses.index');
+        Route::get('licenses', [ProductionLicenseController::class, 'index'])->name('licenses.index');
     });
     
     // Rutas adicionales solo para admin (crear/editar licencias)
     Route::middleware('role:admin')->group(function () {
         Route::prefix('production')->name('production.')->group(function () {
-            Route::post('licenses', [LicenseController::class, 'store'])->name('licenses.store');
+            Route::post('licenses', [ProductionLicenseController::class, 'store'])->name('licenses.store');
             Route::resource('wells', WellController::class)->except(['index', 'show']);
         });
     });
