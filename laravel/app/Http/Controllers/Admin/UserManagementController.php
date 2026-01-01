@@ -5,13 +5,18 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserManagementController extends Controller
+class UserManagementController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('role:admin');
+        return [
+            'auth',
+            new Middleware('role:admin'),
+            'approved',
+        ];
     }
 
     public function index()

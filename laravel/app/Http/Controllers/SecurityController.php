@@ -5,13 +5,18 @@ namespace App\Http\Controllers;
 use App\Models\BlockedIp;
 use App\Models\LoginLog;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class SecurityController extends Controller
+class SecurityController extends Controller implements HasMiddleware
 {
-    public function __construct()
+    public static function middleware(): array
     {
-        $this->middleware('auth');
-        $this->middleware('role:admin');
+        return [
+            'auth',
+            new Middleware('role:admin'),
+            'approved',
+        ];
     }
 
     public function index()
