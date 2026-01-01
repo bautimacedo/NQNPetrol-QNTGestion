@@ -7,9 +7,11 @@
             <h2 class="text-3xl font-bold text-gray-100">Gestión de RPAs (Producción)</h2>
             <p class="mt-2 text-gray-400">Flota de RPAs sincronizada con base de datos de producción</p>
         </div>
-        <a href="{{ route('production.drones.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
-            + Nuevo RPA
-        </a>
+        @hasrole('admin')
+            <a href="{{ route('production.drones.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
+                + Nuevo RPA
+            </a>
+        @endhasrole
     </div>
 
     <div class="rounded-lg overflow-hidden" style="background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
@@ -46,7 +48,9 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <a href="{{ route('production.drones.show', $drone) }}" class="mr-3 transition-colors" style="color: #1B998B;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#1B998B'">Ver</a>
-                                <a href="{{ route('production.drones.edit', $drone) }}" class="mr-3 transition-colors" style="color: #60a5fa;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#60a5fa'">Editar</a>
+                                @hasrole('admin')
+                                    <a href="{{ route('production.drones.edit', $drone) }}" class="mr-3 transition-colors" style="color: #60a5fa;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#60a5fa'">Editar</a>
+                                @endhasrole
                             </td>
                         </tr>
                     @empty

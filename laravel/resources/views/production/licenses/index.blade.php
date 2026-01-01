@@ -7,9 +7,11 @@
             <h2 class="text-3xl font-bold text-gray-100">Licencias de Pilotos</h2>
             <p class="mt-2 text-gray-400">Gestión y seguimiento de licencias de pilotos</p>
         </div>
-        <button onclick="openLicenseModal()" class="px-4 py-2 text-white rounded-lg font-medium qnt-gradient">
-            Registrar Licencia
-        </button>
+        @hasrole('admin')
+            <button onclick="openLicenseModal()" class="px-4 py-2 text-white rounded-lg font-medium qnt-gradient">
+                Registrar Licencia
+            </button>
+        @endhasrole
     </div>
 
     <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">

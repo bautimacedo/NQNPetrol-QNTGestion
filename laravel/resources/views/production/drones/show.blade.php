@@ -8,7 +8,9 @@
             <p class="mt-2 text-gray-400">Información completa del RPA</p>
         </div>
         <div class="flex gap-2">
-            <a href="{{ route('production.drones.edit', $productionDrone) }}" class="px-4 py-2 text-white rounded-lg qnt-gradient">Editar</a>
+            @hasrole('admin')
+                <a href="{{ route('production.drones.edit', $productionDrone) }}" class="px-4 py-2 text-white rounded-lg qnt-gradient">Editar</a>
+            @endhasrole
             <a href="{{ route('production.drones.index') }}" class="px-4 py-2 text-white rounded-lg" style="background-color: rgba(255, 255, 255, 0.1);" onmouseover="this.style.backgroundColor='rgba(255, 255, 255, 0.15)'" onmouseout="this.style.backgroundColor='rgba(255, 255, 255, 0.1)'">Volver</a>
         </div>
     </div>

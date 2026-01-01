@@ -7,12 +7,13 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PilotController;
 use App\Http\Controllers\Production\AuthorizedUserController;
 use App\Http\Controllers\Production\BatteryController;
-use App\Http\Controllers\Production\LicenseController;
+use App\Http\Controllers\Production\LicenseController as ProductionLicenseController;
 use App\Http\Controllers\Production\ProductionDroneController;
 use App\Http\Controllers\Production\ProductionMissionController;
 use App\Http\Controllers\Production\TelemetryLogController;
 use App\Http\Controllers\Production\WellController;
 use App\Http\Controllers\SecurityController;
+use App\Http\Controllers\WaitingApprovalController;
 use Illuminate\Support\Facades\Route;
 
 // Rutas de autenticación
@@ -21,6 +22,11 @@ Route::middleware(['guest', \App\Http\Middleware\CheckBlockedIp::class])->group(
     Route::post('/login', [LoginController::class, 'login']);
     Route::get('/register', [RegisterController::class, 'showRegistrationForm'])->name('register');
     Route::post('/register', [RegisterController::class, 'register']);
+});
+
+// Ruta de espera de aprobación (sin middleware de aprobación)
+Route::middleware('auth')->group(function () {
+    Route::get('/waiting-approval', [WaitingApprovalController::class, 'index'])->name('waiting.approval');
 });
 
 Route::middleware(['auth', 'approved'])->group(function () {
@@ -33,9 +39,11 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::get('/security', [SecurityController::class, 'index'])->name('security.index');
         Route::post('/security/unblock/{id}', [SecurityController::class, 'unblockIp'])->name('security.unblock');
         
-        // Gestión de usuarios pendientes
+        // Gestión de usuarios
+        Route::get('/admin/users', [UserManagementController::class, 'index'])->name('admin.users.index');
         Route::get('/admin/users/pending', [UserManagementController::class, 'pending'])->name('admin.users.pending');
         Route::post('/admin/users/{id}/approve', [UserManagementController::class, 'approve'])->name('admin.users.approve');
+        Route::post('/admin/users/{id}/make-admin', [UserManagementController::class, 'makeAdmin'])->name('admin.users.makeAdmin');
         Route::post('/admin/users/{id}/reject', [UserManagementController::class, 'reject'])->name('admin.users.reject');
     });
     

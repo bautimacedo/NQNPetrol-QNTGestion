@@ -7,9 +7,11 @@
             <h2 class="text-3xl font-bold text-gray-100">Libro de Misiones</h2>
             <p class="mt-2 text-gray-400">Registro completo de misiones de producción</p>
         </div>
-        <a href="{{ route('production.missions.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
-            + Nueva Misión
-        </a>
+        @hasrole('admin')
+            <a href="{{ route('production.missions.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
+                + Nueva Misión
+            </a>
+        @endhasrole
     </div>
 
     <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
@@ -53,7 +55,9 @@
                             </td>
                             <td class="px-6 py-4 text-right">
                                 <a href="{{ route('production.missions.show', $mission) }}" class="text-orange-400 hover:text-orange-300 mr-3">Ver</a>
-                                <a href="{{ route('production.missions.edit', $mission) }}" class="text-blue-400 hover:text-blue-300 mr-3">Editar</a>
+                                @hasrole('admin')
+                                    <a href="{{ route('production.missions.edit', $mission) }}" class="text-blue-400 hover:text-blue-300 mr-3">Editar</a>
+                                @endhasrole
                             </td>
                         </tr>
                     @empty

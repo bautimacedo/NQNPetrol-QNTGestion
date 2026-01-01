@@ -17,6 +17,11 @@ class EnsureUserIsApproved
     public function handle(Request $request, Closure $next): Response
     {
         if (Auth::check() && !Auth::user()->is_approved) {
+            // Si el usuario no tiene rol y no está aprobado, redirigir a página de espera
+            if (Auth::user()->roles->count() === 0) {
+                return redirect()->route('waiting.approval');
+            }
+            
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();

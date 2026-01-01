@@ -14,6 +14,15 @@ class UserManagementController extends Controller
         $this->middleware('role:admin');
     }
 
+    public function index()
+    {
+        $users = User::with('roles')
+            ->orderBy('created_at', 'desc')
+            ->get();
+        
+        return view('admin.users.index', compact('users'));
+    }
+
     public function pending()
     {
         $pendingUsers = User::where('is_approved', false)
@@ -36,8 +45,23 @@ class UserManagementController extends Controller
             $user->assignRole('operator');
         }
         
-        return redirect()->route('admin.users.pending')
-            ->with('success', "Usuario {$user->name} aprobado exitosamente.");
+        return redirect()->back()
+            ->with('success', "Usuario {$user->name} aprobado como Operador exitosamente.");
+    }
+
+    public function makeAdmin($id)
+    {
+        $user = User::findOrFail($id);
+        
+        $user->update([
+            'is_approved' => true,
+        ]);
+        
+        // Sincronizar roles para que solo tenga admin
+        $user->syncRoles(['admin']);
+        
+        return redirect()->back()
+            ->with('success', "Usuario {$user->name} ahora es Administrador.");
     }
 
     public function reject($id)
