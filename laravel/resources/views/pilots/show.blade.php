@@ -42,15 +42,16 @@
                 </div>
                 
                 <!-- Foto de Perfil -->
-                <div class="ml-6">
+                <div class="ml-6 flex items-center">
                     @if($pilot->profile_photo)
-                        <img src="{{ Storage::url($pilot->profile_photo) }}" 
-                             alt="{{ $pilot->full_name }}" 
-                             class="w-32 h-32 rounded-full object-cover"
-                             style="border: 3px solid #1B998B; box-shadow: 0 0 20px rgba(27, 153, 139, 0.3);">
+                        <div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0" style="border: 3px solid #1B998B; box-shadow: 0 0 20px rgba(27, 153, 139, 0.3);">
+                            <img src="{{ Storage::url($pilot->profile_photo) }}" 
+                                 alt="{{ $pilot->full_name }}" 
+                                 class="w-full h-full object-cover">
+                        </div>
                     @else
-                        <div class="w-32 h-32 rounded-full flex items-center justify-center" style="background-color: rgba(31, 41, 55, 0.8); border: 3px solid #1B998B; box-shadow: 0 0 20px rgba(27, 153, 139, 0.3);">
-                            <svg class="w-16 h-16" style="color: rgba(255, 255, 255, 0.3);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center flex-shrink-0" style="background-color: rgba(31, 41, 55, 0.8); border: 3px solid #1B998B; box-shadow: 0 0 20px rgba(27, 153, 139, 0.3);">
+                            <svg class="w-12 h-12" style="color: rgba(255, 255, 255, 0.3);" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                             </svg>
                         </div>
