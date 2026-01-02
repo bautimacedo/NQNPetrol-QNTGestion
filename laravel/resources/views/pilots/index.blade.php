@@ -96,13 +96,23 @@
                 </button>
             </div>
 
-            <form action="{{ route('pilots.store') }}" method="POST" id="pilotForm">
+            <form action="{{ route('pilots.store') }}" method="POST" id="pilotForm" enctype="multipart/form-data">
                 @csrf
                 
                 <!-- Campos del Piloto -->
                 <div class="space-y-6 mb-8">
                     <div>
                         <h4 class="text-lg font-semibold text-gray-200 mb-4 pb-3 border-b border-gray-700">Datos del Piloto</h4>
+                        
+                        <div class="mb-5">
+                            <label for="profile_photo" class="block text-sm font-medium text-gray-400 mb-2">Foto de Perfil</label>
+                            <input type="file" name="profile_photo" id="profile_photo" accept="image/*"
+                                class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
+                            <p class="mt-1 text-xs text-gray-500">Formatos: JPEG, PNG, JPG, GIF. Máximo 2MB.</p>
+                            @error('profile_photo')
+                                <p class="mt-1 text-sm" style="color: #f87171;">{{ $message }}</p>
+                            @enderror
+                        </div>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                             <div>

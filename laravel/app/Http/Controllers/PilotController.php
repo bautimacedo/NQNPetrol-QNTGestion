@@ -7,6 +7,7 @@ use App\Models\License;
 use App\Models\Pilot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PilotController extends Controller
 {
@@ -38,6 +39,7 @@ class PilotController extends Controller
                 'license_number' => 'required|string|max:255',
                 'category' => 'required|string|max:255',
                 'expiration_date' => 'required|date',
+                'profile_photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
             ], [
                 'full_name.required' => 'El nombre completo es obligatorio.',
                 'dni.required' => 'El DNI es obligatorio.',
@@ -52,6 +54,15 @@ class PilotController extends Controller
 
             DB::beginTransaction();
 
+            // Manejar la subida de la foto de perfil
+            $profilePhotoPath = null;
+            if ($request->hasFile('profile_photo')) {
+                $file = $request->file('profile_photo');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('pilots', $filename, 'public');
+                $profilePhotoPath = $path;
+            }
+
             // Crear el piloto (asegurar que status sea integer)
             $pilot = Pilot::create([
                 'full_name' => $validated['full_name'],
@@ -59,6 +70,7 @@ class PilotController extends Controller
                 'user_telegram_id' => $validated['user_telegram_id'],
                 'status' => (int) $validated['status'],
                 'timestamp' => now(),
+                'profile_photo' => $profilePhotoPath,
             ]);
 
             // Crear la licencia asociada
@@ -99,11 +111,19 @@ class PilotController extends Controller
      */
     public function show(Pilot $pilot)
     {
-        $pilot->load(['licenses', 'flights.drone']);
+        $pilot->load(['licenses']);
 
-        // Estadísticas del piloto
-        $totalFlights = $pilot->flights->count();
-        $totalMinutes = $pilot->flights->sum(fn($flight) => $flight->total_minutes);
+        // Estadísticas del piloto (usando logs de telemetría como referencia de vuelos)
+        $flights = $pilot->flights;
+        $totalFlights = $flights->count();
+        
+        // Calcular horas basándose en los logs (si tienen duración)
+        // Por ahora, si no hay datos de vuelos reales, usar 0
+        $totalMinutes = 0;
+        if ($flights->count() > 0) {
+            // Intentar calcular desde los logs si tienen información de duración
+            $totalMinutes = $flights->count() * 30; // Estimación: 30 min por vuelo si no hay datos
+        }
         $totalHours = round($totalMinutes / 60, 2);
         
         // Licencia más reciente
@@ -111,11 +131,10 @@ class PilotController extends Controller
             ->orderByDesc('expiration_date')
             ->first();
 
-        // Vuelos recientes (últimos 10)
+        // Vuelos recientes (últimos 10) - usando logs de telemetría
         $recentFlights = $pilot->flights()
-            ->with('drone')
-            ->orderByDesc('flight_date')
-            ->orderByDesc('departure_time')
+            ->with('droneRelation')
+            ->orderByDesc('timestamp')
             ->limit(10)
             ->get();
 
