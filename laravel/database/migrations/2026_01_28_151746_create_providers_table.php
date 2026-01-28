@@ -13,9 +13,10 @@ return new class extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('contact_email')->nullable();
+            $table->string('name'); // Nombre/Razón Social
             $table->string('cuit')->nullable();
+            $table->string('email')->nullable(); // contact_email renombrado a email
+            $table->string('phone')->nullable();
             $table->text('address')->nullable();
             $table->timestamps();
         });

@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PilotController;
+use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\Production\AuthorizedUserController;
 use App\Http\Controllers\Production\BatteryController;
@@ -94,6 +95,18 @@ Route::middleware(['auth', 'approved'])->group(function () {
             Route::post('licenses', [ProductionLicenseController::class, 'store'])->name('licenses.store');
             Route::resource('wells', WellController::class)->except(['index', 'show']);
         });
+    });
+
+    // Rutas de Proveedores - Solo admin puede crear/editar/eliminar, todos pueden ver
+    Route::get('providers', [ProviderController::class, 'index'])->name('providers.index');
+    Route::get('providers/{provider}', [ProviderController::class, 'show'])->name('providers.show');
+    
+    Route::middleware('role:admin')->group(function () {
+        Route::get('providers/create', [ProviderController::class, 'create'])->name('providers.create');
+        Route::post('providers', [ProviderController::class, 'store'])->name('providers.store');
+        Route::get('providers/{provider}/edit', [ProviderController::class, 'edit'])->name('providers.edit');
+        Route::put('providers/{provider}', [ProviderController::class, 'update'])->name('providers.update');
+        Route::delete('providers/{provider}', [ProviderController::class, 'destroy'])->name('providers.destroy');
     });
 
     // Rutas de Compras - Las rutas específicas deben ir ANTES de las rutas con parámetros
