@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PilotController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\Production\AuthorizedUserController;
 use App\Http\Controllers\Production\BatteryController;
 use App\Http\Controllers\Production\LicenseController as ProductionLicenseController;
@@ -93,6 +94,22 @@ Route::middleware(['auth', 'approved'])->group(function () {
             Route::post('licenses', [ProductionLicenseController::class, 'store'])->name('licenses.store');
             Route::resource('wells', WellController::class)->except(['index', 'show']);
         });
+    });
+
+    // Rutas de Compras - Lectura para todos, CRUD completo para admin
+    Route::get('purchases', [PurchaseController::class, 'index'])->name('purchases.index');
+    Route::get('purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
+    Route::get('purchases/{purchase}/download-document/{purchaseDocument}', [PurchaseController::class, 'downloadDocument'])->name('purchases.download-document');
+    
+    // Rutas de Compras solo para admin
+    Route::middleware('role:admin')->group(function () {
+        Route::get('purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
+        Route::post('purchases', [PurchaseController::class, 'store'])->name('purchases.store');
+        Route::get('purchases/{purchase}/edit', [PurchaseController::class, 'edit'])->name('purchases.edit');
+        Route::put('purchases/{purchase}', [PurchaseController::class, 'update'])->name('purchases.update');
+        Route::delete('purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
+        Route::post('purchases/{purchase}/upload-document', [PurchaseController::class, 'uploadDocument'])->name('purchases.upload-document');
+        Route::delete('purchases/{purchase}/delete-document/{purchaseDocument}', [PurchaseController::class, 'deleteDocument'])->name('purchases.delete-document');
     });
 });
 

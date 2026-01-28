@@ -63,6 +63,9 @@
                             <a href="{{ route('production.wells.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.wells.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                                 Pozos
                             </a>
+                            <a href="{{ route('purchases.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('purchases.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
+                                Compras
+                            </a>
                             <a href="{{ route('production.logs.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.logs.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                                 Logs
                             </a>
@@ -144,6 +147,9 @@
                         </a>
                         <a href="{{ route('production.wells.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.wells.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                             Pozos
+                        </a>
+                        <a href="{{ route('purchases.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('purchases.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
+                            Compras
                         </a>
                         <a href="{{ route('production.logs.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.logs.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
                             Logs
