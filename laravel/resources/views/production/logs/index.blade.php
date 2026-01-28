@@ -1,18 +1,16 @@
 @extends('layouts.app')
 
+@section('page-title', 'Monitor de Logs de Telemetría')
+@section('page-subtitle', 'Visualización y filtrado de logs de telemetría en tiempo real')
+
 @section('content')
 <div class="space-y-6">
-    <div>
-        <h2 class="text-3xl font-bold text-gray-100">Monitor de Logs de Telemetría</h2>
-        <p class="mt-2 text-gray-400">Visualización y filtrado de logs de telemetría en tiempo real</p>
-    </div>
-
     <!-- Filtros -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 p-4">
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
         <form method="GET" action="{{ route('production.logs.index') }}" class="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">RPA</label>
-                <select name="drone" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">RPA</label>
+                <select name="drone" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
                     <option value="">Todos</option>
                     @foreach($drones as $drone)
                         <option value="{{ $drone->name }}" {{ request('drone') == $drone->name ? 'selected' : '' }}>
@@ -22,8 +20,8 @@
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Severidad</label>
-                <select name="severity" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Severidad</label>
+                <select name="severity" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
                     <option value="">Todas</option>
                     @foreach($severities as $severity)
                         <option value="{{ $severity }}" {{ request('severity') == $severity ? 'selected' : '' }}>
@@ -33,64 +31,64 @@
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Desde</label>
-                <input type="datetime-local" name="date_from" value="{{ request('date_from') }}" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Desde</label>
+                <input type="datetime-local" name="date_from" value="{{ request('date_from') }}" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-400 mb-1">Hasta</label>
-                <input type="datetime-local" name="date_to" value="{{ request('date_to') }}" class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-3 py-2">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Hasta</label>
+                <input type="datetime-local" name="date_to" value="{{ request('date_to') }}" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
             </div>
             <div class="md:col-span-4 flex gap-2">
-                <button type="submit" class="px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg">Filtrar</button>
-                <a href="{{ route('production.logs.index') }}" class="px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white rounded-lg">Limpiar</a>
+                <button type="submit" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">Filtrar</button>
+                <a href="{{ route('production.logs.index') }}" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Limpiar</a>
             </div>
         </form>
     </div>
 
     <!-- Tabla de Logs -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
         <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-900">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gradient-to-r from-[#ecebbb] to-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Timestamp</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">RPA</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Severidad</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Mensaje</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Ubicación</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Batería</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Timestamp</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RPA</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Severidad</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Mensaje</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ubicación</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Batería</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-700">
+                <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($logs as $log)
-                        <tr class="hover:bg-gray-700/50 transition-colors">
+                        <tr class="hover:bg-gray-50 transition-colors">
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-100">{{ $log->timestamp ? $log->timestamp->format('d/m/Y H:i:s') : '-' }}</div>
+                                <div class="text-sm text-gray-900">{{ $log->timestamp ? $log->timestamp->format('d/m/Y H:i:s') : '-' }}</div>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm text-gray-100">{{ $log->drone ?? '-' }}</div>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-900">{{ $log->drone ?? '-' }}</div>
                             </td>
-                            <td class="px-6 py-4">
-                                <span class="px-2 py-1 text-xs font-medium rounded
-                                    {{ $log->severity === 'error' || $log->severity === 'critical' ? 'bg-red-500/20 text-red-400' : '' }}
-                                    {{ $log->severity === 'warning' ? 'bg-yellow-500/20 text-yellow-400' : '' }}
-                                    {{ $log->severity === 'info' ? 'bg-blue-500/20 text-blue-400' : '' }}">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="px-2 py-1 text-xs font-medium rounded-full
+                                    {{ $log->severity === 'error' || $log->severity === 'critical' ? 'bg-red-100 text-red-800' : '' }}
+                                    {{ $log->severity === 'warning' ? 'bg-yellow-100 text-yellow-800' : '' }}
+                                    {{ $log->severity === 'info' ? 'bg-blue-100 text-blue-800' : '' }}">
                                     {{ $log->severity ?? 'N/A' }}
                                 </span>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-sm text-gray-300 max-w-md truncate">{{ $log->message ?? '-' }}</div>
+                                <div class="text-sm text-gray-700 max-w-md truncate">{{ $log->message ?? '-' }}</div>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($log->latitude && $log->longitude)
-                                    <div class="text-xs text-gray-400">{{ number_format($log->latitude, 4) }}, {{ number_format($log->longitude, 4) }}</div>
+                                    <div class="text-xs text-gray-600">{{ number_format($log->latitude, 4) }}, {{ number_format($log->longitude, 4) }}</div>
                                 @else
                                     <span class="text-xs text-gray-500">-</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($log->battery_percentage)
-                                    <div class="text-sm text-gray-100">{{ number_format($log->battery_percentage, 1) }}%</div>
+                                    <div class="text-sm text-gray-900">{{ number_format($log->battery_percentage, 1) }}%</div>
                                 @else
                                     <span class="text-xs text-gray-500">-</span>
                                 @endif
@@ -98,7 +96,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="6" class="px-6 py-12 text-center text-gray-400">No se encontraron logs.</td>
+                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">No se encontraron logs.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -106,11 +104,10 @@
         </div>
         
         @if($logs->hasPages())
-            <div class="px-6 py-4 border-t border-gray-700">
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
                 {{ $logs->links() }}
             </div>
         @endif
     </div>
 </div>
 @endsection
-

@@ -1,65 +1,64 @@
 @extends('layouts.app')
 
+@section('page-title', 'Gestión de Baterías')
+@section('page-subtitle', 'Inventario de baterías de la flota')
+
 @section('content')
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <div>
-            <h2 class="text-3xl font-bold text-gray-100">Gestión de Baterías</h2>
-            <p class="mt-2 text-gray-400">Inventario de baterías de la flota</p>
-        </div>
         @hasrole('admin')
-            <a href="{{ route('production.batteries.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
+            <a href="{{ route('production.batteries.create') }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
                 + Nueva Batería
             </a>
         @endhasrole
     </div>
 
-    <div class="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
         <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead class="bg-gray-900">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gradient-to-r from-[#ecebbb] to-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Serial</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">RPA Asignado</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Vuelos</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Último Uso</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">Acciones</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Serial</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">RPA Asignado</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vuelos</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Último Uso</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-700">
+                <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($batteries as $battery)
-                        <tr class="hover:bg-gray-700/50 transition-colors">
-                            <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-100">{{ $battery->serial }}</div>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ $battery->serial }}</div>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm text-gray-300">{{ $battery->drone->name ?? 'Sin asignar' }}</div>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-700">{{ $battery->drone->name ?? 'Sin asignar' }}</div>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="flex items-center">
-                                    <span class="text-sm font-medium text-gray-100 {{ $battery->flight_count > 100 ? 'text-yellow-400' : '' }}">
+                                    <span class="text-sm font-medium {{ $battery->flight_count > 100 ? 'text-amber-600' : 'text-gray-900' }}">
                                         {{ $battery->flight_count }}
                                     </span>
                                     @if($battery->flight_count > 100)
-                                        <span class="ml-2 px-2 py-1 text-xs bg-yellow-500/20 text-yellow-400 rounded">Alto uso</span>
+                                        <span class="ml-2 px-2 py-1 text-xs bg-amber-100 text-amber-800 rounded-full">Alto uso</span>
                                     @endif
                                 </div>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm text-gray-300">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-700">
                                     {{ $battery->last_used ? $battery->last_used->format('d/m/Y') : '-' }}
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <a href="{{ route('production.batteries.show', $battery) }}" class="text-orange-400 hover:text-orange-300 mr-3">Ver</a>
+                            <td class="px-6 py-4 text-right whitespace-nowrap">
+                                <a href="{{ route('production.batteries.show', $battery) }}" class="text-sm font-medium mr-3" style="color: #6b7b39;" onmouseover="this.style.color='#5a6830'" onmouseout="this.style.color='#6b7b39'">Ver</a>
                                 @hasrole('admin')
-                                    <a href="{{ route('production.batteries.edit', $battery) }}" class="text-blue-400 hover:text-blue-300 mr-3">Editar</a>
+                                    <a href="{{ route('production.batteries.edit', $battery) }}" class="text-sm font-medium mr-3 text-blue-600 hover:text-blue-800">Editar</a>
                                 @endhasrole
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-400">No hay baterías registradas.</td>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">No hay baterías registradas.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -67,11 +66,10 @@
         </div>
         
         @if($batteries->hasPages())
-            <div class="px-6 py-4 border-t border-gray-700">
+            <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
                 {{ $batteries->links() }}
             </div>
         @endif
     </div>
 </div>
 @endsection
-

@@ -1,61 +1,60 @@
 @extends('layouts.app')
 
+@section('page-title', 'Gestión de RPAs (Producción)')
+@section('page-subtitle', 'Flota de RPAs sincronizada con base de datos de producción')
+
 @section('content')
 <div class="space-y-6">
     <div class="flex items-center justify-between">
-        <div>
-            <h2 class="text-3xl font-bold text-gray-100">Gestión de RPAs (Producción)</h2>
-            <p class="mt-2 text-gray-400">Flota de RPAs sincronizada con base de datos de producción</p>
-        </div>
         @hasrole('admin')
-            <a href="{{ route('production.drones.create') }}" class="px-4 py-2 text-white rounded-lg font-medium transition-colors qnt-gradient">
+            <a href="{{ route('production.drones.create') }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
                 + Nuevo RPA
             </a>
         @endhasrole
     </div>
 
-    <div class="rounded-lg overflow-hidden" style="background-color: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);">
+    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
         <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead style="background-color: rgba(255, 255, 255, 0.08);">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gradient-to-r from-[#ecebbb] to-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Nombre</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Dock/Site</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Organización</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-400 uppercase">Ubicación</th>
-                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-400 uppercase">Acciones</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Nombre</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Dock/Site</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Organización</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ubicación</th>
+                        <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-700">
+                <tbody class="bg-white divide-y divide-gray-200">
                     @forelse($drones as $drone)
-                        <tr class="hover:bg-gray-700/50 transition-colors">
-                            <td class="px-6 py-4">
-                                <div class="text-sm font-medium text-gray-100">{{ $drone->name }}</div>
+                        <tr class="hover:bg-gray-50 transition-colors">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-medium text-gray-900">{{ $drone->name }}</div>
                             </td>
                             <td class="px-6 py-4">
-                                <div class="text-sm text-gray-300">{{ $drone->dock ?? '-' }}</div>
-                                <div class="text-xs text-gray-500">{{ $drone->site ?? '-' }}</div>
+                                <div class="text-sm text-gray-900">{{ $drone->dock ?? '-' }}</div>
+                                <div class="text-xs text-gray-600">{{ $drone->site ?? '-' }}</div>
                             </td>
-                            <td class="px-6 py-4">
-                                <div class="text-sm text-gray-300">{{ $drone->organization ?? '-' }}</div>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm text-gray-700">{{ $drone->organization ?? '-' }}</div>
                             </td>
-                            <td class="px-6 py-4">
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 @if($drone->Latitud && $drone->Longitud)
-                                    <div class="text-sm text-gray-300">{{ number_format($drone->Latitud, 6) }}, {{ number_format($drone->Longitud, 6) }}</div>
+                                    <div class="text-sm text-gray-700">{{ number_format($drone->Latitud, 6) }}, {{ number_format($drone->Longitud, 6) }}</div>
                                 @else
                                     <span class="text-xs text-gray-500">Sin coordenadas</span>
                                 @endif
                             </td>
-                            <td class="px-6 py-4 text-right">
-                                <a href="{{ route('production.drones.show', $drone) }}" class="mr-3 transition-colors" style="color: #1B998B;" onmouseover="this.style.color='#2dd4bf'" onmouseout="this.style.color='#1B998B'">Ver</a>
+                            <td class="px-6 py-4 text-right whitespace-nowrap">
+                                <a href="{{ route('production.drones.show', $drone) }}" class="text-sm font-medium mr-3" style="color: #6b7b39;" onmouseover="this.style.color='#5a6830'" onmouseout="this.style.color='#6b7b39'">Ver</a>
                                 @hasrole('admin')
-                                    <a href="{{ route('production.drones.edit', $drone) }}" class="mr-3 transition-colors" style="color: #60a5fa;" onmouseover="this.style.color='#93c5fd'" onmouseout="this.style.color='#60a5fa'">Editar</a>
+                                    <a href="{{ route('production.drones.edit', $drone) }}" class="text-sm font-medium mr-3 text-blue-600 hover:text-blue-800">Editar</a>
                                 @endhasrole
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-400">No hay RPAs registrados.</td>
+                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">No hay RPAs registrados.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -64,4 +63,3 @@
     </div>
 </div>
 @endsection
-
