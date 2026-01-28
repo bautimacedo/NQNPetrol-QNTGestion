@@ -12,25 +12,20 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // PRIMERO: Eliminar la restricción de llave primaria actual de user_telegram_id
-        // Esto NO borra los datos, solo quita la restricción
-        Schema::table('authorized_users', function (Blueprint $table) {
-            $table->dropPrimary(['user_telegram_id']);
-        });
-
-        // SEGUNDO: Agregar la nueva columna id como bigIncrements
-        // Al haber quitado la PK anterior, esta pasará a ser la nueva llave primaria sin conflictos
+        // 1. Forzamos la caída de la PK de Telegram y sus dependencias (Logs, send_mission_intent)
+        DB::statement('ALTER TABLE authorized_users DROP CONSTRAINT authorized_users_pkey CASCADE');
+    
+        // 2. Agregamos el nuevo ID y lo hacemos PK
         Schema::table('authorized_users', function (Blueprint $table) {
             $table->bigIncrements('id')->first();
         });
-
-        // TERCERO: Modificar user_telegram_id para que sea único pero no PK
-        // Esto asegura que el bot de Telegram siga funcionando con IDs únicos
+    
+        // 3. Devolvemos el user_telegram_id a su estado normal (único pero no PK)
         Schema::table('authorized_users', function (Blueprint $table) {
             $table->unsignedBigInteger('user_telegram_id')->unique()->change();
         });
-
-        // CUARTO: Agregar el resto de los campos necesarios de la antigua tabla de pilotos
+    
+        // 4. Agregamos los campos de pilots
         Schema::table('authorized_users', function (Blueprint $table) {
             $table->string('dni')->nullable()->after('user_telegram_id');
             $table->string('full_name')->nullable()->after('dni');
@@ -38,8 +33,11 @@ return new class extends Migration
             $table->string('profile_photo_path')->nullable()->after('status');
             $table->foreignId('web_user_id')->nullable()->after('profile_photo_path')->constrained('users')->onDelete('set null');
         });
+    
+        // 5. IMPORTANTE: Recreamos las Foreign Keys que el CASCADE borró
+        DB::statement('ALTER TABLE "Logs" ADD CONSTRAINT logs_telegram_sender_fkey FOREIGN KEY (telegram_sender) REFERENCES authorized_users(user_telegram_id)');
+        DB::statement('ALTER TABLE send_mission_intent ADD CONSTRAINT send_mission_intent_sender_fkey FOREIGN KEY (sender) REFERENCES authorized_users(user_telegram_id)');
     }
-
     /**
      * Reverse the migrations.
      */
