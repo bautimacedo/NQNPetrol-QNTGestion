@@ -12,25 +12,25 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Agregar columna id primero (antes de eliminar la PK)
-        Schema::table('authorized_users', function (Blueprint $table) {
-            $table->bigIncrements('id')->first();
-        });
-
-        // Eliminar la clave primaria actual
+        // PRIMERO: Eliminar la restricción de llave primaria actual de user_telegram_id
+        // Esto NO borra los datos, solo quita la restricción
         Schema::table('authorized_users', function (Blueprint $table) {
             $table->dropPrimary(['user_telegram_id']);
         });
 
-        // Establecer id como nueva clave primaria
-        DB::statement('ALTER TABLE authorized_users ADD PRIMARY KEY (id)');
+        // SEGUNDO: Agregar la nueva columna id como bigIncrements
+        // Al haber quitado la PK anterior, esta pasará a ser la nueva llave primaria sin conflictos
+        Schema::table('authorized_users', function (Blueprint $table) {
+            $table->bigIncrements('id')->first();
+        });
 
-        // Hacer user_telegram_id único pero no primario
+        // TERCERO: Modificar user_telegram_id para que sea único pero no PK
+        // Esto asegura que el bot de Telegram siga funcionando con IDs únicos
         Schema::table('authorized_users', function (Blueprint $table) {
             $table->unsignedBigInteger('user_telegram_id')->unique()->change();
         });
 
-        // Agregar las nuevas columnas de pilots
+        // CUARTO: Agregar el resto de los campos necesarios de la antigua tabla de pilotos
         Schema::table('authorized_users', function (Blueprint $table) {
             $table->string('dni')->nullable()->after('user_telegram_id');
             $table->string('full_name')->nullable()->after('dni');
@@ -45,23 +45,24 @@ return new class extends Migration
      */
     public function down(): void
     {
+        // Eliminar foreign key de web_user_id
         Schema::table('authorized_users', function (Blueprint $table) {
-            // Eliminar foreign key
             $table->dropForeign(['web_user_id']);
-            
-            // Eliminar unique constraint de user_telegram_id
+        });
+
+        // Eliminar unique constraint de user_telegram_id
+        Schema::table('authorized_users', function (Blueprint $table) {
             $table->dropUnique(['user_telegram_id']);
         });
 
-        // Eliminar PK de id
-        DB::statement('ALTER TABLE authorized_users DROP CONSTRAINT authorized_users_pkey');
-
+        // Eliminar la columna id y las demás columnas agregadas
         Schema::table('authorized_users', function (Blueprint $table) {
-            // Eliminar columnas agregadas
             $table->dropColumn(['id', 'dni', 'full_name', 'status', 'profile_photo_path', 'web_user_id']);
         });
 
         // Restaurar user_telegram_id como clave primaria
-        DB::statement('ALTER TABLE authorized_users ADD PRIMARY KEY (user_telegram_id)');
+        Schema::table('authorized_users', function (Blueprint $table) {
+            $table->primary('user_telegram_id');
+        });
     }
 };
