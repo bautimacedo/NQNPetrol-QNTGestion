@@ -32,49 +32,49 @@
 
             <!-- Navigation -->
             <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
-                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Dashboard
                 </a>
-                <a href="{{ route('pilots.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('pilots.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Pilotos
                 </a>
                 
                 <div class="pt-4 pb-2">
                     <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Inventario</p>
                 </div>
-                <a href="{{ route('production.drones.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.drones.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('production.drones.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.drones.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     RPAs
                 </a>
-                <a href="{{ route('production.batteries.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('production.batteries.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Baterías
                 </a>
                 
                 <div class="pt-4 pb-2">
                     <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Operaciones</p>
                 </div>
-                <a href="{{ route('production.missions.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.missions.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('production.missions.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.missions.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Misiones
                 </a>
-                <a href="{{ route('production.wells.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('production.wells.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Pozos
                 </a>
-                <a href="{{ route('providers.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('providers.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('providers.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('providers.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Proveedores
                 </a>
-                <a href="{{ route('purchases.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('purchases.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Compras
                 </a>
-                <a href="{{ route('production.logs.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('production.logs.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Logs
                 </a>
                 
                 <div class="pt-4 pb-2">
                     <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Administración</p>
                 </div>
-                <a href="{{ route('production.users.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('production.users.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Usuarios
                 </a>
-                <a href="{{ route('production.licenses.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                <a href="{{ route('production.licenses.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Licencias
                 </a>
                 
@@ -83,13 +83,13 @@
                         @php
                             $pendingCount = \App\Models\User::where('is_approved', false)->count();
                         @endphp
-                        <a href="{{ route('admin.users.pending') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        <a href="{{ route('admin.users.pending') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                             Usuarios Pendientes
                             @if($pendingCount > 0)
                                 <span class="ml-auto px-2 py-0.5 text-xs rounded-full bg-amber-500/20 text-amber-400">{{ $pendingCount }}</span>
                             @endif
                         </a>
-                        <a href="{{ route('security.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        <a href="{{ route('security.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                             Seguridad
                         </a>
                     @endif
@@ -99,8 +99,8 @@
             <!-- Footer Sidebar -->
             <div class="px-3 py-4 border-t border-zinc-700">
                 @auth
-                    <div class="px-4 py-2 text-sm text-zinc-300">
-                        <p class="font-medium">{{ auth()->user()->first_name ?? auth()->user()->name }}</p>
+                    <div class="px-4 py-2 text-sm text-zinc-400">
+                        <p class="font-medium text-white">{{ auth()->user()->first_name ?? auth()->user()->name }}</p>
                         <p class="text-xs text-zinc-500">{{ auth()->user()->email }}</p>
                     </div>
                     <form action="{{ route('logout') }}" method="POST" class="mt-2">
