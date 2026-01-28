@@ -6,28 +6,111 @@
 @source '../**/*.js';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+    /* Fuentes */
+    --font-sans: 'Figtree', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-roboto: 'Roboto', ui-sans-serif, system-ui, sans-serif;
+    
+    /* Colores Quintana */
+    --color-quintana-green: #6b7b39;
+    --color-quintana-green-light: #92995a;
+    --color-quintana-green-dark: #1e391e;
+    --color-quintana-green-darker: #364513;
+    --color-quintana-green-dark2: #2d5a2d;
+    
+    --color-quintana-beige: #ecebbb;
+    --color-quintana-beige-light: #f8f8e3;
+    --color-quintana-beige-dark: #ae987c;
 }
 
-/* Quintana Energy Operations - Brand Colors */
-.qnt-gradient {
-    background: linear-gradient(135deg, #082032 0%, #1B998B 100%);
+/* Variables CSS personalizadas */
+:root {
+    --quintana-green: #6b7b39;
+    --quintana-green-light: #92995a;
+    --quintana-green-dark: #1e391e;
+    --quintana-green-darker: #364513;
+    --quintana-green-dark2: #2d5a2d;
+    --quintana-beige: #ecebbb;
+    --quintana-beige-light: #f8f8e3;
+    --quintana-beige-dark: #ae987c;
 }
 
-.qnt-gradient:hover {
-    background: linear-gradient(135deg, #0a2840 0%, #1fa896 100%);
-    filter: brightness(1.1);
+/* Animaciones personalizadas */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.qnt-bg-primary {
-    background-color: #0F172A;
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
-.qnt-text-primary {
-    color: #FFFFFF;
+.fade-in {
+    animation: fadeIn 0.6s ease-out;
 }
 
-.qnt-border {
-    border-color: rgba(255, 255, 255, 0.1);
+.slide-in {
+    animation: slideIn 0.6s ease-out;
+}
+
+/* Clases utilitarias */
+[x-cloak] {
+    display: none;
+}
+
+.input-error {
+    border-color: #ef4444;
+    --tw-ring-color: #ef4444;
+}
+
+.input-success {
+    border-color: #10b981;
+    --tw-ring-color: #10b981;
+}
+
+.drop-zone.drag-over {
+    border-color: var(--quintana-green);
+    background-color: var(--quintana-beige-light);
+}
+
+.stepper-step.active {
+    opacity: 1;
+}
+
+.stepper-step.completed {
+    opacity: 1;
+}
+
+/* Utilidades de color Quintana */
+.text-quintana-green {
+    color: var(--quintana-green);
+}
+
+.bg-quintana-green {
+    background-color: var(--quintana-green);
+}
+
+.hover\:bg-quintana-green-dark:hover {
+    background-color: var(--quintana-green-dark);
+}
+
+.text-quintana-beige {
+    color: var(--quintana-beige);
+}
+
+.bg-quintana-beige {
+    background-color: var(--quintana-beige);
 }

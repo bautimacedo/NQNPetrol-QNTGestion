@@ -3,212 +3,242 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="csrf-token" content="{{ csrf_token }}">
 
     <title>{{ config('app.name', 'Quintana Energy Operations') }} - Dashboard</title>
 
     <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.bunny.net">
-    <link href="https://fonts.bunny.net/css?family=inter:400,500,600,700" rel="stylesheet" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 
     <!-- Styles -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="font-sans antialiased" style="background-color: #0F172A; color: #FFFFFF;">
-    <div class="min-h-screen" style="background-color: #0F172A;">
-        <!-- Navigation -->
-        <nav style="background-color: #0F172A; border-bottom: 1px solid rgba(255, 255, 255, 0.1);">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between h-16">
-                    <div class="flex items-center space-x-4">
-                        <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
-                            <img src="{{ asset('images/qnt-drones-logo.png') }}" alt="QNT DRONES" class="h-10 w-10" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
-                            <div style="display: none;" class="h-10 w-10 rounded-full bg-gradient-to-b from-[#082032] to-[#1B998B] flex items-center justify-center">
-                                <span class="text-white font-bold text-xs">QNT</span>
-                            </div>
-                        </a>
-                        <a href="{{ route('dashboard') }}" class="text-xl font-bold transition-colors" style="color: #FFFFFF;">
-                            Quintana Energy Operations
-                        </a>
-                        @auth
-                            <span class="text-sm font-semibold" style="color: rgba(255, 255, 255, 0.8);">
-                                Hola {{ auth()->user()->first_name ?? auth()->user()->name }}!
-                            </span>
-                        @endauth
-                        <!-- Menú Desktop -->
-                        <div class="hidden md:flex items-center space-x-4">
-                            <a href="{{ route('dashboard') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('dashboard') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Dashboard
-                            </a>
-                            <a href="{{ route('pilots.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('pilots.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Pilotos
-                            </a>
-                            <div class="h-6 w-px" style="background-color: rgba(255, 255, 255, 0.2);"></div>
-                            <div class="relative group">
-                                <button class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.drones.*', 'production.batteries.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.drones.*', 'production.batteries.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                    Inventario
-                                </button>
-                                <div class="absolute left-0 mt-2 w-48 rounded-lg shadow-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50" style="background-color: #0F172A; border: 1px solid rgba(255, 255, 255, 0.1);">
-                                    <a href="{{ route('production.drones.index') }}" class="block px-4 py-2 text-sm rounded-lg transition-colors {{ request()->routeIs('production.drones.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.drones.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                        RPAs
-                                    </a>
-                                    <a href="{{ route('production.batteries.index') }}" class="block px-4 py-2 text-sm rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.batteries.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                        Baterías
-                                    </a>
-                                </div>
-                            </div>
-                            <a href="{{ route('production.missions.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.missions.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.missions.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Misiones
-                            </a>
-                            <a href="{{ route('production.wells.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.wells.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Pozos
-                            </a>
-                            <a href="{{ route('providers.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('providers.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('providers.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Proveedores
-                            </a>
-                            <a href="{{ route('purchases.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('purchases.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Compras
-                            </a>
-                            <a href="{{ route('production.logs.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.logs.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Logs
-                            </a>
-                            <a href="{{ route('production.users.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.users.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Usuarios
-                            </a>
-                            <a href="{{ route('production.licenses.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.licenses.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                Licencias
-                            </a>
-                            @auth
-                                @if(auth()->user()->hasRole('admin'))
-                                    <a href="{{ route('admin.users.pending') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('admin.users.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                        Usuarios Pendientes
-                                    </a>
-                                    <a href="{{ route('security.index') }}" class="px-3 py-2 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('security.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                        Seguridad
-                                    </a>
-                                @endif
-                            @endauth
-                        </div>
-                        <!-- Botón Hamburguesa Móvil -->
-                        <button id="mobile-menu-button" class="md:hidden focus:outline-none" style="color: #FFFFFF;">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                                <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
+<body class="font-sans antialiased bg-gray-100">
+    <div class="flex min-h-screen">
+        <!-- Sidebar - Desktop -->
+        <aside class="hidden md:flex md:flex-col md:w-64 md:fixed md:inset-y-0 md:z-40 bg-gradient-to-b from-zinc-800 to-zinc-900">
+            <!-- Header Sidebar -->
+            <div class="px-6 py-5 border-b border-zinc-700">
+                <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
+                    <img src="{{ asset('images/qnt-drones-logo.png') }}" alt="QNT DRONES" class="h-10 w-10" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <div style="display: none;" class="h-10 w-10 rounded-full bg-quintana-green flex items-center justify-center">
+                        <span class="text-white font-bold text-xs">QNT</span>
                     </div>
-                    <div class="flex items-center space-x-4">
-                        @auth
-                            <form action="{{ route('logout') }}" method="POST" class="inline">
-                                @csrf
-                                <button type="submit" class="px-4 py-2 text-sm font-semibold rounded-lg transition-colors" style="color: #FFFFFF; background-color: rgba(239, 68, 68, 0.2);" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'">
-                                    Cerrar Sesión
-                                </button>
-                            </form>
-                        @endauth
-                        <span class="text-sm hidden sm:inline" style="color: rgba(255, 255, 255, 0.6);">QNT Energy</span>
-                    </div>
-                </div>
+                    <span class="text-white font-semibold text-lg">Quintana Energy</span>
+                </a>
             </div>
-        </nav>
 
-        <!-- Menú Móvil (Sidebar) -->
-        <div id="mobile-menu" class="fixed inset-0 z-50 hidden md:hidden">
-            <!-- Overlay -->
-            <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
-            
-            <!-- Sidebar -->
-            <div class="fixed left-0 top-0 bottom-0 w-64 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto" style="background-color: #0F172A; border-right: 1px solid rgba(255, 255, 255, 0.1);">
-                <div class="p-4">
-                    <div class="flex items-center justify-between mb-6">
-                        <span class="text-lg font-bold" style="background: linear-gradient(135deg, #082032 0%, #1B998B 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Menú</span>
-                        <button id="close-mobile-menu" class="focus:outline-none" style="color: #FFFFFF;">
-                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                            </svg>
-                        </button>
-                    </div>
-                    
-                    <nav class="space-y-2">
-                        <a href="{{ route('dashboard') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('dashboard') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Dashboard
-                        </a>
-                        <a href="{{ route('pilots.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('pilots.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Pilotos
-                        </a>
-                        <div class="my-2" style="border-top: 1px solid rgba(255, 255, 255, 0.1);"></div>
-                        <div class="px-4 py-2 text-xs font-semibold uppercase" style="color: rgba(255, 255, 255, 0.5);">Inventario</div>
-                        <a href="{{ route('production.drones.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.drones.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.drones.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            RPAs
-                        </a>
-                        <a href="{{ route('production.batteries.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.batteries.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Baterías
-                        </a>
-                        <div class="my-2" style="border-top: 1px solid rgba(255, 255, 255, 0.1);"></div>
-                        <a href="{{ route('production.missions.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.missions.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.missions.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Misiones
-                        </a>
-                        <a href="{{ route('production.wells.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.wells.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Pozos
-                        </a>
-                        <a href="{{ route('providers.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('providers.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('providers.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Proveedores
-                        </a>
-                        <a href="{{ route('purchases.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('purchases.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Compras
-                        </a>
-                        <a href="{{ route('production.logs.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.logs.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Logs
-                        </a>
-                        <a href="{{ route('production.users.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.users.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Usuarios
-                        </a>
-                        <a href="{{ route('production.licenses.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('production.licenses.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                            Licencias
-                        </a>
-                        @auth
-                            @if(auth()->user()->hasRole('admin'))
-                                <div class="border-t my-2" style="border-color: rgba(255, 255, 255, 0.1);"></div>
-                                @php
-                                    $pendingCount = \App\Models\User::where('is_approved', false)->count();
-                                @endphp
-                                <a href="{{ route('admin.users.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('admin.users.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                    Gestión de Usuarios
-                                    @if($pendingCount > 0)
-                                        <span class="ml-2 px-2 py-0.5 text-xs rounded-full" style="background-color: rgba(251, 191, 36, 0.2); color: #fbbf24;">{{ $pendingCount }}</span>
-                                    @endif
-                                </a>
-                                <a href="{{ route('security.index') }}" class="block px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'text-white' : 'text-gray-300 hover:text-white' }}" style="{{ request()->routeIs('security.*') ? 'background: linear-gradient(135deg, #082032 0%, #1B998B 100%);' : '' }}">
-                                    Seguridad
-                                </a>
-                            @endif
-                            <div class="border-t my-2" style="border-color: rgba(255, 255, 255, 0.1);"></div>
-                            <form action="{{ route('logout') }}" method="POST" class="px-4">
-                                @csrf
-                                <button type="submit" class="w-full px-4 py-3 text-sm font-semibold rounded-lg transition-colors text-left" style="color: #FFFFFF; background-color: rgba(239, 68, 68, 0.2);" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'">
-                                    Cerrar Sesión
-                                </button>
-                            </form>
-                        @endauth
-                    </nav>
+            <!-- Navigation -->
+            <nav class="flex-1 px-3 py-4 space-y-1 overflow-y-auto">
+                <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Dashboard
+                </a>
+                <a href="{{ route('pilots.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Pilotos
+                </a>
+                
+                <div class="pt-4 pb-2">
+                    <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Inventario</p>
                 </div>
+                <a href="{{ route('production.drones.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.drones.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    RPAs
+                </a>
+                <a href="{{ route('production.batteries.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Baterías
+                </a>
+                
+                <div class="pt-4 pb-2">
+                    <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Operaciones</p>
+                </div>
+                <a href="{{ route('production.missions.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.missions.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Misiones
+                </a>
+                <a href="{{ route('production.wells.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Pozos
+                </a>
+                <a href="{{ route('providers.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('providers.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Proveedores
+                </a>
+                <a href="{{ route('purchases.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Compras
+                </a>
+                <a href="{{ route('production.logs.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Logs
+                </a>
+                
+                <div class="pt-4 pb-2">
+                    <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Administración</p>
+                </div>
+                <a href="{{ route('production.users.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Usuarios
+                </a>
+                <a href="{{ route('production.licenses.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Licencias
+                </a>
+                
+                @auth
+                    @if(auth()->user()->hasRole('admin'))
+                        @php
+                            $pendingCount = \App\Models\User::where('is_approved', false)->count();
+                        @endphp
+                        <a href="{{ route('admin.users.pending') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                            Usuarios Pendientes
+                            @if($pendingCount > 0)
+                                <span class="ml-auto px-2 py-0.5 text-xs rounded-full bg-amber-500/20 text-amber-400">{{ $pendingCount }}</span>
+                            @endif
+                        </a>
+                        <a href="{{ route('security.index') }}" class="flex items-center px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                            Seguridad
+                        </a>
+                    @endif
+                @endauth
+            </nav>
+
+            <!-- Footer Sidebar -->
+            <div class="px-3 py-4 border-t border-zinc-700">
+                @auth
+                    <div class="px-4 py-2 text-sm text-zinc-300">
+                        <p class="font-medium">{{ auth()->user()->first_name ?? auth()->user()->name }}</p>
+                        <p class="text-xs text-zinc-500">{{ auth()->user()->email }}</p>
+                    </div>
+                    <form action="{{ route('logout') }}" method="POST" class="mt-2">
+                        @csrf
+                        <button type="submit" class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600/20 hover:bg-red-600/30 rounded-lg transition-colors text-left">
+                            Cerrar Sesión
+                        </button>
+                    </form>
+                @endauth
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <div class="flex-1 flex flex-col md:ml-64">
+            <!-- Navbar -->
+            <header class="sticky top-0 z-30 bg-white shadow-sm border-b">
+                <div class="px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <h1 class="text-lg font-semibold text-gray-900">@yield('page-title', 'Dashboard')</h1>
+                            <p class="text-sm text-gray-500">@yield('page-subtitle', 'Panel de control')</p>
+                        </div>
+                        <div class="flex items-center space-x-4">
+                            <!-- Botón Hamburguesa Móvil -->
+                            <button id="mobile-menu-button" class="md:hidden focus:outline-none text-gray-600">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path id="menu-icon" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                                    <path id="close-icon" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Main Content -->
+            <main class="flex-1 p-6">
+                @if(session('success'))
+                    <div class="mb-6 bg-green-50 border-l-4 border-green-400 text-green-700 px-6 py-4 rounded-lg shadow-sm fade-in">
+                        {{ session('success') }}
+                    </div>
+                @endif
+                @if(session('error'))
+                    <div class="mb-6 bg-red-50 border-l-4 border-red-400 text-red-700 px-6 py-4 rounded-lg shadow-sm fade-in">
+                        {{ session('error') }}
+                    </div>
+                @endif
+                @yield('content')
+            </main>
+        </div>
+    </div>
+
+    <!-- Menú Móvil (Sidebar) -->
+    <div id="mobile-menu" class="fixed inset-0 z-50 hidden md:hidden">
+        <!-- Overlay -->
+        <div id="mobile-menu-overlay" class="fixed inset-0 bg-black bg-opacity-50 transition-opacity"></div>
+        
+        <!-- Sidebar -->
+        <div class="fixed left-0 top-0 bottom-0 w-64 transform -translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto bg-gradient-to-b from-zinc-800 to-zinc-900">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-6">
+                    <span class="text-lg font-bold text-white">Menú</span>
+                    <button id="close-mobile-menu" class="focus:outline-none text-white">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+                
+                <nav class="space-y-1">
+                    <a href="{{ route('dashboard') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Dashboard
+                    </a>
+                    <a href="{{ route('pilots.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Pilotos
+                    </a>
+                    <div class="pt-4 pb-2">
+                        <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Inventario</p>
+                    </div>
+                    <a href="{{ route('production.drones.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.drones.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        RPAs
+                    </a>
+                    <a href="{{ route('production.batteries.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Baterías
+                    </a>
+                    <div class="pt-4 pb-2">
+                        <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Operaciones</p>
+                    </div>
+                    <a href="{{ route('production.missions.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.missions.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Misiones
+                    </a>
+                    <a href="{{ route('production.wells.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.wells.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Pozos
+                    </a>
+                    <a href="{{ route('providers.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('providers.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Proveedores
+                    </a>
+                    <a href="{{ route('purchases.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('purchases.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Compras
+                    </a>
+                    <a href="{{ route('production.logs.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.logs.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Logs
+                    </a>
+                    <div class="pt-4 pb-2">
+                        <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Administración</p>
+                    </div>
+                    <a href="{{ route('production.users.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Usuarios
+                    </a>
+                    <a href="{{ route('production.licenses.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Licencias
+                    </a>
+                    @auth
+                        @if(auth()->user()->hasRole('admin'))
+                            @php
+                                $pendingCount = \App\Models\User::where('is_approved', false)->count();
+                            @endphp
+                            <a href="{{ route('admin.users.pending') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                                Usuarios Pendientes
+                                @if($pendingCount > 0)
+                                    <span class="ml-auto px-2 py-0.5 text-xs rounded-full bg-amber-500/20 text-amber-400">{{ $pendingCount }}</span>
+                                @endif
+                            </a>
+                            <a href="{{ route('security.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('security.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                                Seguridad
+                            </a>
+                        @endif
+                        <div class="border-t border-zinc-700 my-2"></div>
+                        <form action="{{ route('logout') }}" method="POST" class="px-4">
+                            @csrf
+                            <button type="submit" class="w-full px-4 py-2 text-sm font-medium text-white bg-red-600/20 hover:bg-red-600/30 rounded-lg transition-colors text-left">
+                                Cerrar Sesión
+                            </button>
+                        </form>
+                    @endauth
+                </nav>
             </div>
         </div>
-
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" style="background-color: #0F172A;">
-            @if(session('success'))
-                <div class="mb-6 px-4 py-3 rounded-lg" style="background-color: rgba(34, 197, 94, 0.1); border: 1px solid rgba(34, 197, 94, 0.3); color: #4ade80;">
-                    {{ session('success') }}
-                </div>
-            @endif
-            @if(session('error'))
-                <div class="mb-6 px-4 py-3 rounded-lg" style="background-color: rgba(239, 68, 68, 0.1); border: 1px solid rgba(239, 68, 68, 0.3); color: #f87171;">
-                    {{ session('error') }}
-                </div>
-            @endif
-            @yield('content')
-        </main>
     </div>
 
     <script>
@@ -239,17 +269,22 @@
             }, 300);
         }
 
-        mobileMenuButton.addEventListener('click', openMobileMenu);
-        closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
-        mobileMenuOverlay.addEventListener('click', closeMobileMenuFunc);
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', openMobileMenu);
+        }
+        if (closeMobileMenu) {
+            closeMobileMenu.addEventListener('click', closeMobileMenuFunc);
+        }
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', closeMobileMenuFunc);
+        }
 
         // Cerrar menú con tecla Escape
         document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape' && !mobileMenu.classList.contains('hidden')) {
+            if (e.key === 'Escape' && mobileMenu && !mobileMenu.classList.contains('hidden')) {
                 closeMobileMenuFunc();
             }
         });
     </script>
 </body>
 </html>
-
