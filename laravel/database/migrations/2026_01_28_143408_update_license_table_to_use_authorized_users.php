@@ -12,10 +12,18 @@ return new class extends Migration
      */
     public function up(): void
     {
-        // Eliminar la foreign key antigua
-        Schema::table('license', function (Blueprint $table) {
-            $table->dropForeign(['pilot_id']);
-        });
+        // Eliminar la foreign key antigua si existe (usando SQL directo para PostgreSQL)
+        $constraintName = DB::selectOne("
+            SELECT constraint_name 
+            FROM information_schema.table_constraints 
+            WHERE table_name = 'license' 
+            AND constraint_type = 'FOREIGN KEY' 
+            AND constraint_name LIKE '%pilot_id%'
+        ");
+
+        if ($constraintName) {
+            DB::statement("ALTER TABLE license DROP CONSTRAINT IF EXISTS {$constraintName->constraint_name}");
+        }
 
         // Renombrar la columna usando SQL directo (más compatible con PostgreSQL)
         DB::statement('ALTER TABLE license RENAME COLUMN pilot_id TO authorized_user_id');
@@ -34,10 +42,18 @@ return new class extends Migration
      */
     public function down(): void
     {
-        // Eliminar la foreign key nueva
-        Schema::table('license', function (Blueprint $table) {
-            $table->dropForeign(['authorized_user_id']);
-        });
+        // Eliminar la foreign key nueva si existe
+        $constraintName = DB::selectOne("
+            SELECT constraint_name 
+            FROM information_schema.table_constraints 
+            WHERE table_name = 'license' 
+            AND constraint_type = 'FOREIGN KEY' 
+            AND constraint_name LIKE '%authorized_user_id%'
+        ");
+
+        if ($constraintName) {
+            DB::statement("ALTER TABLE license DROP CONSTRAINT IF EXISTS {$constraintName->constraint_name}");
+        }
 
         // Renombrar de vuelta a pilot_id usando SQL directo
         DB::statement('ALTER TABLE license RENAME COLUMN authorized_user_id TO pilot_id');
