@@ -96,12 +96,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
         });
     });
 
-    // Rutas de Compras - Lectura para todos, CRUD completo para admin
+    // Rutas de Compras - Las rutas específicas deben ir ANTES de las rutas con parámetros
     Route::get('purchases', [PurchaseController::class, 'index'])->name('purchases.index');
-    Route::get('purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
-    Route::get('purchases/{purchase}/download-document/{purchaseDocument}', [PurchaseController::class, 'downloadDocument'])->name('purchases.download-document');
     
-    // Rutas de Compras solo para admin
+    // Rutas de Compras solo para admin (deben ir antes de purchases/{purchase})
     Route::middleware('role:admin')->group(function () {
         Route::get('purchases/create', [PurchaseController::class, 'create'])->name('purchases.create');
         Route::post('purchases', [PurchaseController::class, 'store'])->name('purchases.store');
@@ -111,6 +109,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::post('purchases/{purchase}/upload-document', [PurchaseController::class, 'uploadDocument'])->name('purchases.upload-document');
         Route::delete('purchases/{purchase}/delete-document/{purchaseDocument}', [PurchaseController::class, 'deleteDocument'])->name('purchases.delete-document');
     });
+    
+    // Rutas de lectura (deben ir DESPUÉS de las rutas específicas como 'create' y 'edit')
+    Route::get('purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
+    Route::get('purchases/{purchase}/download-document/{purchaseDocument}', [PurchaseController::class, 'downloadDocument'])->name('purchases.download-document');
 });
 
 // Resource Routes
