@@ -97,10 +97,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
         });
     });
 
-    // Rutas de Proveedores - Solo admin puede crear/editar/eliminar, todos pueden ver
+    // Rutas de Proveedores - Las rutas específicas deben ir ANTES de las rutas con parámetros
     Route::get('providers', [ProviderController::class, 'index'])->name('providers.index');
-    Route::get('providers/{provider}', [ProviderController::class, 'show'])->name('providers.show');
     
+    // Rutas de Proveedores solo para admin (deben ir antes de providers/{provider})
     Route::middleware('role:admin')->group(function () {
         Route::get('providers/create', [ProviderController::class, 'create'])->name('providers.create');
         Route::post('providers', [ProviderController::class, 'store'])->name('providers.store');
@@ -108,6 +108,9 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::put('providers/{provider}', [ProviderController::class, 'update'])->name('providers.update');
         Route::delete('providers/{provider}', [ProviderController::class, 'destroy'])->name('providers.destroy');
     });
+    
+    // Rutas de lectura (deben ir DESPUÉS de las rutas específicas como 'create' y 'edit')
+    Route::get('providers/{provider}', [ProviderController::class, 'show'])->name('providers.show');
 
     // Rutas de Compras - Las rutas específicas deben ir ANTES de las rutas con parámetros
     Route::get('purchases', [PurchaseController::class, 'index'])->name('purchases.index');
