@@ -1,56 +1,55 @@
 @extends('layouts.app')
 
+@section('page-title', 'Compra #' . $purchase->id)
+@section('page-subtitle', $purchase->description)
+
 @section('content')
 <div class="space-y-6">
     <div class="flex justify-between items-center">
-        <div>
-            <h2 class="text-3xl font-bold text-gray-100">Compra #{{ $purchase->id }}</h2>
-            <p class="mt-2 text-gray-400">{{ $purchase->description }}</p>
-        </div>
         <div class="flex space-x-3">
             @auth
                 @if(auth()->user()->hasRole('admin'))
-                    <a href="{{ route('purchases.edit', $purchase) }}" class="px-4 py-2 text-sm font-semibold rounded-lg transition-colors" style="background: linear-gradient(135deg, #082032 0%, #1B998B 100%); color: #FFFFFF;">
+                    <a href="{{ route('purchases.edit', $purchase) }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
                         Editar
                     </a>
                     <form action="{{ route('purchases.destroy', $purchase) }}" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de eliminar esta compra?');">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="px-4 py-2 text-sm font-semibold rounded-lg transition-colors" style="background-color: rgba(239, 68, 68, 0.2); color: #f87171;" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'">
+                        <button type="submit" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                             Eliminar
                         </button>
                     </form>
                 @endif
             @endauth
-            <a href="{{ route('purchases.index') }}" class="px-4 py-2 text-sm font-semibold rounded-lg transition-colors text-gray-300 hover:text-white" style="border: 1px solid rgba(255, 255, 255, 0.2);">
+            <a href="{{ route('purchases.index') }}" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                 Volver
             </a>
         </div>
     </div>
 
     <!-- Información General -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-        <h3 class="text-xl font-bold text-gray-100 mb-4">Información General</h3>
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">Información General</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-                <p class="text-sm text-gray-400">Proveedor</p>
-                <p class="text-lg font-medium text-gray-100">{{ $purchase->provider->name }}</p>
-                @if($purchase->provider->contact_email)
-                    <p class="text-sm text-gray-400 mt-1">{{ $purchase->provider->contact_email }}</p>
+                <p class="text-sm text-gray-600">Proveedor</p>
+                <p class="text-lg font-medium text-gray-900">{{ $purchase->provider->name }}</p>
+                @if($purchase->provider->email)
+                    <p class="text-sm text-gray-500 mt-1">{{ $purchase->provider->email }}</p>
                 @endif
             </div>
             <div>
-                <p class="text-sm text-gray-400">Monto Total</p>
-                <p class="text-lg font-medium text-gray-100">{{ $purchase->currency }} {{ number_format($purchase->total_amount, 2, ',', '.') }}</p>
+                <p class="text-sm text-gray-600">Monto Total</p>
+                <p class="text-lg font-medium text-gray-900">{{ $purchase->currency }} {{ number_format($purchase->total_amount, 2, ',', '.') }}</p>
             </div>
             <div>
-                <p class="text-sm text-gray-400">Estado</p>
+                <p class="text-sm text-gray-600">Estado</p>
                 @php
                     $statusColors = [
-                        'pending' => 'bg-yellow-500/20 text-yellow-400',
-                        'authorized' => 'bg-blue-500/20 text-blue-400',
-                        'paid' => 'bg-green-500/20 text-green-400',
-                        'canceled' => 'bg-red-500/20 text-red-400',
+                        'pending' => 'bg-yellow-100 text-yellow-800',
+                        'authorized' => 'bg-blue-100 text-blue-800',
+                        'paid' => 'bg-green-100 text-green-800',
+                        'canceled' => 'bg-red-100 text-red-800',
                     ];
                     $statusLabels = [
                         'pending' => 'Pendiente',
@@ -59,51 +58,95 @@
                         'canceled' => 'Cancelada',
                     ];
                 @endphp
-                <span class="px-3 py-1 text-sm font-medium rounded {{ $statusColors[$purchase->status] ?? 'bg-gray-500/20 text-gray-400' }}">
+                <span class="px-3 py-1 text-sm font-medium rounded-full {{ $statusColors[$purchase->status] ?? 'bg-gray-100 text-gray-800' }}">
                     {{ $statusLabels[$purchase->status] ?? $purchase->status }}
                 </span>
             </div>
             <div>
-                <p class="text-sm text-gray-400">Progreso de Documentación</p>
+                <p class="text-sm text-gray-600">Progreso de Documentación</p>
                 <div class="flex items-center space-x-2 mt-1">
-                    <div class="flex-1 bg-gray-700 rounded-full h-3">
-                        <div class="h-3 rounded-full transition-all" style="background: linear-gradient(135deg, #082032 0%, #1B998B 100%); width: {{ $progress['percentage'] }}%;"></div>
+                    <div class="flex-1 bg-gray-200 rounded-full h-3">
+                        <div class="h-3 rounded-full transition-all" style="background-color: #6b7b39; width: {{ $progress['percentage'] }}%;"></div>
                     </div>
-                    <span class="text-sm font-medium text-gray-100">{{ $progress['percentage'] }}%</span>
+                    <span class="text-sm font-medium text-gray-900">{{ $progress['percentage'] }}%</span>
                 </div>
-                <p class="text-xs text-gray-400 mt-1">{{ $progress['completed'] }} de {{ $progress['total'] }} documentos</p>
+                <p class="text-xs text-gray-500 mt-1">{{ $progress['completed'] }} de {{ $progress['total'] }} documentos</p>
             </div>
         </div>
     </div>
 
     <!-- Timeline de Documentos -->
-    <div class="bg-gray-800 rounded-lg border border-gray-700 p-6">
-        <h3 class="text-xl font-bold text-gray-100 mb-6">Documentación</h3>
+    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <h3 class="text-xl font-bold text-gray-900 mb-6">Documentación</h3>
         
+        <!-- Timeline Visual -->
+        <div class="mb-8">
+            <div class="flex items-center justify-between relative">
+                <!-- Línea del timeline -->
+                <div class="absolute top-6 left-0 right-0 h-0.5 bg-gray-200"></div>
+                
+                @php
+                    $timelineSteps = [
+                        'budget_pdf' => ['label' => 'Presupuesto', 'order' => 1],
+                        'purchase_order' => ['label' => 'Orden de Compra', 'order' => 2],
+                        'invoice' => ['label' => 'Factura', 'order' => 3],
+                        'payment_order' => ['label' => 'Orden de Pago', 'order' => 4],
+                        'payment_proof' => ['label' => 'Comprobante de Pago', 'order' => 5],
+                    ];
+                    $sortedSteps = collect($timelineSteps)->sortBy('order');
+                @endphp
+                
+                @foreach($sortedSteps as $type => $step)
+                    @php
+                        $document = $purchase->getDocument($type);
+                        $hasDocument = $document !== null;
+                        $isCompleted = $hasDocument;
+                    @endphp
+                    <div class="flex flex-col items-center relative z-10 flex-1">
+                        <!-- Círculo del paso -->
+                        <div class="w-12 h-12 rounded-full flex items-center justify-center border-4 {{ $isCompleted ? 'bg-[#6b7b39] border-[#6b7b39]' : 'bg-white border-gray-300' }}">
+                            @if($isCompleted)
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                            @else
+                                <div class="w-3 h-3 rounded-full bg-gray-300"></div>
+                            @endif
+                        </div>
+                        <!-- Etiqueta -->
+                        <p class="mt-2 text-xs font-medium text-center {{ $isCompleted ? 'text-[#6b7b39]' : 'text-gray-500' }}" style="max-width: 100px;">
+                            {{ $step['label'] }}
+                        </p>
+                    </div>
+                @endforeach
+            </div>
+        </div>
+        
+        <!-- Lista Detallada de Documentos -->
         <div class="space-y-4">
             @foreach($documentTypes as $type => $label)
                 @php
                     $document = $purchase->getDocument($type);
                     $hasDocument = $document !== null;
                 @endphp
-                <div class="flex items-center space-x-4 p-4 rounded-lg {{ $hasDocument ? 'bg-gray-700/50' : 'bg-gray-900/50' }} border border-gray-700">
+                <div class="flex items-center space-x-4 p-4 rounded-lg {{ $hasDocument ? 'bg-gray-50 border border-gray-200' : 'bg-white border border-gray-200' }}">
                     <!-- Indicador de estado -->
                     <div class="flex-shrink-0">
                         @if($hasDocument)
-                            <div class="w-3 h-3 rounded-full" style="background: linear-gradient(135deg, #082032 0%, #1B998B 100%);"></div>
+                            <div class="w-4 h-4 rounded-full" style="background-color: #6b7b39;"></div>
                         @else
-                            <div class="w-3 h-3 rounded-full bg-gray-600"></div>
+                            <div class="w-4 h-4 rounded-full bg-gray-300"></div>
                         @endif
                     </div>
                     
                     <!-- Nombre del documento -->
                     <div class="flex-1">
-                        <h4 class="text-sm font-medium text-gray-100">{{ $label }}</h4>
+                        <h4 class="text-sm font-medium text-gray-900">{{ $label }}</h4>
                         @if($hasDocument && $document->document_number)
-                            <p class="text-xs text-gray-400 mt-1">N° {{ $document->document_number }}</p>
+                            <p class="text-xs text-gray-600 mt-1">N° {{ $document->document_number }}</p>
                         @endif
                         @if($hasDocument)
-                            <p class="text-xs text-gray-400 mt-1">Subido: {{ $document->created_at->format('d/m/Y H:i') }}</p>
+                            <p class="text-xs text-gray-500 mt-1">Subido: {{ $document->created_at->format('d/m/Y H:i') }}</p>
                         @endif
                     </div>
                     
@@ -111,7 +154,7 @@
                     <div class="flex-shrink-0">
                         @if($hasDocument)
                             <div class="flex space-x-2">
-                                <a href="{{ route('purchases.download-document', [$purchase, $document]) }}" target="_blank" class="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors" style="background: linear-gradient(135deg, #082032 0%, #1B998B 100%); color: #FFFFFF;">
+                                <a href="{{ route('purchases.download-document', [$purchase, $document]) }}" target="_blank" class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
                                     Ver PDF
                                 </a>
                                 @auth
@@ -119,7 +162,7 @@
                                         <form action="{{ route('purchases.delete-document', [$purchase, $document]) }}" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de eliminar este documento?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors" style="background-color: rgba(239, 68, 68, 0.2); color: #f87171;" onmouseover="this.style.backgroundColor='rgba(239, 68, 68, 0.3)'" onmouseout="this.style.backgroundColor='rgba(239, 68, 68, 0.2)'">
+                                            <button type="submit" class="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                                                 Eliminar
                                             </button>
                                         </form>
@@ -129,7 +172,7 @@
                         @else
                             @auth
                                 @if(auth()->user()->hasRole('admin'))
-                                    <button onclick="openUploadModal('{{ $type }}', '{{ $label }}')" class="px-3 py-1.5 text-sm font-medium rounded-lg transition-colors" style="background: linear-gradient(135deg, #082032 0%, #1B998B 100%); color: #FFFFFF;">
+                                    <button onclick="openUploadModal('{{ $type }}', '{{ $label }}')" class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
                                         Subir PDF
                                     </button>
                                 @endif
@@ -148,28 +191,28 @@
         <div id="uploadModal" class="fixed inset-0 z-50 hidden">
             <div class="fixed inset-0 bg-black bg-opacity-50" onclick="closeUploadModal()"></div>
             <div class="fixed inset-0 flex items-center justify-center p-4">
-                <div class="bg-gray-800 rounded-lg border border-gray-700 p-6 max-w-md w-full" style="background-color: #1F2937;">
-                    <h3 class="text-xl font-bold text-gray-100 mb-4" id="modalTitle">Subir Documento</h3>
+                <div class="bg-white rounded-xl shadow-lg border border-gray-200 p-6 max-w-md w-full">
+                    <h3 class="text-xl font-bold text-gray-900 mb-4" id="modalTitle">Subir Documento</h3>
                     <form id="uploadForm" action="{{ route('purchases.upload-document', $purchase) }}" method="POST" enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" name="type" id="documentType">
                         
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Número de Documento (Opcional)</label>
-                            <input type="text" name="document_number" class="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500">
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Número de Documento (Opcional)</label>
+                            <input type="text" name="document_number" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
                         </div>
                         
                         <div class="mb-4">
-                            <label class="block text-sm font-medium text-gray-300 mb-2">Archivo PDF</label>
-                            <input type="file" name="document" accept=".pdf" required class="w-full px-3 py-2 rounded-lg border border-gray-600 bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-teal-500">
-                            <p class="text-xs text-gray-400 mt-1">Tamaño máximo: 10MB</p>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Archivo PDF</label>
+                            <input type="file" name="document" accept=".pdf" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                            <p class="text-xs text-gray-500 mt-1">Tamaño máximo: 10MB</p>
                         </div>
                         
                         <div class="flex justify-end space-x-3">
-                            <button type="button" onclick="closeUploadModal()" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors text-gray-300 hover:text-white" style="border: 1px solid rgba(255, 255, 255, 0.2);">
+                            <button type="button" onclick="closeUploadModal()" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                                 Cancelar
                             </button>
-                            <button type="submit" class="px-4 py-2 text-sm font-semibold rounded-lg transition-colors" style="background: linear-gradient(135deg, #082032 0%, #1B998B 100%); color: #FFFFFF;">
+                            <button type="submit" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
                                 Subir
                             </button>
                         </div>
@@ -193,4 +236,3 @@
     @endif
 @endauth
 @endsection
-
