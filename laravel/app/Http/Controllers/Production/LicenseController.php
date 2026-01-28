@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use App\Http\Controllers\Controller;
 use App\Models\License;
-use App\Models\Pilot;
+use App\Models\AuthorizedUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -15,7 +15,7 @@ class LicenseController extends Controller
      */
     public function index()
     {
-        $licenses = License::with('pilot')
+        $licenses = License::with('authorizedUser')
             ->orderByDesc('expiration_date')
             ->get();
 
@@ -28,7 +28,7 @@ class LicenseController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'pilot_id' => 'required|integer|exists:pilots,id',
+            'authorized_user_id' => 'required|integer|exists:authorized_users,id',
             'license_number' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'expiration_date' => 'required|date',
@@ -36,7 +36,7 @@ class LicenseController extends Controller
 
         try {
             License::create([
-                'pilot_id' => $validated['pilot_id'],
+                'authorized_user_id' => $validated['authorized_user_id'],
                 'license_number' => $validated['license_number'],
                 'category' => $validated['category'],
                 'expiration_date' => $validated['expiration_date'],

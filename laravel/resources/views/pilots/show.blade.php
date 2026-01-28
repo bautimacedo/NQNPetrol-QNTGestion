@@ -43,9 +43,9 @@
                 
                 <!-- Foto de Perfil -->
                 <div class="ml-6 flex items-center">
-                    @if($pilot->profile_photo)
+                    @if($pilot->profile_photo_path)
                         <div class="w-24 h-24 rounded-full overflow-hidden flex-shrink-0" style="border: 3px solid #1B998B; box-shadow: 0 0 20px rgba(27, 153, 139, 0.3);">
-                            <img src="{{ Storage::url($pilot->profile_photo) }}" 
+                            <img src="{{ Storage::url($pilot->profile_photo_path) }}" 
                                  alt="{{ $pilot->full_name }}" 
                                  class="w-full h-full object-cover">
                         </div>

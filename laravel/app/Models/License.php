@@ -11,7 +11,7 @@ class License extends Model
     public $timestamps = false;
 
     protected $fillable = [
-        'pilot_id',
+        'authorized_user_id',
         'license_number',
         'category',
         'expiration_date',
@@ -24,11 +24,20 @@ class License extends Model
     ];
 
     /**
-     * Relación con el piloto
+     * Relación con el operario autorizado
+     */
+    public function authorizedUser(): BelongsTo
+    {
+        return $this->belongsTo(AuthorizedUser::class, 'authorized_user_id');
+    }
+
+    /**
+     * Alias para mantener compatibilidad con código existente
+     * @deprecated Usar authorizedUser() en su lugar
      */
     public function pilot(): BelongsTo
     {
-        return $this->belongsTo(Pilot::class);
+        return $this->authorizedUser();
     }
 
     /**

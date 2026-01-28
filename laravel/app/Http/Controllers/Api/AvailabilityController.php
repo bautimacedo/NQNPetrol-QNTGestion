@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Resources\DroneAvailabilityResource;
 use App\Http\Resources\PilotAvailabilityResource;
 use App\Models\ProductionDrone;
-use App\Models\Pilot;
+use App\Models\AuthorizedUser;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
@@ -35,8 +35,9 @@ class AvailabilityController extends Controller
      */
     public function pilots(): JsonResponse
     {
-        $pilots = Pilot::with('licenses')
+        $pilots = AuthorizedUser::with('licenses')
             ->where('status', 1)
+            ->whereNotNull('full_name')
             ->whereHas('licenses', function ($query) {
                 $query->where('expiration_date', '>', now());
             })
@@ -74,7 +75,9 @@ class AvailabilityController extends Controller
      */
     public function pilot(int $id): JsonResponse
     {
-        $pilot = Pilot::with('licenses')->findOrFail($id);
+        $pilot = AuthorizedUser::with('licenses')
+            ->whereNotNull('full_name')
+            ->findOrFail($id);
 
         $available = (int) $pilot->status === 1 && $pilot->hasValidLicense();
 

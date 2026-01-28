@@ -139,7 +139,7 @@
                     @foreach($expiringLicenses as $license)
                         <div class="flex items-center justify-between p-4 bg-gray-700/30 rounded-lg border border-gray-600 hover:bg-gray-700/50 transition-all">
                             <div>
-                                <p class="font-bold text-gray-100">{{ $license->pilot->name }}</p>
+                                <p class="font-bold text-gray-100">{{ $license->authorizedUser->full_name ?? 'N/A' }}</p>
                                 <p class="text-xs text-gray-400 mt-1 uppercase tracking-wider">{{ $license->type }}</p>
                             </div>
                             <div class="text-right">

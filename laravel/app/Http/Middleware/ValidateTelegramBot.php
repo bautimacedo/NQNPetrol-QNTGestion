@@ -2,7 +2,7 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\Pilot;
+use App\Models\AuthorizedUser;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,7 @@ class ValidateTelegramBot
         }
 
         // Verificar que el telegram_id existe en la base de datos
-        $pilot = Pilot::where('telegram_id', $telegramId)->first();
+        $pilot = AuthorizedUser::where('user_telegram_id', $telegramId)->first();
 
         if (!$pilot) {
             return response()->json([
@@ -36,7 +36,7 @@ class ValidateTelegramBot
         }
 
         // Verificar que el piloto está activo
-        if ($pilot->status !== 'active') {
+        if ((int) $pilot->status !== 1) {
             return response()->json([
                 'error' => 'pilot_inactive',
                 'message' => 'El piloto asociado a este telegram_id está inactivo',

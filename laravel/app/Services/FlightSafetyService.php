@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\Battery;
 use App\Models\Drone;
 use App\Models\License;
-use App\Models\Pilot;
+use App\Models\AuthorizedUser;
 use Illuminate\Support\Collection;
 
 class FlightSafetyService
@@ -13,7 +13,7 @@ class FlightSafetyService
     /**
      * Validar todas las condiciones de seguridad antes de aprobar un vuelo
      *
-     * @param Pilot $pilot
+     * @param AuthorizedUser $pilot
      * @param Drone $drone
      * @param Battery|null $battery
      * @param float|null $windSpeedSustained Viento sostenido en km/h
@@ -21,7 +21,7 @@ class FlightSafetyService
      * @return Collection Errores encontrados (vacío si todo está OK)
      */
     public function validateFlightSafety(
-        Pilot $pilot,
+        AuthorizedUser $pilot,
         Drone $drone,
         ?Battery $battery = null,
         ?float $windSpeedSustained = null,
@@ -79,10 +79,10 @@ class FlightSafetyService
     /**
      * Validar cumplimiento legal
      *
-     * @param Pilot $pilot
+     * @param AuthorizedUser $pilot
      * @return Collection
      */
-    protected function validateLegalCompliance(Pilot $pilot): Collection
+    protected function validateLegalCompliance(AuthorizedUser $pilot): Collection
     {
         $errors = collect();
 
@@ -91,7 +91,7 @@ class FlightSafetyService
             $errors->push([
                 'type' => 'legal',
                 'field' => 'pilot_license',
-                'message' => "El piloto {$pilot->name} no tiene una licencia vigente",
+                'message' => "El piloto {$pilot->full_name} no tiene una licencia vigente",
             ]);
         }
 
@@ -144,7 +144,7 @@ class FlightSafetyService
     /**
      * Verificar si un vuelo puede ser aprobado
      *
-     * @param Pilot $pilot
+     * @param AuthorizedUser $pilot
      * @param Drone $drone
      * @param Battery|null $battery
      * @param float|null $windSpeedSustained
@@ -152,7 +152,7 @@ class FlightSafetyService
      * @return bool
      */
     public function canApproveFlight(
-        Pilot $pilot,
+        AuthorizedUser $pilot,
         Drone $drone,
         ?Battery $battery = null,
         ?float $windSpeedSustained = null,

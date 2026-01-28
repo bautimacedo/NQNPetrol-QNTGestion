@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Flight;
+use App\Models\AuthorizedUser;
 use App\Models\License;
-use App\Models\Pilot;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
@@ -16,9 +15,10 @@ class PilotController extends Controller
      */
     public function index()
     {
-        $pilots = Pilot::with(['licenses' => function ($query) {
+        $pilots = AuthorizedUser::with(['licenses' => function ($query) {
             $query->orderByDesc('expiration_date');
         }])
+            ->whereNotNull('full_name') // Solo mostrar operarios que tienen datos de piloto
             ->orderBy('full_name')
             ->get();
 
@@ -63,19 +63,31 @@ class PilotController extends Controller
                 $profilePhotoPath = $path;
             }
 
-            // Crear el piloto (asegurar que status sea integer)
-            $pilot = Pilot::create([
-                'full_name' => $validated['full_name'],
-                'dni' => $validated['dni'],
-                'user_telegram_id' => $validated['user_telegram_id'],
-                'status' => (int) $validated['status'],
-                'timestamp' => now(),
-                'profile_photo' => $profilePhotoPath,
+            // Buscar o crear el authorized_user
+            $authorizedUser = AuthorizedUser::firstOrNew([
+                'user_telegram_id' => $validated['user_telegram_id']
             ]);
+
+            // Si es nuevo, establecer valores por defecto
+            if (!$authorizedUser->exists) {
+                $authorizedUser->username = null;
+                $authorizedUser->mission_password = '';
+                $authorizedUser->role = 'operator';
+                $authorizedUser->created_at = now();
+            }
+
+            // Actualizar o establecer los datos del piloto
+            $authorizedUser->full_name = $validated['full_name'];
+            $authorizedUser->dni = $validated['dni'];
+            $authorizedUser->status = (int) $validated['status'];
+            if ($profilePhotoPath) {
+                $authorizedUser->profile_photo_path = $profilePhotoPath;
+            }
+            $authorizedUser->save();
 
             // Crear la licencia asociada
             License::create([
-                'pilot_id' => $pilot->id,
+                'authorized_user_id' => $authorizedUser->id,
                 'license_number' => $validated['license_number'],
                 'category' => $validated['category'],
                 'expiration_date' => $validated['expiration_date'],
@@ -109,7 +121,7 @@ class PilotController extends Controller
     /**
      * Display the specified resource (Perfil del Piloto).
      */
-    public function show(Pilot $pilot)
+    public function show(AuthorizedUser $pilot)
     {
         $pilot->load(['licenses']);
 

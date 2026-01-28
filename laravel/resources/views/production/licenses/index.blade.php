@@ -35,7 +35,7 @@
                         <tr class="hover:bg-gray-700/50 transition-colors">
                             <td class="px-6 py-4">
                                 <div class="text-sm font-medium text-gray-100">
-                                    {{ $license->pilot->full_name ?? 'N/A' }}
+                                    {{ $license->authorizedUser->full_name ?? 'N/A' }}
                                 </div>
                             </td>
                             <td class="px-6 py-4">
@@ -94,17 +94,17 @@
                 
                 <div class="space-y-6">
                     <div>
-                        <label for="pilot_id" class="block text-sm font-medium text-gray-400 mb-2">Piloto *</label>
-                        <select name="pilot_id" id="pilot_id" required
+                        <label for="authorized_user_id" class="block text-sm font-medium text-gray-400 mb-2">Operario *</label>
+                        <select name="authorized_user_id" id="authorized_user_id" required
                             class="w-full bg-gray-900 border border-gray-700 text-gray-100 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 transition-colors">
-                            <option value="">Seleccione un piloto</option>
-                            @foreach(\App\Models\Pilot::orderBy('full_name')->get() as $pilot)
-                                <option value="{{ $pilot->id }}" {{ old('pilot_id') == $pilot->id ? 'selected' : '' }}>
-                                    {{ $pilot->full_name }} ({{ $pilot->dni }})
+                            <option value="">Seleccione un operario</option>
+                            @foreach(\App\Models\AuthorizedUser::whereNotNull('full_name')->orderBy('full_name')->get() as $user)
+                                <option value="{{ $user->id }}" {{ old('authorized_user_id') == $user->id ? 'selected' : '' }}>
+                                    {{ $user->full_name }} ({{ $user->dni }})
                                 </option>
                             @endforeach
                         </select>
-                        @error('pilot_id')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
+                        @error('authorized_user_id')<p class="mt-1 text-sm text-red-400">{{ $message }}</p>@enderror
                     </div>
                     
                     <div>

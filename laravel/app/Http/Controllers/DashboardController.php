@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Battery;
 use App\Models\License;
-use App\Models\Pilot;
+use App\Models\AuthorizedUser;
 use App\Models\ProductionDrone;
 use App\Models\StatusLog;
 use App\Models\Well;
@@ -34,10 +34,10 @@ class DashboardController extends Controller
         ->get()
         ->pluck('drone_count', 'status');
 
-        // 2. Alertas de licencias por vencer (desde license y pilots)
+        // 2. Alertas de licencias por vencer (desde license y authorized_users)
         $expiringLicenses = License::where('expiration_date', '>', now())
             ->where('expiration_date', '<=', now()->addDays(30))
-            ->with('pilot')
+            ->with('authorizedUser')
             ->get();
 
         // 3. Resumen de energía: Baterías con más de 100 vuelos
@@ -46,8 +46,10 @@ class DashboardController extends Controller
             ->orderByDesc('flight_count')
             ->get();
 
-        // 4. Pilotos activos
-        $totalPilots = Pilot::where('status', 1)->count();
+        // 4. Operarios activos (pilotos)
+        $totalPilots = AuthorizedUser::where('status', 1)
+            ->whereNotNull('full_name')
+            ->count();
 
         // 5. Pozos activos
         $activeWells = Well::where('status', 'activo')->count();
