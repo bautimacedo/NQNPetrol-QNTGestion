@@ -14,11 +14,11 @@
 
     <!-- KPI Cards -->
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Flota Total</p>
-                    <p class="mt-2 text-3xl font-bold text-gray-900">{{ $totalDrones }}</p>
+                    <p class="mt-2 text-3xl font-extrabold text-[#6b7b39]">{{ $totalDrones }}</p>
                 </div>
                 <div class="p-3 bg-blue-100 rounded-lg">
                     <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -28,11 +28,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Drones con Estado</p>
-                    <p class="mt-2 text-3xl font-bold" style="color: #6b7b39;">{{ $dronesWithStatus }}</p>
+                    <p class="mt-2 text-3xl font-extrabold text-[#6b7b39]">{{ $dronesWithStatus }}</p>
                 </div>
                 <div class="p-3 rounded-lg" style="background-color: rgba(107, 123, 57, 0.1);">
                     <svg class="w-8 h-8" style="color: #6b7b39;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -42,11 +42,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Baterías >100 Vuelos</p>
-                    <p class="mt-2 text-3xl font-bold text-amber-600">{{ $batteriesHighFlightCount->count() }}</p>
+                    <p class="mt-2 text-3xl font-extrabold text-[#6b7b39]">{{ $batteriesHighFlightCount->count() }}</p>
                 </div>
                 <div class="p-3 bg-amber-100 rounded-lg">
                     <svg class="w-8 h-8 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -56,11 +56,11 @@
             </div>
         </div>
 
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Pilotos Activos</p>
-                    <p class="mt-2 text-3xl font-bold text-orange-600">{{ $totalPilots }}</p>
+                    <p class="mt-2 text-3xl font-extrabold text-[#6b7b39]">{{ $totalPilots }}</p>
                 </div>
                 <div class="p-3 bg-orange-100 rounded-lg">
                     <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -73,11 +73,11 @@
 
     <!-- Pozos Activos -->
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-5">
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6 hover:shadow-md transition-shadow">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-600">Pozos Activos</p>
-                    <p class="mt-2 text-3xl font-bold" style="color: #6b7b39;">{{ $activeWells ?? 0 }}</p>
+                    <p class="mt-2 text-3xl font-extrabold text-[#6b7b39]">{{ $activeWells ?? 0 }}</p>
                 </div>
                 <div class="p-3 rounded-lg" style="background-color: rgba(107, 123, 57, 0.1);">
                     <svg class="w-8 h-8" style="color: #6b7b39;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +91,7 @@
 
     <!-- Baterías con Alto Uso -->
     @if($batteriesHighFlightCount->count() > 0)
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <div class="flex items-center justify-between mb-4">
             <h3 class="text-lg font-semibold text-gray-900 flex items-center">
                 <svg class="w-5 h-5 mr-2 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +124,7 @@
 
     <!-- Licencias y Clima -->
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div class="lg:col-span-2 bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <div class="flex items-center justify-between mb-6">
                 <h3 class="text-lg font-semibold text-gray-900 flex items-center">
                     <svg class="w-5 h-5 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -230,10 +230,10 @@
 
     <!-- Pilotos y Estado Operativo -->
     <div class="grid grid-cols-1 gap-6 sm:grid-cols-2">
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 flex items-center justify-between">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 flex items-center justify-between">
             <div>
                 <h3 class="text-lg font-semibold text-gray-900">Pilotos en Activo</h3>
-                <p class="text-4xl font-black text-gray-900 mt-2">{{ $totalPilots }}</p>
+                <p class="text-4xl font-extrabold text-[#6b7b39] mt-2">{{ $totalPilots }}</p>
             </div>
             <div class="text-gray-400">
                 <svg class="w-16 h-16" fill="currentColor" viewBox="0 0 20 20">
@@ -242,7 +242,7 @@
             </div>
         </div>
         
-        <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
             <h3 class="text-lg font-semibold text-gray-900 mb-4 tracking-tight">Estado Operativo del Sistema</h3>
             @php
                 $isSafeToFly = ($weather['wind_speed'] ?? 0) < 35;

@@ -28,8 +28,8 @@
     </div>
 
     <!-- Información General -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
-        <h3 class="text-xl font-bold text-gray-900 mb-4">Información General</h3>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-2xl font-bold text-gray-800 mb-4">Información General</h3>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
                 <p class="text-sm text-gray-600">Proveedor</p>
@@ -75,27 +75,27 @@
         </div>
     </div>
 
-    <!-- Timeline de Documentos -->
-    <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
-        <h3 class="text-xl font-bold text-gray-900 mb-6">Documentación</h3>
+    <!-- Timeline Horizontal Superior -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6">Progreso de Documentación</h3>
         
-        <!-- Timeline Visual -->
-        <div class="mb-8">
+        <!-- Timeline Visual Horizontal -->
+        <div class="relative">
+            <!-- Línea del timeline -->
+            <div class="absolute top-8 left-0 right-0 h-1 bg-gray-200"></div>
+            
+            @php
+                $timelineSteps = [
+                    'budget_pdf' => ['label' => 'Presupuesto', 'order' => 1],
+                    'purchase_order' => ['label' => 'OC', 'order' => 2],
+                    'invoice' => ['label' => 'Factura', 'order' => 3],
+                    'payment_order' => ['label' => 'OP', 'order' => 4],
+                    'payment_proof' => ['label' => 'Pago', 'order' => 5],
+                ];
+                $sortedSteps = collect($timelineSteps)->sortBy('order');
+            @endphp
+            
             <div class="flex items-center justify-between relative">
-                <!-- Línea del timeline -->
-                <div class="absolute top-6 left-0 right-0 h-0.5 bg-gray-200"></div>
-                
-                @php
-                    $timelineSteps = [
-                        'budget_pdf' => ['label' => 'Presupuesto', 'order' => 1],
-                        'purchase_order' => ['label' => 'Orden de Compra', 'order' => 2],
-                        'invoice' => ['label' => 'Factura', 'order' => 3],
-                        'payment_order' => ['label' => 'Orden de Pago', 'order' => 4],
-                        'payment_proof' => ['label' => 'Comprobante de Pago', 'order' => 5],
-                    ];
-                    $sortedSteps = collect($timelineSteps)->sortBy('order');
-                @endphp
-                
                 @foreach($sortedSteps as $type => $step)
                     @php
                         $document = $purchase->getDocument($type);
@@ -104,23 +104,28 @@
                     @endphp
                     <div class="flex flex-col items-center relative z-10 flex-1">
                         <!-- Círculo del paso -->
-                        <div class="w-12 h-12 rounded-full flex items-center justify-center border-4 {{ $isCompleted ? 'bg-[#6b7b39] border-[#6b7b39]' : 'bg-white border-gray-300' }}">
+                        <div class="w-8 h-8 rounded-full flex items-center justify-center border-2 {{ $isCompleted ? 'bg-[#6b7b39] border-[#6b7b39]' : 'bg-white border-gray-300' }}">
                             @if($isCompleted)
-                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
                             @else
-                                <div class="w-3 h-3 rounded-full bg-gray-300"></div>
+                                <div class="w-2 h-2 rounded-full bg-gray-300"></div>
                             @endif
                         </div>
                         <!-- Etiqueta -->
-                        <p class="mt-2 text-xs font-medium text-center {{ $isCompleted ? 'text-[#6b7b39]' : 'text-gray-500' }}" style="max-width: 100px;">
+                        <p class="mt-3 text-xs font-medium text-center {{ $isCompleted ? 'text-[#6b7b39] font-bold' : 'text-gray-500' }}">
                             {{ $step['label'] }}
                         </p>
                     </div>
                 @endforeach
             </div>
         </div>
+    </div>
+
+    <!-- Timeline de Documentos -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-2xl font-bold text-gray-800 mb-6">Documentación Detallada</h3>
         
         <!-- Lista Detallada de Documentos -->
         <div class="space-y-4">

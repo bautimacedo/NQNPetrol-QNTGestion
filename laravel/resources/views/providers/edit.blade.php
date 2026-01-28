@@ -4,7 +4,7 @@
 @section('page-subtitle', 'Modificar información del proveedor')
 
 @section('content')
-<div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
     <form action="{{ route('providers.update', $provider) }}" method="POST">
         @csrf
         @method('PUT')

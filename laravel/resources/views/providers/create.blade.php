@@ -4,7 +4,7 @@
 @section('page-subtitle', 'Registrar un nuevo proveedor en el sistema')
 
 @section('content')
-<div class="bg-white rounded-lg shadow-md border border-gray-200 p-6">
+<div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
     <form action="{{ route('providers.store') }}" method="POST">
         @csrf
         
