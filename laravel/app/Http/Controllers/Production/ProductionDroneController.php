@@ -64,6 +64,24 @@ class ProductionDroneController extends Controller
      */
     public function edit(ProductionDrone $productionDrone)
     {
+        // #region agent log
+        file_put_contents('/home/bauti/NQNPetrol/PilotosdeCero/.cursor/debug.log', json_encode([
+            'sessionId' => 'debug-session',
+            'runId' => 'run1',
+            'hypothesisId' => 'A',
+            'location' => 'ProductionDroneController@edit',
+            'message' => 'Edit method called',
+            'data' => [
+                'drone_id' => $productionDrone->id ?? 'NULL',
+                'drone_name' => $productionDrone->name ?? 'NULL',
+                'route_key_name' => $productionDrone->getRouteKeyName(),
+                'route_key_value' => method_exists($productionDrone, 'getRouteKey') ? $productionDrone->getRouteKey() : 'getRouteKey() not exists',
+                'model_exists' => $productionDrone->exists ?? false,
+            ],
+            'timestamp' => time() * 1000
+        ]) . "\n", FILE_APPEND);
+        // #endregion
+        
         $sites = Site::orderBy('name')->get();
         return view('production.drones.edit', compact('productionDrone', 'sites'));
     }

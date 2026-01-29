@@ -85,4 +85,12 @@ class ProductionDrone extends Model
     {
         return 'id';
     }
+
+    /**
+     * Obtener el valor de la clave para route model binding
+     */
+    public function getRouteKey()
+    {
+        return $this->getAttribute($this->getRouteKeyName());
+    }
 }

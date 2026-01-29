@@ -5,7 +5,26 @@
 
 @section('content')
 <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 max-w-2xl">
-    <form action="{{ route('production.drones.update', $productionDrone) }}" method="POST">
+    @php
+        // #region agent log
+        file_put_contents('/home/bauti/NQNPetrol/PilotosdeCero/.cursor/debug.log', json_encode([
+            'sessionId' => 'debug-session',
+            'runId' => 'run1',
+            'hypothesisId' => 'B',
+            'location' => 'edit.blade.php:8',
+            'message' => 'Before route generation',
+            'data' => [
+                'productionDrone_exists' => isset($productionDrone),
+                'productionDrone_id' => isset($productionDrone) ? ($productionDrone->id ?? 'NULL') : 'NOT_SET',
+                'productionDrone_name' => isset($productionDrone) ? ($productionDrone->name ?? 'NULL') : 'NOT_SET',
+                'route_key_name' => isset($productionDrone) ? $productionDrone->getRouteKeyName() : 'NOT_SET',
+                'route_key_value' => isset($productionDrone) && method_exists($productionDrone, 'getRouteKey') ? $productionDrone->getRouteKey() : 'NOT_AVAILABLE',
+            ],
+            'timestamp' => time() * 1000
+        ]) . "\n", FILE_APPEND);
+        // #endregion
+    @endphp
+    <form action="{{ route('production.drones.update', $productionDrone->id ?? $productionDrone) }}" method="POST">
         @csrf
         @method('PUT')
 
