@@ -7,26 +7,26 @@
 <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 max-w-2xl">
     @php
         // #region agent log
-        $logDir = '/home/bauti/NQNPetrol/PilotosdeCero/.cursor';
-        $logFile = $logDir . '/debug.log';
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0755, true);
+        try {
+            $logFile = storage_path('logs/debug.log');
+            @file_put_contents($logFile, json_encode([
+                'sessionId' => 'debug-session',
+                'runId' => 'run1',
+                'hypothesisId' => 'B',
+                'location' => 'edit.blade.php:8',
+                'message' => 'Before route generation',
+                'data' => [
+                    'productionDrone_exists' => isset($productionDrone),
+                    'productionDrone_id' => isset($productionDrone) ? ($productionDrone->id ?? 'NULL') : 'NOT_SET',
+                    'productionDrone_name' => isset($productionDrone) ? ($productionDrone->name ?? 'NULL') : 'NOT_SET',
+                    'route_key_name' => isset($productionDrone) ? $productionDrone->getRouteKeyName() : 'NOT_SET',
+                    'route_key_value' => isset($productionDrone) && method_exists($productionDrone, 'getRouteKey') ? $productionDrone->getRouteKey() : 'NOT_AVAILABLE',
+                ],
+                'timestamp' => time() * 1000
+            ]) . "\n", FILE_APPEND);
+        } catch (\Exception $e) {
+            // Silently fail logging
         }
-        file_put_contents($logFile, json_encode([
-            'sessionId' => 'debug-session',
-            'runId' => 'run1',
-            'hypothesisId' => 'B',
-            'location' => 'edit.blade.php:8',
-            'message' => 'Before route generation',
-            'data' => [
-                'productionDrone_exists' => isset($productionDrone),
-                'productionDrone_id' => isset($productionDrone) ? ($productionDrone->id ?? 'NULL') : 'NOT_SET',
-                'productionDrone_name' => isset($productionDrone) ? ($productionDrone->name ?? 'NULL') : 'NOT_SET',
-                'route_key_name' => isset($productionDrone) ? $productionDrone->getRouteKeyName() : 'NOT_SET',
-                'route_key_value' => isset($productionDrone) && method_exists($productionDrone, 'getRouteKey') ? $productionDrone->getRouteKey() : 'NOT_AVAILABLE',
-            ],
-            'timestamp' => time() * 1000
-        ]) . "\n", FILE_APPEND);
         // #endregion
     @endphp
     <form action="{{ route('production.drones.update', $productionDrone->id ?? $productionDrone) }}" method="POST">

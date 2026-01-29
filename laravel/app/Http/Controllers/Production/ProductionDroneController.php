@@ -65,26 +65,26 @@ class ProductionDroneController extends Controller
     public function edit(ProductionDrone $productionDrone)
     {
         // #region agent log
-        $logDir = '/home/bauti/NQNPetrol/PilotosdeCero/.cursor';
-        $logFile = $logDir . '/debug.log';
-        if (!is_dir($logDir)) {
-            mkdir($logDir, 0755, true);
+        try {
+            $logFile = storage_path('logs/debug.log');
+            @file_put_contents($logFile, json_encode([
+                'sessionId' => 'debug-session',
+                'runId' => 'run1',
+                'hypothesisId' => 'A',
+                'location' => 'ProductionDroneController@edit',
+                'message' => 'Edit method called',
+                'data' => [
+                    'drone_id' => $productionDrone->id ?? 'NULL',
+                    'drone_name' => $productionDrone->name ?? 'NULL',
+                    'route_key_name' => $productionDrone->getRouteKeyName(),
+                    'route_key_value' => method_exists($productionDrone, 'getRouteKey') ? $productionDrone->getRouteKey() : 'getRouteKey() not exists',
+                    'model_exists' => $productionDrone->exists ?? false,
+                ],
+                'timestamp' => time() * 1000
+            ]) . "\n", FILE_APPEND);
+        } catch (\Exception $e) {
+            // Silently fail logging
         }
-        file_put_contents($logFile, json_encode([
-            'sessionId' => 'debug-session',
-            'runId' => 'run1',
-            'hypothesisId' => 'A',
-            'location' => 'ProductionDroneController@edit',
-            'message' => 'Edit method called',
-            'data' => [
-                'drone_id' => $productionDrone->id ?? 'NULL',
-                'drone_name' => $productionDrone->name ?? 'NULL',
-                'route_key_name' => $productionDrone->getRouteKeyName(),
-                'route_key_value' => method_exists($productionDrone, 'getRouteKey') ? $productionDrone->getRouteKey() : 'getRouteKey() not exists',
-                'model_exists' => $productionDrone->exists ?? false,
-            ],
-            'timestamp' => time() * 1000
-        ]) . "\n", FILE_APPEND);
         // #endregion
         
         $sites = Site::orderBy('name')->get();
