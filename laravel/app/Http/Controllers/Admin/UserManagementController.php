@@ -53,6 +53,42 @@ class UserManagementController extends Controller implements HasMiddleware
         // Asignar el rol seleccionado (sincronizar para que solo tenga ese rol)
         $user->syncRoles([$role]);
         
+        // Si el rol es pilot, crear/actualizar registro en authorized_users
+        if ($role === 'pilot') {
+            $authorizedUser = \App\Models\AuthorizedUser::where('web_user_id', $user->id)->first();
+            
+            if (!$authorizedUser) {
+                // Generar un user_telegram_id único (usar un número alto para evitar conflictos)
+                $maxTelegramId = \App\Models\AuthorizedUser::max('user_telegram_id') ?? 1000000;
+                $newTelegramId = max($maxTelegramId + 1, 1000000 + $user->id);
+                
+                // Verificar que no exista
+                while (\App\Models\AuthorizedUser::where('user_telegram_id', $newTelegramId)->exists()) {
+                    $newTelegramId++;
+                }
+                
+                // Crear nuevo registro en authorized_users
+                \App\Models\AuthorizedUser::create([
+                    'user_telegram_id' => $newTelegramId,
+                    'username' => $user->name,
+                    'full_name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')),
+                    'dni' => $user->dni ?? null,
+                    'role' => 'operator', // Rol por defecto en authorized_users
+                    'status' => 1,
+                    'web_user_id' => $user->id,
+                    'created_at' => now(),
+                ]);
+            } else {
+                // Actualizar registro existente
+                $authorizedUser->update([
+                    'web_user_id' => $user->id,
+                    'username' => $user->name,
+                    'full_name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')),
+                    'dni' => $user->dni ?? $authorizedUser->dni,
+                ]);
+            }
+        }
+        
         $roleLabels = [
             'admin' => 'Administrador',
             'operator' => 'Operador',

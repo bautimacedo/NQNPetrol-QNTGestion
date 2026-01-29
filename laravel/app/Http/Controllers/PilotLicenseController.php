@@ -7,7 +7,7 @@ use App\Models\License;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-class PilotController extends Controller
+class PilotLicenseController extends Controller
 {
     /**
      * Display the pilot's license management page.
