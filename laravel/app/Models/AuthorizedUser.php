@@ -89,4 +89,12 @@ class AuthorizedUser extends Model
     {
         return 'user_telegram_id';
     }
+
+    /**
+     * Obtener el valor de la clave para route model binding
+     */
+    public function getRouteKey()
+    {
+        return $this->getAttribute($this->getRouteKeyName());
+    }
 }

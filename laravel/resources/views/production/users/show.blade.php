@@ -8,7 +8,7 @@
     <div class="flex items-center justify-between">
         <div class="flex gap-2">
             @hasrole('admin')
-                <a href="{{ route('production.users.edit', ['user' => $authorizedUser->user_telegram_id]) }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">Editar</a>
+                <a href="{{ route('production.users.edit', ['user' => $authorizedUser->getRouteKey()]) }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">Editar</a>
             @endhasrole
             <a href="{{ route('production.users.index') }}" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Volver</a>
         </div>
