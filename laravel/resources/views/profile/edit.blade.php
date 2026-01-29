@@ -91,6 +91,37 @@
             </div>
         </form>
     </div>
+
+    @if(auth()->user()->hasRole('pilot'))
+        @php
+            $authorizedUser = \App\Models\AuthorizedUser::where('web_user_id', auth()->id())->first();
+        @endphp
+        @if($authorizedUser)
+            <!-- Card 3: Configuración de Misiones (Solo para Pilotos) -->
+            <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-6">Configuración de Misiones</h3>
+                <form action="{{ route('profile.mission-password.update') }}" method="POST">
+                    @csrf
+                    @method('PUT')
+
+                    <div class="space-y-6">
+                        <div>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Contraseña para enviar misiones</label>
+                            <input type="password" name="mission_password" value="" placeholder="Dejar vacío para mantener la actual" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                            <p class="mt-1 text-xs text-gray-500">Esta contraseña se usa para autenticar el envío de misiones desde Telegram.</p>
+                            @error('mission_password')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                        </div>
+
+                        <div class="flex justify-end pt-4 border-t border-gray-200">
+                            <button type="submit" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
+                                Actualizar Contraseña de Misión
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        @endif
+    @endif
 </div>
 @endsection
 

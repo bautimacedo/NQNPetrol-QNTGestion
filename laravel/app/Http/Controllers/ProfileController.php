@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules\Password;
+use App\Models\AuthorizedUser;
 
 class ProfileController extends Controller
 {
@@ -65,5 +66,41 @@ class ProfileController extends Controller
 
         return redirect()->route('profile.edit')
             ->with('success', 'Contraseña actualizada exitosamente.');
+    }
+
+    /**
+     * Update the pilot's mission password.
+     */
+    public function updateMissionPassword(Request $request)
+    {
+        $user = auth()->user();
+        
+        if (!$user->hasRole('pilot')) {
+            abort(403, 'Acceso denegado. Solo para pilotos.');
+        }
+        
+        $authorizedUser = AuthorizedUser::where('web_user_id', $user->id)->first();
+        
+        if (!$authorizedUser) {
+            return redirect()->route('profile.edit')
+                ->withErrors(['error' => 'No se encontró tu perfil de piloto.'])
+                ->withInput();
+        }
+        
+        $request->validate([
+            'mission_password' => 'nullable|string|min:4',
+        ]);
+        
+        if ($request->filled('mission_password')) {
+            $authorizedUser->update([
+                'mission_password' => Hash::make($request->mission_password),
+            ]);
+            
+            return redirect()->route('profile.edit')
+                ->with('success', 'Contraseña de misión actualizada exitosamente.');
+        }
+        
+        return redirect()->route('profile.edit')
+            ->with('info', 'No se realizaron cambios.');
     }
 }

@@ -73,6 +73,7 @@ class UserManagementController extends Controller implements HasMiddleware
                     'username' => $user->name,
                     'full_name' => trim(($user->first_name ?? '') . ' ' . ($user->last_name ?? '')),
                     'dni' => $user->dni ?? null,
+                    'mission_password' => null, // Se configurará después por el piloto
                     'role' => 'operator', // Rol por defecto en authorized_users
                     'status' => 1,
                     'web_user_id' => $user->id,

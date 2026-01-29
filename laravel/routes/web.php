@@ -41,10 +41,12 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::put('/profile/mission-password', [ProfileController::class, 'updateMissionPassword'])->name('profile.mission-password.update');
     
     // Mi Licencia (solo para pilots)
     Route::middleware('role:pilot')->group(function () {
         Route::get('/pilot/my-license', [\App\Http\Controllers\PilotLicenseController::class, 'myLicense'])->name('pilot.my-license');
+        Route::put('/pilot/my-license', [\App\Http\Controllers\PilotLicenseController::class, 'update'])->name('pilot.my-license.update');
         Route::post('/pilot/my-license/update-document', [\App\Http\Controllers\PilotLicenseController::class, 'updateLicenseDocument'])->name('pilot.my-license.update-document');
     });
     
