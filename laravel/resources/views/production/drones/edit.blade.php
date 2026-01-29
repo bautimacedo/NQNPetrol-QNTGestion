@@ -5,7 +5,7 @@
 
 @section('content')
 <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6 max-w-2xl">
-    <form action="{{ route('production.drones.update', $productionDrone->id) }}" method="POST">
+    <form action="{{ route('production.drones.update', $productionDrone) }}" method="POST">
         @csrf
         @method('PUT')
 

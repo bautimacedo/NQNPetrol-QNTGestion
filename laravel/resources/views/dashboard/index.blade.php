@@ -10,6 +10,16 @@
             <p class="text-sm text-gray-600">Ubicación: <span class="text-gray-900 font-medium">Neuquén, AR</span></p>
             <p class="text-xs text-gray-500">Coord: -39.01, -67.88</p>
         </div>
+        @if(auth()->user()->hasRole('pilot'))
+            @php
+                $authorizedUser = \App\Models\AuthorizedUser::where('web_user_id', auth()->id())->first();
+            @endphp
+            @if($authorizedUser)
+                <a href="{{ route('production.users.edit', $authorizedUser) }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
+                    Gestionar Mi Licencia
+                </a>
+            @endif
+        @endif
     </div>
 
     <!-- KPI Cards -->

@@ -9,6 +9,11 @@
         <div class="flex gap-2">
             @hasrole('admin')
                 <a href="{{ route('production.drones.edit', $productionDrone) }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">Editar</a>
+                <form action="{{ route('production.drones.destroy', $productionDrone) }}" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este RPA? Esta acción no se puede deshacer.');">
+                    @csrf
+                    @method('DELETE')
+                    <button type="submit" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors bg-red-600 hover:bg-red-700">Eliminar</button>
+                </form>
             @endhasrole
             <a href="{{ route('production.drones.index') }}" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">Volver</a>
         </div>

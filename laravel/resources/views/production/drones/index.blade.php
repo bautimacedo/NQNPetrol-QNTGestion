@@ -44,6 +44,11 @@
                                 <a href="{{ route('production.drones.show', $drone) }}" class="text-sm font-medium mr-3" style="color: #6b7b39;" onmouseover="this.style.color='#5a6830'" onmouseout="this.style.color='#6b7b39'">Ver</a>
                                 @hasrole('admin')
                                     <a href="{{ route('production.drones.edit', $drone) }}" class="text-sm font-medium mr-3 text-blue-600 hover:text-blue-800">Editar</a>
+                                    <form action="{{ route('production.drones.destroy', $drone) }}" method="POST" class="inline" onsubmit="return confirm('¿Estás seguro de que deseas eliminar este RPA? Esta acción no se puede deshacer.');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="text-sm font-medium text-red-600 hover:text-red-800">Eliminar</button>
+                                    </form>
                                 @endhasrole
                             </td>
                         </tr>

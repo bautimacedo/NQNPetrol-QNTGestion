@@ -25,7 +25,7 @@
             <!-- Header Sidebar -->
             <div class="px-6 py-5 border-b border-zinc-700">
                 <a href="{{ route('dashboard') }}" class="flex items-center space-x-3">
-                    <img src="{{ asset('images/qnt-drones-logo.png') }}" alt="QNT DRONES" class="h-10 w-10" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                    <img src="{{ asset('images/quintana-2.jpg') }}" alt="Quintana Energy" class="h-10 w-10 rounded-lg object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
                     <div style="display: none;" class="h-10 w-10 rounded-full bg-quintana-green flex items-center justify-center">
                         <span class="text-white font-bold text-xs">QNT</span>
                     </div>

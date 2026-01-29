@@ -13,7 +13,7 @@
     <div class="w-full max-w-2xl px-4">
         <div class="text-center mb-8">
             <div class="flex justify-center mb-6">
-                <img src="{{ asset('images/qnt-drones-logo.png') }}" alt="QNT DRONES" class="h-24 w-24" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <img src="{{ asset('images/quintana-2.jpg') }}" alt="Quintana Energy" class="h-24 w-24 rounded-lg object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                 <div style="display: none;" class="h-24 w-24 rounded-full bg-gradient-to-b from-[#082032] to-[#1B998B] items-center justify-center">
                     <span class="text-white font-bold text-2xl">QNT</span>
                 </div>
