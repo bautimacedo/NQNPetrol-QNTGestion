@@ -65,7 +65,12 @@ class ProductionDroneController extends Controller
     public function edit(ProductionDrone $productionDrone)
     {
         // #region agent log
-        file_put_contents('/home/bauti/NQNPetrol/PilotosdeCero/.cursor/debug.log', json_encode([
+        $logDir = '/home/bauti/NQNPetrol/PilotosdeCero/.cursor';
+        $logFile = $logDir . '/debug.log';
+        if (!is_dir($logDir)) {
+            mkdir($logDir, 0755, true);
+        }
+        file_put_contents($logFile, json_encode([
             'sessionId' => 'debug-session',
             'runId' => 'run1',
             'hypothesisId' => 'A',
