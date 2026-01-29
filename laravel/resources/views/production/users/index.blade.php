@@ -1,14 +1,14 @@
 @extends('layouts.app')
 
-@section('page-title', 'Usuarios Autorizados')
-@section('page-subtitle', 'Gestión de operarios de Telegram')
+@section('page-title', 'Pilotos')
+@section('page-subtitle', 'Gestión de pilotos y operarios de Telegram')
 
 @section('content')
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         @hasrole('admin')
             <a href="{{ route('production.users.create') }}" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
-                + Nuevo Usuario
+                + Nuevo Piloto
             </a>
         @endhasrole
     </div>
@@ -21,6 +21,7 @@
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Telegram ID</th>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Username</th>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Rol</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Licencia</th>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Registrado</th>
                         <th class="px-6 py-3 text-right text-xs font-bold text-gray-600 uppercase tracking-wider">Acciones</th>
                     </tr>
@@ -43,6 +44,23 @@
                                 </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
+                                @php
+                                    $latestLicense = $user->licenses->sortByDesc('expiration_date')->first();
+                                @endphp
+                                @if($latestLicense)
+                                    @if($latestLicense->expiration_date < now())
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Vencida</span>
+                                    @elseif($latestLicense->expiration_date->isBefore(now()->addDays(30)))
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Por Vencer</span>
+                                    @else
+                                        <span class="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Vigente</span>
+                                    @endif
+                                    <div class="text-xs text-gray-600 mt-1">{{ $latestLicense->category }} - Vence: {{ $latestLicense->expiration_date->format('d/m/Y') }}</div>
+                                @else
+                                    <span class="text-xs text-gray-500">Sin licencia</span>
+                                @endif
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-700">{{ $user->created_at ? $user->created_at->format('d/m/Y') : '-' }}</div>
                             </td>
                             <td class="px-6 py-4 text-right whitespace-nowrap">
@@ -54,7 +72,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">No hay usuarios registrados.</td>
+                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">No hay usuarios registrados.</td>
                         </tr>
                     @endforelse
                 </tbody>

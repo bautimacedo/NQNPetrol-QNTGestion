@@ -88,4 +88,60 @@ class UserManagementController extends Controller implements HasMiddleware
         return redirect()->route('admin.users.pending')
             ->with('success', "Usuario {$userName} rechazado y eliminado.");
     }
+
+    /**
+     * Display the specified user.
+     */
+    public function show(User $user)
+    {
+        $user->load('roles');
+        return view('admin.users.show', compact('user'));
+    }
+
+    /**
+     * Show the form for editing the specified user.
+     */
+    public function edit(User $user)
+    {
+        $user->load('roles');
+        return view('admin.users.edit', compact('user'));
+    }
+
+    /**
+     * Update the specified user in storage.
+     */
+    public function update(Request $request, User $user)
+    {
+        $validated = $request->validate([
+            'first_name' => 'nullable|string|max:255',
+            'last_name' => 'nullable|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $user->id,
+            'role' => 'nullable|string|in:admin,operator,pilot',
+        ]);
+
+        $user->update([
+            'first_name' => $validated['first_name'] ?? $user->first_name,
+            'last_name' => $validated['last_name'] ?? $user->last_name,
+            'email' => $validated['email'],
+        ]);
+
+        if ($request->filled('role')) {
+            $user->syncRoles([$validated['role']]);
+        }
+
+        return redirect()->route('admin.users.index')
+            ->with('success', 'Usuario actualizado exitosamente.');
+    }
+
+    /**
+     * Remove the specified user from storage.
+     */
+    public function destroy(User $user)
+    {
+        $userName = $user->name;
+        $user->delete();
+
+        return redirect()->route('admin.users.index')
+            ->with('success', "Usuario {$userName} eliminado exitosamente.");
+    }
 }

@@ -7,6 +7,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\PilotController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\SiteController;
 use App\Http\Controllers\Production\AuthorizedUserController;
 use App\Http\Controllers\Production\BatteryController;
 use App\Http\Controllers\Production\LicenseController as ProductionLicenseController;
@@ -44,6 +45,10 @@ Route::middleware(['auth', 'approved'])->group(function () {
         // Gestión de usuarios
         Route::get('/admin/users', [UserManagementController::class, 'index'])->name('admin.users.index');
         Route::get('/admin/users/pending', [UserManagementController::class, 'pending'])->name('admin.users.pending');
+        Route::get('/admin/users/{user}', [UserManagementController::class, 'show'])->name('admin.users.show');
+        Route::get('/admin/users/{user}/edit', [UserManagementController::class, 'edit'])->name('admin.users.edit');
+        Route::put('/admin/users/{user}', [UserManagementController::class, 'update'])->name('admin.users.update');
+        Route::delete('/admin/users/{user}', [UserManagementController::class, 'destroy'])->name('admin.users.destroy');
         Route::post('/admin/users/{id}/approve', [UserManagementController::class, 'approve'])->name('admin.users.approve');
         Route::post('/admin/users/{id}/make-admin', [UserManagementController::class, 'makeAdmin'])->name('admin.users.makeAdmin');
         Route::post('/admin/users/{id}/reject', [UserManagementController::class, 'reject'])->name('admin.users.reject');

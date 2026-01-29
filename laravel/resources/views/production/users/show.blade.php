@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
-@section('page-title', $authorizedUser->username ?? $authorizedUser->user_telegram_id)
-@section('page-subtitle', 'Perfil del usuario autorizado')
+@section('page-title', $authorizedUser->full_name ?? $authorizedUser->username ?? $authorizedUser->user_telegram_id)
+@section('page-subtitle', 'Perfil del piloto')
 
 @section('content')
 <div class="space-y-6">
@@ -45,6 +45,33 @@
         </div>
 
         <div class="space-y-6">
+            @if(isset($latestLicense) && $latestLicense)
+                <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Licencia Actual</h3>
+                    <div class="space-y-3">
+                        <div>
+                            <p class="text-sm text-gray-600">Número de Licencia</p>
+                            <p class="text-gray-900 font-medium">{{ $latestLicense->license_number }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Categoría</p>
+                            <p class="text-gray-900 font-medium">{{ $latestLicense->category }}</p>
+                        </div>
+                        <div>
+                            <p class="text-sm text-gray-600">Fecha de Vencimiento</p>
+                            <p class="text-gray-900 font-medium">{{ $latestLicense->expiration_date->format('d/m/Y') }}</p>
+                            @if($latestLicense->expiration_date < now())
+                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-800">Vencida</span>
+                            @elseif($latestLicense->expiration_date->isBefore(now()->addDays(30)))
+                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium rounded-full bg-yellow-100 text-yellow-800">Por Vencer</span>
+                            @else
+                                <span class="inline-block mt-2 px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-800">Vigente</span>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @endif
+            
             <div class="bg-white rounded-xl shadow-md border border-gray-200 p-6">
                 <h3 class="text-lg font-semibold text-gray-900 mb-4">Estadísticas</h3>
                 <div class="space-y-4">

@@ -89,11 +89,19 @@
                 </div>
                 @auth
                     @if(!auth()->user()->hasRole('pilot'))
-                        <a href="{{ route('production.users.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
-                            Usuarios
-                        </a>
+                <a href="{{ route('production.users.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
+                    Pilotos
+                </a>
                     @endif
                     @if(auth()->user()->hasRole('pilot'))
+                        @php
+                            $authorizedUser = \App\Models\AuthorizedUser::where('web_user_id', auth()->id())->first();
+                        @endphp
+                        @if($authorizedUser)
+                            <a href="{{ route('production.users.show', $authorizedUser) }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.show') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
+                                Mi Perfil
+                            </a>
+                        @endif
                         <a href="{{ route('production.licenses.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                             Mi Licencia
                         </a>
@@ -104,10 +112,13 @@
                     @endif
                     
                     @if(auth()->user()->hasRole('admin'))
+                        <a href="{{ route('admin.users.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('admin.users.index') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
+                            Gestión de Usuarios
+                        </a>
                         @php
                             $pendingCount = \App\Models\User::where('is_approved', false)->count();
                         @endphp
-                        <a href="{{ route('admin.users.pending') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
+                        <a href="{{ route('admin.users.pending') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors relative {{ request()->routeIs('admin.users.pending') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                             Usuarios Pendientes
                             @if($pendingCount > 0)
                                 <span class="ml-auto px-2 py-0.5 text-xs rounded-full bg-amber-500/20 text-amber-400">{{ $pendingCount }}</span>
@@ -233,10 +244,18 @@
                             <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Administración</p>
                         </div>
                         <a href="{{ route('production.users.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
-                            Usuarios
+                            Pilotos
                         </a>
                     @endif
                     @if(auth()->user()->hasRole('pilot'))
+                        @php
+                            $authorizedUser = \App\Models\AuthorizedUser::where('web_user_id', auth()->id())->first();
+                        @endphp
+                        @if($authorizedUser)
+                            <a href="{{ route('production.users.show', $authorizedUser) }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.users.show') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
+                                Mi Perfil
+                            </a>
+                        @endif
                         <a href="{{ route('production.licenses.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.licenses.*') ? 'bg-zinc-700 text-white' : 'text-zinc-300 hover:bg-zinc-700/50 hover:text-white' }}">
                             Mi Licencia
                         </a>

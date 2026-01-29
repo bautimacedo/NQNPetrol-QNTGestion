@@ -14,7 +14,7 @@ class AuthorizedUserController extends Controller
      */
     public function index()
     {
-        $users = AuthorizedUser::orderBy('username')->get();
+        $users = AuthorizedUser::with('licenses')->orderBy('username')->get();
         return view('production.users.index', compact('users'));
     }
 
@@ -45,7 +45,7 @@ class AuthorizedUserController extends Controller
         AuthorizedUser::create($validated);
 
         return redirect()->route('production.users.index')
-            ->with('success', 'Usuario autorizado registrado exitosamente.');
+            ->with('success', 'Piloto registrado exitosamente.');
     }
 
     /**
@@ -53,8 +53,9 @@ class AuthorizedUserController extends Controller
      */
     public function show(AuthorizedUser $authorizedUser)
     {
-        $authorizedUser->load(['telemetryLogs', 'missionIntents']);
-        return view('production.users.show', compact('authorizedUser'));
+        $authorizedUser->load(['telemetryLogs', 'missionIntents', 'licenses']);
+        $latestLicense = $authorizedUser->licenses()->orderByDesc('expiration_date')->first();
+        return view('production.users.show', compact('authorizedUser', 'latestLicense'));
     }
 
     /**
@@ -62,7 +63,9 @@ class AuthorizedUserController extends Controller
      */
     public function edit(AuthorizedUser $authorizedUser)
     {
-        return view('production.users.edit', compact('authorizedUser'));
+        $authorizedUser->load('licenses');
+        $latestLicense = $authorizedUser->licenses()->orderByDesc('expiration_date')->first();
+        return view('production.users.edit', compact('authorizedUser', 'latestLicense'));
     }
 
     /**
@@ -74,6 +77,9 @@ class AuthorizedUserController extends Controller
             'username' => 'nullable|string',
             'mission_password' => 'nullable|string',
             'role' => 'required|string|in:operator,admin,viewer',
+            'license_number' => 'nullable|string|max:255',
+            'license_category' => 'nullable|string|max:255',
+            'license_expiration_date' => 'nullable|date',
         ]);
 
         if ($request->has('mission_password') && $request->mission_password) {
@@ -82,10 +88,35 @@ class AuthorizedUserController extends Controller
             unset($validated['mission_password']);
         }
 
-        $authorizedUser->update($validated);
+        $authorizedUser->update([
+            'username' => $validated['username'] ?? $authorizedUser->username,
+            'role' => $validated['role'],
+            'mission_password' => $validated['mission_password'] ?? $authorizedUser->mission_password,
+        ]);
+
+        // Actualizar o crear licencia
+        if ($request->filled('license_number') && $request->filled('license_category') && $request->filled('license_expiration_date')) {
+            $license = $authorizedUser->licenses()->orderByDesc('expiration_date')->first();
+            
+            if ($license) {
+                $license->update([
+                    'license_number' => $validated['license_number'],
+                    'category' => $validated['license_category'],
+                    'expiration_date' => $validated['license_expiration_date'],
+                ]);
+            } else {
+                \App\Models\License::create([
+                    'authorized_user_id' => $authorizedUser->id,
+                    'license_number' => $validated['license_number'],
+                    'category' => $validated['license_category'],
+                    'expiration_date' => $validated['license_expiration_date'],
+                    'created_at' => now(),
+                ]);
+            }
+        }
 
         return redirect()->route('production.users.index')
-            ->with('success', 'Usuario actualizado exitosamente.');
+            ->with('success', 'Piloto actualizado exitosamente.');
     }
 
     /**
