@@ -33,17 +33,12 @@
                             </td>
                             <td class="px-6 py-4">
                                 <div class="text-sm text-gray-900">{{ $drone->dock ?? '-' }}</div>
-                                <div class="text-xs text-gray-600">{{ $drone->site ?? '-' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
                                 <div class="text-sm text-gray-700">{{ $drone->organization ?? '-' }}</div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                @if($drone->Latitud && $drone->Longitud)
-                                    <div class="text-sm text-gray-700">{{ number_format($drone->Latitud, 6) }}, {{ number_format($drone->Longitud, 6) }}</div>
-                                @else
-                                    <span class="text-xs text-gray-500">Sin coordenadas</span>
-                                @endif
+                                <div class="text-sm text-gray-900">{{ $drone->site->name ?? '-' }}</div>
                             </td>
                             <td class="px-6 py-4 text-right whitespace-nowrap">
                                 <a href="{{ route('production.drones.show', $drone) }}" class="text-sm font-medium mr-3" style="color: #6b7b39;" onmouseover="this.style.color='#5a6830'" onmouseout="this.style.color='#6b7b39'">Ver</a>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Production;
 
 use App\Http\Controllers\Controller;
 use App\Models\ProductionDrone;
+use App\Models\Site;
 use Illuminate\Http\Request;
 
 class ProductionDroneController extends Controller
@@ -13,7 +14,7 @@ class ProductionDroneController extends Controller
      */
     public function index()
     {
-        $drones = ProductionDrone::orderBy('name')->get();
+        $drones = ProductionDrone::with('site')->orderBy('name')->get();
         return view('production.drones.index', compact('drones'));
     }
 
@@ -22,7 +23,8 @@ class ProductionDroneController extends Controller
      */
     public function create()
     {
-        return view('production.drones.create');
+        $sites = Site::orderBy('name')->get();
+        return view('production.drones.create', compact('sites'));
     }
 
     /**
@@ -33,7 +35,7 @@ class ProductionDroneController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|unique:Drone,name',
             'dock' => 'nullable|string',
-            'site' => 'nullable|string',
+            'site_id' => 'nullable|exists:sites,id',
             'organization' => 'nullable|string',
             'Latitud' => 'nullable|numeric',
             'Longitud' => 'nullable|numeric',
@@ -53,7 +55,7 @@ class ProductionDroneController extends Controller
      */
     public function show(ProductionDrone $productionDrone)
     {
-        $productionDrone->load(['missions', 'telemetryLogs', 'statusLogs']);
+        $productionDrone->load(['site', 'missions', 'telemetryLogs', 'statusLogs']);
         return view('production.drones.show', compact('productionDrone'));
     }
 
@@ -62,7 +64,8 @@ class ProductionDroneController extends Controller
      */
     public function edit(ProductionDrone $productionDrone)
     {
-        return view('production.drones.edit', compact('productionDrone'));
+        $sites = Site::orderBy('name')->get();
+        return view('production.drones.edit', compact('productionDrone', 'sites'));
     }
 
     /**
@@ -73,7 +76,7 @@ class ProductionDroneController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|unique:Drone,name,' . $productionDrone->id,
             'dock' => 'nullable|string',
-            'site' => 'nullable|string',
+            'site_id' => 'nullable|exists:sites,id',
             'organization' => 'nullable|string',
             'Latitud' => 'nullable|numeric',
             'Longitud' => 'nullable|numeric',

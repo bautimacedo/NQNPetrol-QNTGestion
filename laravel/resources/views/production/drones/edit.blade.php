@@ -22,8 +22,16 @@
                     <input type="text" name="dock" value="{{ old('dock', $productionDrone->dock) }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
                 </div>
                 <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Site</label>
-                    <input type="text" name="site" value="{{ old('site', $productionDrone->site) }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">Ubicación</label>
+                    <select name="site_id" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                        <option value="">Seleccione una ubicación</option>
+                        @foreach($sites as $site)
+                            <option value="{{ $site->id }}" {{ old('site_id', $productionDrone->site_id) == $site->id ? 'selected' : '' }}>
+                                {{ $site->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                    @error('site_id')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                 </div>
             </div>
 

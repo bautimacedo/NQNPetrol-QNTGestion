@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class ProductionDrone extends Model
 {
@@ -15,7 +16,7 @@ class ProductionDrone extends Model
     protected $fillable = [
         'name',
         'dock',
-        'site',
+        'site_id',
         'organization',
         'Latitud',
         'Longitud',
@@ -59,6 +60,14 @@ class ProductionDrone extends Model
     public function batteries(): HasMany
     {
         return $this->hasMany(Battery::class, 'drone_name', 'name');
+    }
+
+    /**
+     * Relación con el sitio
+     */
+    public function site(): BelongsTo
+    {
+        return $this->belongsTo(Site::class, 'site_id');
     }
 
     /**

@@ -55,6 +55,11 @@
                 <a href="{{ route('production.batteries.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('production.batteries.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
                     Baterías
                 </a>
+                @hasrole('admin')
+                    <a href="{{ route('sites.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('sites.*') ? 'bg-zinc-700 text-white' : 'text-zinc-400 hover:bg-zinc-700/50 hover:text-white' }}">
+                        Ubicaciones
+                    </a>
+                @endhasrole
                 
                 <div class="pt-4 pb-2">
                     <p class="px-4 text-xs font-semibold text-zinc-500 uppercase tracking-wider">Operaciones</p>

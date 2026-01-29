@@ -58,6 +58,9 @@ Route::middleware(['auth', 'approved'])->group(function () {
             Route::resource('users', AuthorizedUserController::class)->except(['index', 'show']);
             Route::resource('batteries', BatteryController::class)->except(['index', 'show']);
         });
+        
+        // Gestión de Ubicaciones (Sites)
+        Route::resource('sites', SiteController::class);
     });
     
     // Rutas de solo lectura para operator y admin (dashboard y visualización)

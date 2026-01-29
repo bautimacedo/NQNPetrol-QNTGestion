@@ -36,8 +36,11 @@
                         <p class="text-gray-900 font-medium">{{ $productionDrone->dock ?? '-' }}</p>
                     </div>
                     <div>
-                        <p class="text-sm text-gray-600">Site</p>
-                        <p class="text-gray-900 font-medium">{{ $productionDrone->site ?? '-' }}</p>
+                        <p class="text-sm text-gray-600">Ubicación</p>
+                        <p class="text-gray-900 font-medium">{{ $productionDrone->site->name ?? '-' }}</p>
+                        @if($productionDrone->site && $productionDrone->site->location_details)
+                            <p class="text-xs text-gray-500 mt-1">{{ $productionDrone->site->location_details }}</p>
+                        @endif
                     </div>
                     <div>
                         <p class="text-sm text-gray-600">Organización</p>
