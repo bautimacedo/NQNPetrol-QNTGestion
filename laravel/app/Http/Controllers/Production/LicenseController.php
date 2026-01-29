@@ -7,6 +7,7 @@ use App\Models\License;
 use App\Models\AuthorizedUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class LicenseController extends Controller
 {
@@ -48,14 +49,26 @@ class LicenseController extends Controller
             'license_number' => 'required|string|max:255',
             'category' => 'required|string|max:255',
             'expiration_date' => 'required|date',
+            'document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // 10MB max
         ]);
 
         try {
+            $documentPath = null;
+            
+            // Manejar la subida del documento
+            if ($request->hasFile('document')) {
+                $file = $request->file('document');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('licenses_docs', $filename, 'public');
+                $documentPath = $path;
+            }
+
             License::create([
                 'authorized_user_id' => $validated['authorized_user_id'],
                 'license_number' => $validated['license_number'],
                 'category' => $validated['category'],
                 'expiration_date' => $validated['expiration_date'],
+                'document_path' => $documentPath,
                 'created_at' => now(),
             ]);
 

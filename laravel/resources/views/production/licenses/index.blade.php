@@ -23,6 +23,7 @@
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Categoría</th>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Fecha de Vencimiento</th>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Estado</th>
+                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-600 uppercase tracking-wider">Documento</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white divide-y divide-gray-200">
@@ -63,10 +64,23 @@
                                     </span>
                                 @endif
                             </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                @if($license->document_path)
+                                    <a href="{{ Storage::url($license->document_path) }}" target="_blank" class="inline-flex items-center px-3 py-1.5 text-xs font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="this.style.backgroundColor='#5a6830'" onmouseout="this.style.backgroundColor='#6b7b39'">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                        </svg>
+                                        Ver
+                                    </a>
+                                @else
+                                    <span class="text-xs text-gray-500">Sin documento</span>
+                                @endif
+                            </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="px-6 py-12 text-center text-gray-500">No hay licencias registradas.</td>
+                            <td colspan="6" class="px-6 py-12 text-center text-gray-500">No hay licencias registradas.</td>
                         </tr>
                     @endforelse
                 </tbody>
@@ -88,7 +102,7 @@
                 </button>
             </div>
 
-            <form action="{{ route('production.licenses.store') }}" method="POST" id="licenseForm">
+            <form action="{{ route('production.licenses.store') }}" method="POST" id="licenseForm" enctype="multipart/form-data">
                 @csrf
                 
                 <div class="space-y-6">
@@ -125,6 +139,14 @@
                         <input type="date" name="expiration_date" id="expiration_date" value="{{ old('expiration_date') }}" required
                             class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
                         @error('expiration_date')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
+                    </div>
+
+                    <div>
+                        <label for="document" class="block text-sm font-semibold text-gray-700 mb-2">Documento Digital (PDF, JPG, PNG)</label>
+                        <input type="file" name="document" id="document" accept=".pdf,.jpg,.jpeg,.png"
+                            class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                        <p class="mt-1 text-xs text-gray-500">Tamaño máximo: 10MB. Formatos permitidos: PDF, JPG, PNG</p>
+                        @error('document')<p class="mt-1 text-sm text-red-600">{{ $message }}</p>@enderror
                     </div>
 
                     <!-- Mensajes de Error -->

@@ -15,6 +15,7 @@ class License extends Model
         'license_number',
         'category',
         'expiration_date',
+        'document_path',
         'created_at',
     ];
 

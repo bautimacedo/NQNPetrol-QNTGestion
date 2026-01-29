@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\AuthorizedUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class AuthorizedUserController extends Controller
 {
@@ -80,6 +81,7 @@ class AuthorizedUserController extends Controller
             'license_number' => 'nullable|string|max:255',
             'license_category' => 'nullable|string|max:255',
             'license_expiration_date' => 'nullable|date',
+            'license_document' => 'nullable|file|mimes:pdf,jpg,jpeg,png|max:10240', // 10MB max
         ]);
 
         if ($request->has('mission_password') && $request->mission_password) {
@@ -98,11 +100,27 @@ class AuthorizedUserController extends Controller
         if ($request->filled('license_number') && $request->filled('license_category') && $request->filled('license_expiration_date')) {
             $license = $authorizedUser->licenses()->orderByDesc('expiration_date')->first();
             
+            $documentPath = $license ? $license->document_path : null;
+            
+            // Manejar la subida del documento
+            if ($request->hasFile('license_document')) {
+                // Eliminar documento anterior si existe
+                if ($documentPath && Storage::disk('public')->exists($documentPath)) {
+                    Storage::disk('public')->delete($documentPath);
+                }
+                
+                $file = $request->file('license_document');
+                $filename = time() . '_' . $file->getClientOriginalName();
+                $path = $file->storeAs('licenses_docs', $filename, 'public');
+                $documentPath = $path;
+            }
+            
             if ($license) {
                 $license->update([
                     'license_number' => $validated['license_number'],
                     'category' => $validated['license_category'],
                     'expiration_date' => $validated['license_expiration_date'],
+                    'document_path' => $documentPath,
                 ]);
             } else {
                 \App\Models\License::create([
@@ -110,6 +128,7 @@ class AuthorizedUserController extends Controller
                     'license_number' => $validated['license_number'],
                     'category' => $validated['license_category'],
                     'expiration_date' => $validated['license_expiration_date'],
+                    'document_path' => $documentPath,
                     'created_at' => now(),
                 ]);
             }
