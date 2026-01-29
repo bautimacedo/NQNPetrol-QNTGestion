@@ -15,9 +15,25 @@ class LicenseController extends Controller
      */
     public function index()
     {
-        $licenses = License::with('authorizedUser')
-            ->orderByDesc('expiration_date')
-            ->get();
+        // Si el usuario tiene rol pilot, solo mostrar su propia licencia
+        if (auth()->user()->hasRole('pilot')) {
+            // Buscar el AuthorizedUser vinculado al usuario web
+            $authorizedUser = AuthorizedUser::where('web_user_id', auth()->id())->first();
+            
+            if (!$authorizedUser) {
+                $licenses = collect();
+            } else {
+                $licenses = License::with('authorizedUser')
+                    ->where('authorized_user_id', $authorizedUser->id)
+                    ->orderByDesc('expiration_date')
+                    ->get();
+            }
+        } else {
+            // Para admin y operator, mostrar todas las licencias
+            $licenses = License::with('authorizedUser')
+                ->orderByDesc('expiration_date')
+                ->get();
+        }
 
         return view('production.licenses.index', compact('licenses'));
     }

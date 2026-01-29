@@ -37,21 +37,30 @@ class UserManagementController extends Controller implements HasMiddleware
         return view('admin.users.pending', compact('pendingUsers'));
     }
 
-    public function approve($id)
+    public function approve(Request $request, $id)
     {
+        $request->validate([
+            'role' => 'required|string|in:admin,operator,pilot',
+        ]);
+
         $user = User::findOrFail($id);
+        $role = $request->input('role');
         
         $user->update([
             'is_approved' => true,
         ]);
         
-        // Asegurar que tenga el rol operator
-        if (!$user->hasRole('operator')) {
-            $user->assignRole('operator');
-        }
+        // Asignar el rol seleccionado (sincronizar para que solo tenga ese rol)
+        $user->syncRoles([$role]);
+        
+        $roleLabels = [
+            'admin' => 'Administrador',
+            'operator' => 'Operador',
+            'pilot' => 'Piloto',
+        ];
         
         return redirect()->back()
-            ->with('success', "Usuario {$user->name} aprobado como Operador exitosamente.");
+            ->with('success', "Usuario {$user->name} aprobado como {$roleLabels[$role]} exitosamente.");
     }
 
     public function makeAdmin($id)
