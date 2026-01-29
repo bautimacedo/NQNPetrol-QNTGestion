@@ -10,6 +10,26 @@ use Illuminate\Support\Facades\Storage;
 class PilotController extends Controller
 {
     /**
+     * Display a listing of pilots (authorized_users with pilot role).
+     */
+    public function index()
+    {
+        // Obtener todos los usuarios web con rol 'pilot'
+        $pilotUserIds = \App\Models\User::role('pilot')->pluck('id');
+        
+        // Obtener authorized_users vinculados a esos usuarios web
+        $pilots = AuthorizedUser::whereIn('web_user_id', $pilotUserIds)
+            ->with(['webUser', 'licenses' => function($query) {
+                $query->orderByDesc('expiration_date');
+            }])
+            ->orderBy('full_name')
+            ->orderBy('username')
+            ->get();
+        
+        return view('pilots.index', compact('pilots'));
+    }
+
+    /**
      * Display the pilot's license management page.
      */
     public function myLicense()
