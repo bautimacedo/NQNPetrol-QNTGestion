@@ -37,13 +37,6 @@
                 <a href="{{ route('dashboard') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('dashboard') ? 'bg-[#6b7b39]/10 text-[#6b7b39] font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-[#6b7b39]' }}">
                     Dashboard
                 </a>
-                @auth
-                    @if(!auth()->user()->hasRole('pilot'))
-                        <a href="{{ route('pilots.index') }}" class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'bg-[#6b7b39]/10 text-[#6b7b39] font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-[#6b7b39]' }}">
-                            Pilotos
-                        </a>
-                    @endif
-                @endauth
                 
                 <div class="pt-4 pb-2">
                     <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Inventario</p>
@@ -256,9 +249,6 @@
                         Dashboard
                     </a>
                     @if(!auth()->user()->hasRole('pilot'))
-                        <a href="{{ route('pilots.index') }}" class="block px-4 py-2.5 text-sm font-medium rounded-lg transition-colors {{ request()->routeIs('pilots.*') ? 'bg-[#6b7b39]/10 text-[#6b7b39] font-semibold' : 'text-gray-600 hover:bg-gray-50 hover:text-[#6b7b39]' }}">
-                            Pilotos
-                        </a>
                         <div class="pt-4 pb-2">
                             <p class="px-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Inventario</p>
                         </div>

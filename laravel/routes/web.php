@@ -4,7 +4,6 @@ use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\PilotController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PurchaseController;
@@ -152,6 +151,3 @@ Route::middleware(['auth', 'approved'])->group(function () {
     Route::get('purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
     Route::get('purchases/{purchase}/download-document/{purchaseDocument}', [PurchaseController::class, 'downloadDocument'])->name('purchases.download-document');
 });
-
-// Resource Routes
-Route::resource('pilots', PilotController::class)->only(['index', 'show', 'store']);

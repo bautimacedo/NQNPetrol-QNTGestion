@@ -77,7 +77,7 @@
         <div class="hidden lg:flex lg:w-1/2 items-center justify-center p-8" style="background-color: #6b7b39;">
             <div class="text-center text-white max-w-md">
                 <div class="mb-8">
-                    <img src="{{ asset('images/quintana-2.jpg') }}" alt="Quintana Energy" class="h-24 w-24 mx-auto mb-6 rounded-lg object-cover" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <img src="{{ asset('images/qnt.png') }}" alt="Quintana Energy" class="h-32 w-auto mx-auto mb-6 object-contain" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     <div style="display: none;" class="h-24 w-24 rounded-full bg-white/20 items-center justify-center mx-auto mb-6">
                         <span class="text-white font-bold text-2xl">QNT</span>
                     </div>
