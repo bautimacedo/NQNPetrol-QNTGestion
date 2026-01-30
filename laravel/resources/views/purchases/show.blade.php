@@ -274,31 +274,3 @@
     @endif
 @endauth
 @endsection
-
-                            <button type="button" onclick="closeUploadModal()" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                                Cancelar
-                            </button>
-                            <button type="submit" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
-                                Subir
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-
-        <script>
-            function openUploadModal(type, label) {
-                document.getElementById('documentType').value = type;
-                document.getElementById('modalTitle').textContent = 'Subir: ' + label;
-                document.getElementById('uploadModal').classList.remove('hidden');
-            }
-
-            function closeUploadModal() {
-                document.getElementById('uploadModal').classList.add('hidden');
-                document.getElementById('uploadForm').reset();
-            }
-        </script>
-    @endif
-@endauth
-@endsection
