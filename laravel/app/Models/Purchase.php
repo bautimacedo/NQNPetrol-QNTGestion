@@ -14,6 +14,9 @@ class Purchase extends Model
         'total_amount',
         'currency',
         'status',
+        'payment_method',
+        'card_last_four',
+        'product_image_path',
     ];
 
     protected $casts = [
@@ -53,12 +56,12 @@ class Purchase extends Model
     }
 
     /**
-     * Calcular el progreso de documentación
+     * Calcular el progreso de documentación (etapas opcionales)
      */
     public function getDocumentationProgress(): array
     {
-        $requiredTypes = [
-            'budget_request',
+        // Etapas opcionales - no son obligatorias
+        $optionalTypes = [
             'budget_pdf',
             'purchase_order',
             'invoice',
@@ -68,10 +71,10 @@ class Purchase extends Model
         ];
 
         $completed = 0;
-        $total = count($requiredTypes);
+        $total = count($optionalTypes);
         $status = [];
 
-        foreach ($requiredTypes as $type) {
+        foreach ($optionalTypes as $type) {
             $hasDocument = $this->hasDocument($type);
             if ($hasDocument) {
                 $completed++;
@@ -88,11 +91,11 @@ class Purchase extends Model
     }
 
     /**
-     * Verificar si la documentación está completa
+     * Verificar si la documentación está completa (ahora opcional, siempre retorna true)
      */
     public function isDocumentationComplete(): bool
     {
-        $progress = $this->getDocumentationProgress();
-        return $progress['completed'] === $progress['total'];
+        // Las etapas son opcionales, así que siempre retornamos true
+        return true;
     }
 }

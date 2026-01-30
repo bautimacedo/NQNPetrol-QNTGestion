@@ -4,10 +4,12 @@ use App\Http\Controllers\Admin\UserManagementController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ProviderController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\SiteController;
+use App\Http\Controllers\SoftwareLicenseController;
 use App\Http\Controllers\Production\AuthorizedUserController;
 use App\Http\Controllers\Production\BatteryController;
 use App\Http\Controllers\Production\LicenseController as ProductionLicenseController;
@@ -79,6 +81,12 @@ Route::middleware(['auth', 'approved'])->group(function () {
         
         // Gestión de Ubicaciones (Sites)
         Route::resource('sites', SiteController::class);
+        
+        // Gestión de Licencias de Software
+        Route::resource('software-licenses', SoftwareLicenseController::class);
+        
+        // Gestión de Seguros
+        Route::resource('insurances', InsuranceController::class);
     });
     
     // Rutas de solo lectura para operator y admin (dashboard y visualización)
@@ -150,4 +158,5 @@ Route::middleware(['auth', 'approved'])->group(function () {
     // Rutas de lectura (deben ir DESPUÉS de las rutas específicas como 'create' y 'edit')
     Route::get('purchases/{purchase}', [PurchaseController::class, 'show'])->name('purchases.show');
     Route::get('purchases/{purchase}/download-document/{purchaseDocument}', [PurchaseController::class, 'downloadDocument'])->name('purchases.download-document');
+
 });

@@ -28,7 +28,6 @@ class PurchaseDocument extends Model
     public function getTypeLabel(): string
     {
         $labels = [
-            'budget_request' => 'Solicitud de Presupuesto',
             'budget_pdf' => 'Presupuesto PDF',
             'purchase_order' => 'Orden de Compra',
             'invoice' => 'Factura',

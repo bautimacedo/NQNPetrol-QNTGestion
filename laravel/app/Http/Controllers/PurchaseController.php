@@ -42,8 +42,26 @@ class PurchaseController extends Controller
             'description' => 'required|string|max:500',
             'total_amount' => 'required|numeric|min:0',
             'currency' => 'required|in:ARS,USD',
-            'status' => 'required|in:pending,authorized,paid,canceled',
+            'status' => 'required|in:pending,authorized,paid,canceled,delivered',
+            'payment_method' => 'nullable|string|in:efectivo,transferencia,tarjeta_credito,tarjeta_debito,cheque',
+            'card_last_four' => 'nullable|string|size:4',
+            'product_image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
+
+        // Manejar imagen de producto
+        if ($request->hasFile('product_image')) {
+            $file = $request->file('product_image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('purchase_products', $filename, 'public');
+            $validated['product_image_path'] = $path;
+        }
+
+        // Validar card_last_four solo si payment_method es tarjeta
+        if (in_array($validated['payment_method'] ?? null, ['tarjeta_credito', 'tarjeta_debito']) && empty($validated['card_last_four'])) {
+            return redirect()->back()
+                ->withErrors(['card_last_four' => 'Los últimos 4 dígitos de la tarjeta son requeridos cuando se selecciona pago con tarjeta.'])
+                ->withInput();
+        }
 
         $purchase = Purchase::create($validated);
 
@@ -59,7 +77,6 @@ class PurchaseController extends Controller
         $purchase->load(['provider', 'documents']);
         
         $documentTypes = [
-            'budget_request' => 'Solicitud de Presupuesto',
             'budget_pdf' => 'Presupuesto PDF',
             'purchase_order' => 'Orden de Compra',
             'invoice' => 'Factura',
@@ -92,8 +109,30 @@ class PurchaseController extends Controller
             'description' => 'required|string|max:500',
             'total_amount' => 'required|numeric|min:0',
             'currency' => 'required|in:ARS,USD',
-            'status' => 'required|in:pending,authorized,paid,canceled',
+            'status' => 'required|in:pending,authorized,paid,canceled,delivered',
+            'payment_method' => 'nullable|string|in:efectivo,transferencia,tarjeta_credito,tarjeta_debito,cheque',
+            'card_last_four' => 'nullable|string|size:4',
+            'product_image' => 'nullable|image|mimes:jpg,jpeg,png|max:10240',
         ]);
+
+        // Manejar imagen de producto
+        if ($request->hasFile('product_image')) {
+            // Eliminar imagen anterior si existe
+            if ($purchase->product_image_path && Storage::disk('public')->exists($purchase->product_image_path)) {
+                Storage::disk('public')->delete($purchase->product_image_path);
+            }
+            $file = $request->file('product_image');
+            $filename = time() . '_' . $file->getClientOriginalName();
+            $path = $file->storeAs('purchase_products', $filename, 'public');
+            $validated['product_image_path'] = $path;
+        }
+
+        // Validar card_last_four solo si payment_method es tarjeta
+        if (in_array($validated['payment_method'] ?? null, ['tarjeta_credito', 'tarjeta_debito']) && empty($validated['card_last_four'])) {
+            return redirect()->back()
+                ->withErrors(['card_last_four' => 'Los últimos 4 dígitos de la tarjeta son requeridos cuando se selecciona pago con tarjeta.'])
+                ->withInput();
+        }
 
         $purchase->update($validated);
 
@@ -114,6 +153,11 @@ class PurchaseController extends Controller
             $document->delete();
         }
 
+        // Eliminar imagen de producto si existe
+        if ($purchase->product_image_path && Storage::disk('public')->exists($purchase->product_image_path)) {
+            Storage::disk('public')->delete($purchase->product_image_path);
+        }
+
         $purchase->delete();
 
         return redirect()->route('purchases.index')
@@ -126,8 +170,8 @@ class PurchaseController extends Controller
     public function uploadDocument(Request $request, Purchase $purchase)
     {
         $validated = $request->validate([
-            'type' => 'required|in:budget_request,budget_pdf,purchase_order,invoice,payment_order,payment_proof,tax_retention',
-            'document' => 'required|file|mimes:pdf|max:10240', // 10MB máximo
+            'type' => 'required|in:budget_pdf,purchase_order,invoice,payment_order,payment_proof,tax_retention',
+            'document' => 'required|file|mimes:pdf,jpg,jpeg,png|max:10240', // 10MB máximo, permite PDF e imágenes
             'document_number' => 'nullable|string|max:255',
         ]);
 

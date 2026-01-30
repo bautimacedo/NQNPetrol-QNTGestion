@@ -1,5 +1,9 @@
 @extends('layouts.app')
 
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
+
 @section('page-title', 'Compra #' . $purchase->id)
 @section('page-subtitle', $purchase->description)
 
@@ -49,12 +53,14 @@
                         'pending' => 'bg-yellow-100 text-yellow-800',
                         'authorized' => 'bg-blue-100 text-blue-800',
                         'paid' => 'bg-green-100 text-green-800',
+                        'delivered' => 'bg-purple-100 text-purple-800',
                         'canceled' => 'bg-red-100 text-red-800',
                     ];
                     $statusLabels = [
                         'pending' => 'Pendiente',
                         'authorized' => 'Autorizada',
                         'paid' => 'Pagada',
+                        'delivered' => 'Entregada',
                         'canceled' => 'Cancelada',
                     ];
                 @endphp
@@ -70,8 +76,35 @@
                     </div>
                     <span class="text-sm font-medium text-gray-900">{{ $progress['percentage'] }}%</span>
                 </div>
-                <p class="text-xs text-gray-500 mt-1">{{ $progress['completed'] }} de {{ $progress['total'] }} documentos</p>
+                <p class="text-xs text-gray-500 mt-1">{{ $progress['completed'] }} de {{ $progress['total'] }} documentos (todos opcionales)</p>
             </div>
+            @if($purchase->payment_method)
+                <div>
+                    <p class="text-sm text-gray-600">Método de Pago</p>
+                    <p class="text-lg font-medium text-gray-900">
+                        @php
+                            $paymentMethods = [
+                                'transferencia' => 'Transferencia',
+                                'efectivo' => 'Efectivo',
+                                'tarjeta_credito' => 'Tarjeta de Crédito',
+                                'tarjeta_debito' => 'Tarjeta de Débito',
+                                'cheque' => 'Cheque',
+                                'otro' => 'Otro',
+                            ];
+                        @endphp
+                        {{ $paymentMethods[$purchase->payment_method] ?? $purchase->payment_method }}
+                        @if($purchase->card_last_four)
+                            (****{{ $purchase->card_last_four }})
+                        @endif
+                    </p>
+                </div>
+            @endif
+            @if($purchase->product_image_path)
+                <div>
+                    <p class="text-sm text-gray-600">Imagen del Producto</p>
+                    <img src="{{ Storage::url($purchase->product_image_path) }}" alt="Imagen del producto" class="h-32 w-auto rounded-lg border border-gray-300 mt-2">
+                </div>
+            @endif
         </div>
     </div>
 
@@ -160,7 +193,7 @@
                         @if($hasDocument)
                             <div class="flex space-x-2">
                                 <a href="{{ route('purchases.download-document', [$purchase, $document]) }}" target="_blank" class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
-                                    Ver PDF
+                                    Ver Documento
                                 </a>
                                 @auth
                                     @if(auth()->user()->hasRole('admin'))
@@ -178,7 +211,7 @@
                             @auth
                                 @if(auth()->user()->hasRole('admin'))
                                     <button onclick="openUploadModal('{{ $type }}', '{{ $label }}')" class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
-                                        Subir PDF
+                                        Subir Documento
                                     </button>
                                 @endif
                             @endauth
@@ -208,12 +241,40 @@
                         </div>
                         
                         <div class="mb-4">
-                            <label class="block text-sm font-semibold text-gray-700 mb-2">Archivo PDF</label>
-                            <input type="file" name="document" accept=".pdf" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
-                            <p class="text-xs text-gray-500 mt-1">Tamaño máximo: 10MB</p>
+                            <label class="block text-sm font-semibold text-gray-700 mb-2">Archivo (PDF, JPG, JPEG, PNG)</label>
+                            <input type="file" name="document" accept=".pdf,.jpg,.jpeg,.png" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                            <p class="text-xs text-gray-500 mt-1">Tamaño máximo: 10MB. Formatos: PDF, JPG, JPEG, PNG</p>
                         </div>
                         
                         <div class="flex justify-end space-x-3">
+                            <button type="button" onclick="closeUploadModal()" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                                Cancelar
+                            </button>
+                            <button type="submit" class="px-6 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
+                                Subir
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function openUploadModal(type, label) {
+                document.getElementById('documentType').value = type;
+                document.getElementById('modalTitle').textContent = 'Subir: ' + label;
+                document.getElementById('uploadModal').classList.remove('hidden');
+            }
+
+            function closeUploadModal() {
+                document.getElementById('uploadModal').classList.add('hidden');
+                document.getElementById('uploadForm').reset();
+            }
+        </script>
+    @endif
+@endauth
+@endsection
+
                             <button type="button" onclick="closeUploadModal()" class="px-6 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                                 Cancelar
                             </button>

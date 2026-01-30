@@ -39,12 +39,12 @@
                 @endforeach
             </div>
         </div>
-        <p class="text-sm text-gray-600 mt-4 text-center">Los documentos se podrán subir después de crear la compra</p>
+        <p class="text-sm text-gray-600 mt-4 text-center">Los documentos son opcionales y se podrán subir después de crear la compra</p>
     </div>
 
     <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
         <h3 class="text-2xl font-bold text-gray-800 mb-6">Datos de la Compra</h3>
-        <form action="{{ route('purchases.store') }}" method="POST">
+        <form action="{{ route('purchases.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
         
         <div class="space-y-4">
@@ -98,9 +98,43 @@
                     <option value="pending" {{ old('status') == 'pending' ? 'selected' : '' }}>Pendiente</option>
                     <option value="authorized" {{ old('status') == 'authorized' ? 'selected' : '' }}>Autorizada</option>
                     <option value="paid" {{ old('status') == 'paid' ? 'selected' : '' }}>Pagada</option>
+                    <option value="delivered" {{ old('status') == 'delivered' ? 'selected' : '' }}>Entregada</option>
                     <option value="canceled" {{ old('status') == 'canceled' ? 'selected' : '' }}>Cancelada</option>
                 </select>
                 @error('status')
+                    <p class="text-red-500 text-xs mt-1 flex items-center gap-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Método de Pago</label>
+                <select name="payment_method" id="payment_method" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                    <option value="">Seleccionar método</option>
+                    <option value="transferencia" {{ old('payment_method') == 'transferencia' ? 'selected' : '' }}>Transferencia</option>
+                    <option value="efectivo" {{ old('payment_method') == 'efectivo' ? 'selected' : '' }}>Efectivo</option>
+                    <option value="tarjeta_credito" {{ old('payment_method') == 'tarjeta_credito' ? 'selected' : '' }}>Tarjeta de Crédito</option>
+                    <option value="tarjeta_debito" {{ old('payment_method') == 'tarjeta_debito' ? 'selected' : '' }}>Tarjeta de Débito</option>
+                    <option value="cheque" {{ old('payment_method') == 'cheque' ? 'selected' : '' }}>Cheque</option>
+                    <option value="otro" {{ old('payment_method') == 'otro' ? 'selected' : '' }}>Otro</option>
+                </select>
+                @error('payment_method')
+                    <p class="text-red-500 text-xs mt-1 flex items-center gap-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div id="card_last_four_field" style="display: none;">
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Últimos 4 dígitos de la tarjeta *</label>
+                <input type="text" name="card_last_four" id="card_last_four" maxlength="4" pattern="[0-9]{4}" value="{{ old('card_last_four') }}" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors" placeholder="1234">
+                @error('card_last_four')
+                    <p class="text-red-500 text-xs mt-1 flex items-center gap-1">{{ $message }}</p>
+                @enderror
+            </div>
+
+            <div>
+                <label class="block text-sm font-semibold text-gray-700 mb-2">Imagen del Producto (Opcional)</label>
+                <input type="file" name="product_image" accept="image/jpg,image/jpeg,image/png" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#6b7b39] focus:border-[#6b7b39] transition-colors">
+                <p class="text-xs text-gray-500 mt-1">Formatos permitidos: JPG, JPEG, PNG. Tamaño máximo: 10MB</p>
+                @error('product_image')
                     <p class="text-red-500 text-xs mt-1 flex items-center gap-1">{{ $message }}</p>
                 @enderror
             </div>
@@ -117,4 +151,19 @@
         </form>
     </div>
 </div>
+
+<script>
+    document.getElementById('payment_method').addEventListener('change', function() {
+        const cardField = document.getElementById('card_last_four_field');
+        const cardInput = document.getElementById('card_last_four');
+        if (this.value === 'tarjeta_credito' || this.value === 'tarjeta_debito') {
+            cardField.style.display = 'block';
+            cardInput.required = true;
+        } else {
+            cardField.style.display = 'none';
+            cardInput.required = false;
+            cardInput.value = '';
+        }
+    });
+</script>
 @endsection
