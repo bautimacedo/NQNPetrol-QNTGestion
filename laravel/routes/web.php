@@ -153,6 +153,7 @@ Route::middleware(['auth', 'approved'])->group(function () {
         Route::delete('purchases/{purchase}', [PurchaseController::class, 'destroy'])->name('purchases.destroy');
         Route::post('purchases/{purchase}/upload-document', [PurchaseController::class, 'uploadDocument'])->name('purchases.upload-document');
         Route::delete('purchases/{purchase}/delete-document/{purchaseDocument}', [PurchaseController::class, 'deleteDocument'])->name('purchases.delete-document');
+        Route::post('purchases/{purchase}/toggle-manual-completion', [PurchaseController::class, 'toggleManualCompletion'])->name('purchases.toggle-manual-completion');
     });
     
     // Rutas de lectura (deben ir DESPUÉS de las rutas específicas como 'create' y 'edit')

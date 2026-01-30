@@ -186,6 +186,11 @@ class PurchaseController extends Controller
                 $existingDocument->delete();
             }
 
+            // Si estaba marcado como completado manualmente, desmarcarlo
+            if ($purchase->isManuallyCompleted($validated['type'])) {
+                $purchase->unmarkAsManuallyCompleted($validated['type']);
+            }
+
             // Guardar el archivo
             $file = $request->file('document');
             $directory = "purchases/{$purchase->id}";
@@ -246,5 +251,35 @@ class PurchaseController extends Controller
 
         return redirect()->route('purchases.show', $purchase)
             ->with('success', 'Documento eliminado exitosamente.');
+    }
+
+    /**
+     * Marcar/desmarcar un paso como completado manualmente
+     */
+    public function toggleManualCompletion(Request $request, Purchase $purchase)
+    {
+        $validated = $request->validate([
+            'type' => 'required|in:budget_pdf,purchase_order,invoice,payment_order,payment_proof,tax_retention',
+        ]);
+
+        $type = $validated['type'];
+        
+        // Si ya tiene un documento físico, no se puede marcar como completado manualmente
+        if ($purchase->getDocument($type)) {
+            return redirect()->route('purchases.show', $purchase)
+                ->with('error', 'Este paso ya tiene un documento subido. Elimine el documento primero si desea marcarlo como completado manualmente.');
+        }
+
+        // Toggle: si está marcado, desmarcarlo; si no, marcarlo
+        if ($purchase->isManuallyCompleted($type)) {
+            $purchase->unmarkAsManuallyCompleted($type);
+            $message = 'Paso desmarcado como completado manualmente.';
+        } else {
+            $purchase->markAsManuallyCompleted($type);
+            $message = 'Paso marcado como completado manualmente.';
+        }
+
+        return redirect()->route('purchases.show', $purchase)
+            ->with('success', $message);
     }
 }

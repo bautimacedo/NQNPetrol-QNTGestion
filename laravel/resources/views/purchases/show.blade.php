@@ -133,7 +133,8 @@
                     @php
                         $document = $purchase->getDocument($type);
                         $hasDocument = $document !== null;
-                        $isCompleted = $hasDocument;
+                        $isManuallyCompleted = $purchase->isManuallyCompleted($type);
+                        $isCompleted = $hasDocument || $isManuallyCompleted;
                     @endphp
                     <div class="flex flex-col items-center relative z-10 flex-1">
                         <!-- Círculo del paso -->
@@ -149,6 +150,9 @@
                         <!-- Etiqueta -->
                         <p class="mt-3 text-xs font-medium text-center {{ $isCompleted ? 'text-[#6b7b39] font-bold' : 'text-gray-500' }}">
                             {{ $step['label'] }}
+                            @if($isManuallyCompleted && !$hasDocument)
+                                <span class="block text-[10px] text-gray-400 mt-1">(Manual)</span>
+                            @endif
                         </p>
                     </div>
                 @endforeach
@@ -166,11 +170,13 @@
                 @php
                     $document = $purchase->getDocument($type);
                     $hasDocument = $document !== null;
+                    $isManuallyCompleted = $purchase->isManuallyCompleted($type);
+                    $isCompleted = $hasDocument || $isManuallyCompleted;
                 @endphp
-                <div class="flex items-center space-x-4 p-4 rounded-lg {{ $hasDocument ? 'bg-gray-50 border border-gray-200' : 'bg-white border border-gray-200' }}">
+                <div class="flex items-center space-x-4 p-4 rounded-lg {{ $isCompleted ? 'bg-gray-50 border border-gray-200' : 'bg-white border border-gray-200' }}">
                     <!-- Indicador de estado -->
                     <div class="flex-shrink-0">
-                        @if($hasDocument)
+                        @if($isCompleted)
                             <div class="w-4 h-4 rounded-full" style="background-color: #6b7b39;"></div>
                         @else
                             <div class="w-4 h-4 rounded-full bg-gray-300"></div>
@@ -179,7 +185,12 @@
                     
                     <!-- Nombre del documento -->
                     <div class="flex-1">
-                        <h4 class="text-sm font-medium text-gray-900">{{ $label }}</h4>
+                        <h4 class="text-sm font-medium text-gray-900">
+                            {{ $label }}
+                            @if($isManuallyCompleted && !$hasDocument)
+                                <span class="ml-2 text-xs text-gray-500">(Completado manualmente)</span>
+                            @endif
+                        </h4>
                         @if($hasDocument && $document->document_number)
                             <p class="text-xs text-gray-600 mt-1">N° {{ $document->document_number }}</p>
                         @endif
@@ -210,9 +221,26 @@
                         @else
                             @auth
                                 @if(auth()->user()->hasRole('admin'))
-                                    <button onclick="openUploadModal('{{ $type }}', '{{ $label }}')" class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
-                                        Subir Documento
-                                    </button>
+                                    <div class="flex space-x-2">
+                                        <button onclick="openUploadModal('{{ $type }}', '{{ $label }}')" class="px-4 py-2 text-sm font-medium text-white rounded-lg transition-colors" style="background-color: #6b7b39;" onmouseover="if(!this.disabled) this.style.backgroundColor='#5a6830'" onmouseout="if(!this.disabled) this.style.backgroundColor='#6b7b39'">
+                                            Subir Documento
+                                        </button>
+                                        <form action="{{ route('purchases.toggle-manual-completion', $purchase) }}" method="POST" class="inline">
+                                            @csrf
+                                            <input type="hidden" name="type" value="{{ $type }}">
+                                            <button type="submit" class="px-4 py-2 text-sm font-medium rounded-lg transition-colors border-2 {{ $isManuallyCompleted ? 'bg-[#6b7b39] text-white border-[#6b7b39]' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50' }}" title="{{ $isManuallyCompleted ? 'Desmarcar como completado manualmente' : 'Marcar como completado manualmente' }}">
+                                                @if($isManuallyCompleted)
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                @else
+                                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                                                    </svg>
+                                                @endif
+                                            </button>
+                                        </form>
+                                    </div>
                                 @endif
                             @endauth
                         @endif

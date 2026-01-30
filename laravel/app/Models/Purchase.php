@@ -17,10 +17,12 @@ class Purchase extends Model
         'payment_method',
         'card_last_four',
         'product_image_path',
+        'manually_completed_steps',
     ];
 
     protected $casts = [
         'total_amount' => 'decimal:2',
+        'manually_completed_steps' => 'array',
     ];
 
     /**
@@ -40,11 +42,51 @@ class Purchase extends Model
     }
 
     /**
-     * Verificar si tiene un documento específico
+     * Verificar si tiene un documento específico o está marcado como completado manualmente
      */
     public function hasDocument(string $type): bool
     {
-        return $this->documents()->where('type', $type)->exists();
+        // Verificar si tiene documento físico
+        if ($this->documents()->where('type', $type)->exists()) {
+            return true;
+        }
+        
+        // Verificar si está marcado como completado manualmente
+        $manuallyCompleted = $this->manually_completed_steps ?? [];
+        return in_array($type, $manuallyCompleted);
+    }
+    
+    /**
+     * Verificar si un paso está marcado como completado manualmente
+     */
+    public function isManuallyCompleted(string $type): bool
+    {
+        $manuallyCompleted = $this->manually_completed_steps ?? [];
+        return in_array($type, $manuallyCompleted);
+    }
+    
+    /**
+     * Marcar un paso como completado manualmente
+     */
+    public function markAsManuallyCompleted(string $type): void
+    {
+        $manuallyCompleted = $this->manually_completed_steps ?? [];
+        if (!in_array($type, $manuallyCompleted)) {
+            $manuallyCompleted[] = $type;
+            $this->manually_completed_steps = $manuallyCompleted;
+            $this->save();
+        }
+    }
+    
+    /**
+     * Desmarcar un paso como completado manualmente
+     */
+    public function unmarkAsManuallyCompleted(string $type): void
+    {
+        $manuallyCompleted = $this->manually_completed_steps ?? [];
+        $manuallyCompleted = array_values(array_filter($manuallyCompleted, fn($t) => $t !== $type));
+        $this->manually_completed_steps = $manuallyCompleted;
+        $this->save();
     }
 
     /**
@@ -76,10 +118,11 @@ class Purchase extends Model
 
         foreach ($optionalTypes as $type) {
             $hasDocument = $this->hasDocument($type);
-            if ($hasDocument) {
+            $isManuallyCompleted = $this->isManuallyCompleted($type);
+            if ($hasDocument || $isManuallyCompleted) {
                 $completed++;
             }
-            $status[$type] = $hasDocument;
+            $status[$type] = $hasDocument || $isManuallyCompleted;
         }
 
         return [
